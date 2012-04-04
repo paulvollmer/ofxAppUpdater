@@ -1,0 +1,24 @@
+<install>
+    <name>ofxAppUpdater</name>
+	<version>0.1.0</version>
+	<author>Paul Vollmer</author>
+	<url>http://www.wng.cc</url>
+	
+    <add>	
+		<!-- ===================================================================== -->
+		<!-- ========================== add per project using this addon ========= -->
+		<!-- ===================================================================== -->
+	
+	    <src>
+		    <folder name="addons/ofxAppUpdater/src">	
+			    <file>../../../addons/ofxAppUpdater/src/ofxAppUpdater.h</file>
+			    <file>../../../addons/ofxAppUpdater/src/ofxAppUpdater.cpp</file>
+		    </folder>
+	    </src>
+	
+	    <include>
+		    <path>../../../addons/ofxAppUpdater/src</path>
+	    </include>
+    </add>
+    
+</install>
