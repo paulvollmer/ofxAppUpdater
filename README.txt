@@ -1,6 +1,9 @@
 
 
-ofxUpdater
+ofxUpdater  
+
+AT THE MOMENT THIS ADDON IS NOT READY.  
+
 
 
      +-------------------+ // The Application is started.
