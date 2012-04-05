@@ -51,32 +51,38 @@ namespace wng {
 			/*
 			 * Methods
 			 */
-			void init(float userVer, bool connection, const string file, string url);
+			void init(float userVer, string file, string url, bool connection);
 			void init(float userVer, string file, string url);
 			bool checkVersion(float userVer, float newestVer);
 		
 			
-		
 			/*
 			 * Variables
 			 * Here will be listen all Variables of the ofxUpdater class.
 			 *
-			 *
-			 * Version of User Application
-			 */
+			 * Trigger your web connection, if bool is true,
+			 * your Application can check the version and
+			 * download automatic if a new release is available. */
+			bool internetConnection;
+		
+			/* Version of User Application */
 			float userVersion;
 		
 			/* Latest Software Version */
 			float latestVersion;
 			
-			/* Trigger your web connection, if bool is true,
-			 * your Application can check the version and
-			 * download automatic if a new release is available. */
-			bool internetConnection;
+			/* Date of last modification */
+			string modified;
+		
+			/* Name of the author/company */
+			string author;
+			
+			/* A list of changes that will shipped with the new update.  */
+			string changes;
 		
 			/* If the variable is true, the addon start
 			 * downloading zip package. */
-			bool downloadActive;
+			//bool downloadActive;
 			
 		
 	};

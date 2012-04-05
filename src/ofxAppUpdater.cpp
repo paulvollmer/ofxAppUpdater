@@ -28,6 +28,7 @@
 
 
 #include "ofxAppUpdater.h"
+
 #include "ofxXmlSettings.h"
 
 
@@ -60,28 +61,28 @@ namespace wng {
 	 *
 	 * @param userVer
 	 *        User Version.
-	 * @param connection
-	 *        internet Connection boolean.
 	 * @param file
 	 *        Our update information xml filename.
 	 * @param url
 	 *        The url of the server/folder to load the file.
+	 * @param connection
+	 *        internet Connection boolean.
 	 */
-	void ofxAppUpdater::init(float userVer, bool connection, string file, string url){
+	void ofxAppUpdater::init(float userVer, string file, string url, bool connection){
 		
-		/* Get the Unixtime */
-		int ut = ofGetUnixTime();
+		/* Get the Timestamp */
+		string timestamp = ofGetTimestampString();
 		
 		/* Set version variables. */
 		userVersion = userVer;
 		internetConnection = connection;
 		
 		#ifdef DEBUG
-			printf("[ofxAppUpdater] init() Unixtime: %d \n", ut);
-			printf("                    Internet Connection: %s \n", (internetConnection)?"true":"false");
-			printf("                    User Version: %f \n", userVersion);
-			cout <<"                    Filename: " << file << endl;
-			cout <<"                    Url: " << url << endl;
+			cout <<"[ofxAppUpdater] init() Timestamp: " << ofGetTimestampString() << endl;
+			printf("                       Internet Connection: %s \n", (internetConnection)?"true":"false");
+			printf("                       User Version: %f \n", userVersion);
+			cout <<"                       Filename: " << file << endl;
+			cout <<"                       Url: " << url << endl;
 		#endif
 		
 		
@@ -91,35 +92,43 @@ namespace wng {
 			
 			/* A path and name for the file we load from server. 
 			 * I think we can handle this as an intern variable.*/
-			string tempFilename = "tempVersion.xml";
+			string tempFilename = "tempVersioninfo.xml";
 			
 			/* Copy our version xml file to data folder. */
 			ofSaveURLTo(url+file, tempFilename);
 			
 			
-			/* create a new ofxXmlSettings object for reading the saved file. */			
+			/* Create a new ofxXmlSettings object for reading the saved file. */		
 			ofxXmlSettings xml;
 			
-			/* we load our xml file
+			/* We load our xml file.
 			 * Examlple from openFrameworks xmlSettingsExample */
 			if(xml.loadFile(tempFilename)){
 				#ifdef DEBUG 
-					cout << "                    XML: File <" << file << "> loaded!" << endl;
+					cout << "                       XML: File <" << tempFilename << "> loaded!" << endl;
 				#endif
 				
-				float tempVersion = xml.getValue("VERSIONING:VERSION", 0.0, 0);
-				string tempModified = xml.getValue("VERSIONING:MODIFIED", "1970.01.01", 0);
-				string tempAuthor = xml.getValue("VERSIONING:AUTHOR", "wng.cc", 0);
+				latestVersion = xml.getValue("VERSIONING:VERSION",  0.0,          0);
+				modified      = xml.getValue("VERSIONING:MODIFIED", "1970.01.01", 0);
+				author        = xml.getValue("VERSIONING:AUTHOR",   "wng.cc",     0);
+				changes       = xml.getValue("VERSIONING:CHANGES",  "nothing",    0);
+				
+				
 				#ifdef DEBUG 
-					cout << "                         VERSIONING:VERSION  = " << tempVersion << endl;
-					cout << "                         VERSIONING:MODIFIED = " << tempModified << endl;
-					cout << "                         VERSIONING:AUTHOR   = " << tempAuthor << endl;
+					cout << "                            Latest Version = " << latestVersion << endl;
+					cout << "                            Modified       = " << modified << endl;
+					cout << "                            Author         = " << author << endl;
+					cout << "                            Changes        = " << changes << endl;
 				#endif
 				
-				/* Check the Version numbers if it's true. */
-				if(checkVersion(userVersion, tempVersion)){
+				/* Check the Version numbers if it's false, you can download a new version. */
+				if(checkVersion(userVersion, latestVersion) == false){
 					
+					printf("DOWNLOAD ZIP\n");
 					/* Start downloading zip package. */
+					ofSaveURLTo(url+"test.zip", "tempDownload.zip");
+					
+					//ofxUnZip("tempDownload.zip", "wng_test");
 					
 				}
 				
@@ -137,7 +146,7 @@ namespace wng {
 	 * See decription below.
 	 */
 	void ofxAppUpdater::init(float userVer, string file, string url){
-		init(userVer, true, file, url);
+		init(userVer, file, url, true);
 	}
 	
 	

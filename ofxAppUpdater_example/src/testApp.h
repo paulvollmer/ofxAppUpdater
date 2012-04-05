@@ -34,6 +34,11 @@
 
 using namespace wng;
 
+/* We store our oxfAppUpdater Variables here. */
+#define OFXAPPUPDATER_VERSION 1.0
+#define OFXAPPUPDATER_VERSIONFILE "versioninfo.xml"
+#define OFXAPPUPDATER_SERVER "http://www.wrong-entertainment.com/code/wngUpdater/"
+#define OFXAPPUPDATER_ZIPFILE "latest.zip"
 
 
 

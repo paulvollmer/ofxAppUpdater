@@ -39,11 +39,21 @@
 void testApp::setup(){
 	
 	/* Initiolize ofxUpdater class. */
-	updater.init(1,
-				 "versioninfo.xml",
-				 "http://www.wrong-entertainment.com/code/wngUpdater/");
+	updater.init(OFXAPPUPDATER_VERSION,
+				 OFXAPPUPDATER_VERSIONFILE,
+				 OFXAPPUPDATER_SERVER);
 	/* Or use the init method which you can set your internet connection. */
-	//updater.init(1, 122, false);
+	/*updater.init(OFXAPPUPDATER_VERSION,
+				 OFXAPPUPDATER_VERSIONFILE,
+				 OFXAPPUPDATER_SERVER,
+				 false);*/
+	
+	
+	/*
+	updater.internetConnection;
+	updater.userVersion;
+	updater.latestVersion;
+	*/
 	
 	
 	// TEST
@@ -57,7 +67,28 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-
+	
+	ofBackground(0);
+	
+	/* Display our ofxAppUpdater Information. */
+	int textX = 100;
+	int textY = 50;
+	ofSetColor(0, 255, 255);
+	ofDrawBitmapString("ofxAppUpdater", textX, textY);
+	textY+=20;
+	
+	ofSetColor(0, 255, 0);
+	ofDrawBitmapString("User-Version:   " + ofToString(updater.userVersion), textX, textY);
+	textY+=20;
+	ofDrawBitmapString("Latest-Version: " + ofToString(updater.latestVersion), textX, textY);
+	textY+=20;
+	ofDrawBitmapString("Author:         " + updater.author, textX, textY);
+	textY+=20;
+	ofDrawBitmapString("Modified:       " + updater.modified, textX, textY);
+	textY+=20;
+	ofDrawBitmapString("Changes:        " + updater.changes, textX, textY);
+	textY+=20;
+	
 }
 
 //--------------------------------------------------------------
