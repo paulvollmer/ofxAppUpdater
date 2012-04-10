@@ -41,11 +41,13 @@ void testApp::setup(){
 	/* Initiolize ofxUpdater class. */
 	updater.init(OFXAPPUPDATER_VERSION,
 				 OFXAPPUPDATER_VERSIONFILE,
-				 OFXAPPUPDATER_SERVER);
-	/* Or use the init method which you can set your internet connection. */
-	/*updater.init(OFXAPPUPDATER_VERSION,
+				 OFXAPPUPDATER_SERVER,
+				 OFXAPPUPDATER_ZIPFILE);
+	/* Or use the init method which you can set your internet connection. *
+	updater.init(OFXAPPUPDATER_VERSION,
 				 OFXAPPUPDATER_VERSIONFILE,
 				 OFXAPPUPDATER_SERVER,
+				 OFXAPPUPDATER_ZIPFILE,
 				 false);*/
 	
 	

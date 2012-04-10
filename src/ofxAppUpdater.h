@@ -51,8 +51,8 @@ namespace wng {
 			/*
 			 * Methods
 			 */
-			void init(float userVer, string file, string url, bool connection);
-			void init(float userVer, string file, string url);
+			void init(float userVer, string file, string url, string zip, bool connection);
+			void init(float userVer, string file, string url, string zip);
 			bool checkVersion(float userVer, float newestVer);
 		
 			

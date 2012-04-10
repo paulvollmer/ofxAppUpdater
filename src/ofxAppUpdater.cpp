@@ -45,7 +45,6 @@ namespace wng {
 		 * set the internetConnection variable at setup to false */
 		internetConnection = true;
 		
-		
 		#ifdef DEBUG
 			printf("[ofxAppUpdater] Constructor Ready! \n");
 		#endif
@@ -68,7 +67,7 @@ namespace wng {
 	 * @param connection
 	 *        internet Connection boolean.
 	 */
-	void ofxAppUpdater::init(float userVer, string file, string url, bool connection){
+	void ofxAppUpdater::init(float userVer, string file, string url, string zip, bool connection){
 		
 		/* Get the Timestamp */
 		string timestamp = ofGetTimestampString();
@@ -113,7 +112,6 @@ namespace wng {
 				author        = xml.getValue("VERSIONING:AUTHOR",   "wng.cc",     0);
 				changes       = xml.getValue("VERSIONING:CHANGES",  "nothing",    0);
 				
-				
 				#ifdef DEBUG 
 					cout << "                            Latest Version = " << latestVersion << endl;
 					cout << "                            Modified       = " << modified << endl;
@@ -124,17 +122,25 @@ namespace wng {
 				/* Check the Version numbers if it's false, you can download a new version. */
 				if(checkVersion(userVersion, latestVersion) == false){
 					
-					printf("DOWNLOAD ZIP\n");
-					/* Start downloading zip package. */
-					ofSaveURLTo(url+"test.zip", "tempDownload.zip");
+					#ifdef DEBUG
+						printf("Start downloading zip file.\n");
+					#endif
 					
+					/* Create a temporary zip filename. 
+					 * Setting the name of the downloaded zip file. */
+					string tempZipFilename = "tempDownload.zip";
+					/* Start downloading zip package. */
+					ofSaveURLTo(url+"test.zip", tempZipFilename);
+					
+					/* We have to unzip the downloaded file. */
 					//ofxUnZip("tempDownload.zip", "wng_test");
 					
 				}
+
 				
 			} else {
 				#ifdef DEBUG
-					cout << "              File not found" << endl;
+					printf("                       XML: File not found");
 				#endif
 			}
 
@@ -145,8 +151,8 @@ namespace wng {
 	/**
 	 * See decription below.
 	 */
-	void ofxAppUpdater::init(float userVer, string file, string url){
-		init(userVer, file, url, true);
+	void ofxAppUpdater::init(float userVer, string file, string url, string zip){
+		init(userVer, file, url, zip, true);
 	}
 	
 	
@@ -166,7 +172,7 @@ namespace wng {
 		if (userVer == latestVer) {
 			#ifdef DEBUG
 				printf("[ofxUpdater] checkVersion() User-Version: %f Latest-Version: %f \n", userVer, latestVer);
-				printf("                            State: You're running the newest Application Release. \n");
+				printf("                            State: You're running the latest Application Release. \n");
 			#endif
 			return true;
 		} else {
