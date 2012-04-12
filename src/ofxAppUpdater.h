@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.04
- * @version     0.1.0
+ * @modified    2012.04.12
+ * @version     0.1.0b
  */
 
 
@@ -31,7 +31,7 @@
 
 #include <ofMain.h>
 
-#define DEBUG
+#define OFXAPPUPDATER_LOG
 
 
 
@@ -42,48 +42,65 @@ namespace wng {
 	class ofxAppUpdater {
 		
 		public:
-			/*
+			/**
 			 * Constructor
 			 */
 			ofxAppUpdater();
 	
 	
-			/*
+			/**
 			 * Methods
 			 */
-			void init(float userVer, string file, string url, string zip, bool connection);
-			void init(float userVer, string file, string url, string zip);
-			bool checkVersion(float userVer, float newestVer);
+			void init(float tempCurrentVer, string tempServer, string tempVersionInfo, string tempLatest);
+			void checking();
+		
+		
+			bool checkVersion(float currentVer, float latestVer);
+			void parseXML(string filename);
+			void loadFile(string serverSrc, string tempFilepath);
+		
+		
+		
+		
+		
+		
+			void test(float userVer, string file, string url, string zip, bool connection);
+			//void test(float userVer, string file, string url, string zip);
 		
 			
-			/*
+			
+		
+		
+			
+			/**
 			 * Variables
 			 * Here will be listen all Variables of the ofxUpdater class.
-			 *
-			 * Trigger your web connection, if bool is true,
-			 * your Application can check the version and
-			 * download automatic if a new release is available. */
+			 */
+			
+			// This variables we need for checking if a new release exist.
+			float currentVersion;
+			string serverUrl;
+			string versionInfoXml;
+			string latestZip;
+		
+			// This variables store the information from our versioninfo.xml file.
+			// The variables will be set by parseXML method.
+			float latestVersion;   // Latest Software Version
+			string modifiedDate;   // Date of last modification
+			string author;         // Name of the author/company
+			string changes;        // A list of changes that will shipped with the new update.
+		
+		
+		
+		
+			// Trigger your web connection, if bool is true,
+			// your Application can check the version and
+			// download automatic if a new release is available.
 			bool internetConnection;
 		
-			/* Version of User Application */
-			float userVersion;
-		
-			/* Latest Software Version */
-			float latestVersion;
-			
-			/* Date of last modification */
-			string modified;
-		
-			/* Name of the author/company */
-			string author;
-			
-			/* A list of changes that will shipped with the new update.  */
-			string changes;
-		
-			/* If the variable is true, the addon start
-			 * downloading zip package. */
+			// If the variable is true, the addon start downloading zip package.
 			//bool downloadActive;
-			
+		
 		
 	};
 

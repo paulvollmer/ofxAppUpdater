@@ -21,7 +21,7 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.05
+ * @modified    2012.04.12
  * @version     0.1.0
  */
 
@@ -33,12 +33,6 @@
 #include "ofxAppUpdater.h"
 
 using namespace wng;
-
-/* We store our oxfAppUpdater Variables here. */
-#define OFXAPPUPDATER_VERSION 1.0
-#define OFXAPPUPDATER_VERSIONFILE "versioninfo.xml"
-#define OFXAPPUPDATER_SERVER "http://www.wrong-entertainment.com/code/wngUpdater/"
-#define OFXAPPUPDATER_ZIPFILE "latest.zip"
 
 
 
@@ -60,8 +54,11 @@ class testApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+		void exit();
 		
+	private:
 		/* Added ofxAppUpdater addon */
 		ofxAppUpdater updater;
+		bool updaterChecking;
 
 };

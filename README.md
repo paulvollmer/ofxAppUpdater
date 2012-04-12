@@ -4,12 +4,14 @@
 ## Readme  
 General information about ofxAppUpdater.  
   
-AT THE MOMENT THIS ADDON IS NOT READY. WORK IN PROGRESS.  
+AT THE MOMENT THIS ADDON IS PURE BETA. WORK IN PROGRESS...  
   
 ofxAppUpdater is an addons for [openFrameworks](http://www.openframeworks.cc/) to manage application updates.    
 
 
 <pre>
+	
+DOWNLOAD PROCESS
 	
     +-------------------+ // The Application is started.
 +-->| Start Application | // At Application setup(), the ofxUpdater
@@ -58,17 +60,42 @@ ofxAppUpdater is an addons for [openFrameworks](http://www.openframeworks.cc/) t
 +---------------------------+
 
 </pre>
-  
+
+**VERSION-INFO XML FILE**
+
+	<VERSIONING>
+		<VERSION>1.1</VERSION>
+		<MODIFIED>2012.04.04</MODIFIED>
+		<AUTHOR>Paul Vollmer, wng.cc</AUTHOR>
+		<CHANGES>A small description of the changes.</CHANGES>
+	</VERSIONING>
+	
+	Description of the XML tags.
+	----------------------------
+	<VERSIONING>
+		This is our main tag for the Version-Info File.
+		We use this tag for xml parsing.
+	<VERSION>
+		This tag contains the latest Application version.
+	<MODIFIED>
+		This tag contains the last Modified-Date.
+	<AUTHOR>
+		This tag contains the name of the Author/Company.
+	<CHANGES>
+		This tag contains a string of changes.
+
+
 ofxAppUpdater is developed by Paul Vollmer http://wrong-entertainment.com/  
 The ofxAppUpdater Project Page is Hosted at ...  
 Check out for New released Version at https://github.com/wrongentertainment/ofxAppUpdater/  
 
 This file is part of ofxAppUpdater.  
-Author: Paul Vollmer, Modified: 2012.04.05  
+Author: Paul Vollmer, Modified: 2012.04.12  
 
 
 ## Versioning 
-
+ofxAppUpdater is stable and versioned using [semantic versioning](http://semver.org/).  
+Current version: 0.1.0  
 
 
 ## Authors
@@ -88,7 +115,7 @@ Here is a small installation instruction.
 Check install.xml files.    
 
 Platform:
-MacOS  
+MacOS 10.6  
 Dependencies:
 openFrameworks version 0.07  
 

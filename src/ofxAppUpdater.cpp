@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.04
- * @version     0.1.0
+ * @modified    2012.04.12
+ * @version     0.1.0b
  */
 
 
@@ -40,13 +40,14 @@ namespace wng {
 	 */
 	ofxAppUpdater::ofxAppUpdater(){
 		
-		/* Set the internetConnection variable to true 
-		 * This we need for an automatic update. If you want to manually,
-		 * set the internetConnection variable at setup to false */
-		internetConnection = true;
+		// Set the internetConnection variable to false. 
+		// If you want to manually, set the internetConnection variable,
+		// change it at openFrameworks setup.
+		internetConnection = false;
 		
-		#ifdef DEBUG
-			printf("[ofxAppUpdater] Constructor Ready! \n");
+		#ifdef OFXAPPUPDATER_LOG
+			ofSetLogLevel(OF_LOG_VERBOSE);
+			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] " + ofGetTimestampString() + " Constructor Ready! ");
 		#endif
 		
 	}
@@ -56,7 +57,216 @@ namespace wng {
 	
 	
 	/**
-	 * Load a CSV File.
+	 * initialize
+	 *
+	 * @param currentVersion
+	 *        The current Application Version.
+	 *        Like this: 1.0
+	 * @param serverUrl
+	 *        The url of the server to load the files.
+	 *        Like this: "http://www.wrong-entertainment.com/appupdate"
+	 * @param versionInfoXml
+	 *        The name of our version information xml file.
+	 *        Like this: "versioninfo.xml"
+	 * @param latestZip
+	 *        The name of the zip file.
+	 *        Like this: "latest.zip"
+	 */
+	void ofxAppUpdater::init(float currentVersion, string serverUrl, string versionInfoXml, string latestZip){
+		
+		this->currentVersion = currentVersion;
+		this->serverUrl = serverUrl;
+		this->versionInfoXml = versionInfoXml;
+		this->latestZip = latestZip;
+		
+		#ifdef OFXAPPUPDATER_LOG
+			ofSetLogLevel(OF_LOG_VERBOSE);
+			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] init()");
+			ofLog(OF_LOG_VERBOSE, "-> Current-Version:  " + ofToString(this->currentVersion));
+			ofLog(OF_LOG_VERBOSE, "-> Server-Url:       " + this->serverUrl);
+			ofLog(OF_LOG_VERBOSE, "-> Version-Info-XML: " + this->versionInfoXml);
+			ofLog(OF_LOG_VERBOSE, "-> Latest-ZIP:       " + this->latestZip);
+		#endif
+		
+	}
+	
+	
+	
+	
+	
+	/**
+	 * checking
+	 */
+	void ofxAppUpdater::checking(){
+		
+		#ifdef OFXAPPUPDATER_LOG
+			ofSetLogLevel(OF_LOG_VERBOSE);
+			ofLog(OF_LOG_VERBOSE, "[ofxUpdater] check() Start");
+		#endif
+		
+		
+		loadFile(serverUrl+versionInfoXml, ofFilePath::getCurrentWorkingDirectory()+"tempVersionInfo.xml");
+		parseXML(ofFilePath::getCurrentWorkingDirectory()+"tempVersionInfo.xml");
+		ofFile tempXmlFile;
+		tempXmlFile.removeFile("tempVersioninfo.xml", true);
+		
+		
+		
+		
+		
+		// Check the Version numbers if it's false, you can download a new version.
+		if(checkVersion(currentVersion, latestVersion) == false){
+			#ifdef OFXAPPUPDATER_LOG
+				ofLog(OF_LOG_VERBOSE, ofGetTimestampString() + " Start downloading zip file.");
+			#endif
+			
+			// Create a temporary zip filename. 
+			// Setting the name of the downloaded zip file.
+			string tempZipFilename = "tempDownload.zip";
+			// Start downloading zip package.
+			//ofSaveURLTo(url+"test.zip", tempZipFilename);
+			
+			loadFile(serverUrl+latestZip, ofFilePath::getCurrentWorkingDirectory()+"tempDownload.zip");
+			
+			#ifdef OFXAPPUPDATER_LOG
+				ofLog(OF_LOG_VERBOSE, ofGetTimestampString() + " Start downloading zip file.");
+			#endif
+			// We have to unzip the downloaded file.
+			//ofxUnZip("tempDownload.zip", "wng_test");
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	/**
+	 * checkVersion
+	 *
+	 * @param currentVer
+	 *        Float of the Current-Version.
+	 * @param latestVer
+	 *        Float of the Latest-Version.
+	 * @return bool
+	 *         True if the Version is the latest.
+	 */
+	bool ofxAppUpdater::checkVersion(float currentVer, float latestVer){
+		
+		if (currentVer == latestVer) {
+			
+			#ifdef OFXAPPUPDATER_LOG
+			ofSetLogLevel(OF_LOG_VERBOSE);
+			ofLog(OF_LOG_VERBOSE, "[ofxUpdater] checkVersion() Current-Version: " + ofToString(currentVer) + " Latest-Version: " + ofToString(latestVer));
+			ofLog(OF_LOG_VERBOSE, "                            State: You're running the latest Application Release.");
+			#endif
+			return true;
+			
+		} else {
+			
+			#ifdef OFXAPPUPDATER_LOG
+			ofSetLogLevel(OF_LOG_VERBOSE);
+			ofLog(OF_LOG_VERBOSE, "[ofxUpdater] checkVersion() Current-Version: " + ofToString(currentVer) + " Latest-Version: " + ofToString(latestVer));
+			ofLog(OF_LOG_VERBOSE, "                            State: A new Version is Available.");
+			#endif
+			return false;
+			
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	void ofxAppUpdater::parseXML(string filename){
+		
+		#ifdef OFXAPPUPDATER_LOG
+			ofSetLogLevel(OF_LOG_VERBOSE);
+			ofLog(OF_LOG_VERBOSE, "[ofxUpdater] parseXML() Start");
+		#endif
+		
+		
+		//  Create a new ofxXmlSettings object for reading the saved file.		
+		ofxXmlSettings xml;
+		
+		// We load our xml file.
+		// This is based on the openFrameworks xmlSettingsExample.
+		if(xml.loadFile(filename)){
+			#ifdef OFXAPPUPDATER_LOG 
+				ofLog(OF_LOG_VERBOSE, "XML: File <" + filename + "> loaded!");
+			#endif
+			
+			latestVersion = xml.getValue("VERSIONING:VERSION",  0.0,          0);
+			modifiedDate  = xml.getValue("VERSIONING:MODIFIED", "1970.01.01", 0);
+			author        = xml.getValue("VERSIONING:AUTHOR",   "wng.cc",     0);
+			changes       = xml.getValue("VERSIONING:CHANGES",  "nothing",    0);
+			#ifdef OFXAPPUPDATER_LOG
+				ofLog(OF_LOG_VERBOSE, "-> Latest Version = " + ofToString(latestVersion));
+				ofLog(OF_LOG_VERBOSE, "-> Modified       = " + modifiedDate);
+				ofLog(OF_LOG_VERBOSE, "-> Author         = " + author );
+				ofLog(OF_LOG_VERBOSE, "-> Changes        = " + changes);
+			#endif
+		} else {
+			#ifdef OFXAPPUPDATER_LOG
+				ofLog(OF_LOG_VERBOSE, "XML: File <" + filename + "> not found");
+			#endif
+		}
+		
+	}
+	
+	
+	
+	void ofxAppUpdater::loadFile(string serverSrc, string tempFilepath){
+		
+		// A path and name for the file we load from server. 
+		// I think we can handle this as an intern variable.
+		//string tempFilename = "tempVersioninfo.xml";
+		
+		
+		// Xml file download
+		//
+		// Soluion 1:
+		// use openFrameworks to download our xml file.
+		
+		//cout << ofGetTimestampString() << " DOWNLOAD XML FILE START." << endl;
+		// Copy our version xml file to data folder.
+		//ofSaveURLAsync(serverUrl+versionInfoXml, tempFilename);
+		//cout << ofGetTimestampString() << " DOWNLOAD XML FILE READY." << endl;	
+		
+		
+		// Solution 2:
+		// we use applescript to download our xml file.
+		//
+		// Here is the original applescript
+		// 
+		// tell application "URL Access Scripting"
+		// download "http://www.wrong-entertainment.com/code/wngUpdater/versioninfo.xml" to file "/testfile.txt" replacing yes
+		// end tell
+		
+		//string tempUrl = "http://www.wrong-entertainment.com/code/wngUpdater/versioninfo.xml";
+		//string tempFilepath = ofFilePath::getCurrentWorkingDirectory()+tempFilename;
+		
+		string tempApplescript = "osascript -e 'tell app \"URL Access Scripting\" \n download \""+serverSrc+"\" to file \""+tempFilepath+"\" replacing yes \n end tell'";
+		system(tempApplescript.c_str());
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * init
 	 *
 	 * @param userVer
 	 *        User Version.
@@ -67,123 +277,145 @@ namespace wng {
 	 * @param connection
 	 *        internet Connection boolean.
 	 */
-	void ofxAppUpdater::init(float userVer, string file, string url, string zip, bool connection){
+	void ofxAppUpdater::test(float userVer, string file, string url, string zip, bool connection){
 		
-		/* Get the Timestamp */
+		// Get the Timestamp
 		string timestamp = ofGetTimestampString();
 		
-		/* Set version variables. */
-		userVersion = userVer;
-		internetConnection = connection;
+		// Set version variables.
+		//currentVersion = userVer;
+		//internetConnection = connection;
 		
-		#ifdef DEBUG
-			cout <<"[ofxAppUpdater] init() Timestamp: " << ofGetTimestampString() << endl;
-			printf("                       Internet Connection: %s \n", (internetConnection)?"true":"false");
-			printf("                       User Version: %f \n", userVersion);
-			cout <<"                       Filename: " << file << endl;
-			cout <<"                       Url: " << url << endl;
-		#endif
+		/*#ifdef OFXAPPUPDATER_LOG
+			ofSetLogLevel(OF_LOG_VERBOSE);
+			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] " + ofGetTimestampString() + " init()");
+			ofLog(OF_LOG_VERBOSE, "-> Internet Connection: " + internetConnection);
+			ofLog(OF_LOG_VERBOSE, "-> User Version:        " + ofToString(userVersion));
+			ofLog(OF_LOG_VERBOSE, "-> Filename:            " + file);
+			ofLog(OF_LOG_VERBOSE, "-> Server-Url:          " + url);
+		#endif*/
 		
 		
-		/* if the internetConnection is true, we can check an xml file
-		 * to get the latest version. */
+		// if the internetConnection is true, we can check an xml file
+		// to get the latest version.
 		if (internetConnection == true){
 			
-			/* A path and name for the file we load from server. 
-			 * I think we can handle this as an intern variable.*/
+			// A path and name for the file we load from server. 
+			// I think we can handle this as an intern variable.
 			string tempFilename = "tempVersioninfo.xml";
-			
-			/* Copy our version xml file to data folder. */
-			ofSaveURLTo(url+file, tempFilename);
+			/*
 			
 			
-			/* Create a new ofxXmlSettings object for reading the saved file. */		
-			ofxXmlSettings xml;
+			// Xml file download
+			//
+			// Soluion 1:
+			// use openFrameworks to download our xml file.
 			
-			/* We load our xml file.
-			 * Examlple from openFrameworks xmlSettingsExample */
+			//cout << ofGetTimestampString() << " DOWNLOAD XML FILE START." << endl;
+			// Copy our version xml file to data folder.
+			ofSaveURLAsync(url+file, tempFilename);
+			//cout << ofGetTimestampString() << " DOWNLOAD XML FILE READY." << endl;	
+			
+			
+			// Solution 2:
+			// we use applescript to download our xml file.
+			//
+			// Here is the original applescript
+			// 
+			// tell application "URL Access Scripting"
+			// download "http://www.wrong-entertainment.com/code/wngUpdater/versioninfo.xml" to file "/testfile.txt" replacing yes
+			// end tell
+			string tempUrl = "http://www.wrong-entertainment.com/code/wngUpdater/versioninfo.xml";
+			string tempFilepath = ofFilePath::getCurrentWorkingDirectory()+"/test_00001.xml";
+			
+			string tempApplescript = "osascript -e 'tell app \"URL Access Scripting\" \n download \""+tempUrl+"\" to file \""+tempFilepath+"\" replacing yes \n end tell'";
+			
+			system(tempApplescript.c_str());*/
+			
+			
+			
+			
+			
+			//  Create a new ofxXmlSettings object for reading the saved file.		
+			/*ofxXmlSettings xml;
+			
+			// We load our xml file.
+			// Examlple from openFrameworks xmlSettingsExample.
 			if(xml.loadFile(tempFilename)){
-				#ifdef DEBUG 
-					cout << "                       XML: File <" << tempFilename << "> loaded!" << endl;
+				#ifdef OFXAPPUPDATER_LOG 
+					ofSetLogLevel(OF_LOG_VERBOSE);
+					ofLog(OF_LOG_VERBOSE, "XML: File <" + tempFilename + "> loaded!");
 				#endif
 				
 				latestVersion = xml.getValue("VERSIONING:VERSION",  0.0,          0);
-				modified      = xml.getValue("VERSIONING:MODIFIED", "1970.01.01", 0);
+				modifiedDate  = xml.getValue("VERSIONING:MODIFIED", "1970.01.01", 0);
 				author        = xml.getValue("VERSIONING:AUTHOR",   "wng.cc",     0);
 				changes       = xml.getValue("VERSIONING:CHANGES",  "nothing",    0);
 				
-				#ifdef DEBUG 
-					cout << "                            Latest Version = " << latestVersion << endl;
-					cout << "                            Modified       = " << modified << endl;
-					cout << "                            Author         = " << author << endl;
-					cout << "                            Changes        = " << changes << endl;
-				#endif
+				#ifdef OFXAPPUPDATER_LOG
+					ofLog(OF_LOG_VERBOSE, "-> Latest Version = " + ofToString(latestVersion));
+					ofLog(OF_LOG_VERBOSE, "-> Modified       = " + modifiedDate);
+					ofLog(OF_LOG_VERBOSE, "-> Author         = " + author );
+					ofLog(OF_LOG_VERBOSE, "-> Changes        = " + changes);
+				#endif*/
 				
-				/* Check the Version numbers if it's false, you can download a new version. */
-				if(checkVersion(userVersion, latestVersion) == false){
+				
+			
+			
+			
+			
+			
+			
+			
+				// Check the Version numbers if it's false, you can download a new version.
+				if(checkVersion(currentVersion, latestVersion) == false){
 					
-					#ifdef DEBUG
-						printf("Start downloading zip file.\n");
+					#ifdef OFXAPPUPDATER_LOG
+						ofLog(OF_LOG_VERBOSE, ofGetTimestampString() + " Start downloading zip file.");
 					#endif
 					
-					/* Create a temporary zip filename. 
-					 * Setting the name of the downloaded zip file. */
-					string tempZipFilename = "tempDownload.zip";
-					/* Start downloading zip package. */
-					ofSaveURLTo(url+"test.zip", tempZipFilename);
+					// Create a temporary zip filename. 
+					// Setting the name of the downloaded zip file.
+					//string tempZipFilename = "tempDownload.zip";
+					// Start downloading zip package.
+					//ofSaveURLTo(url+"test.zip", tempZipFilename);
 					
-					/* We have to unzip the downloaded file. */
+					#ifdef OFXAPPUPDATER_LOG
+						ofLog(OF_LOG_VERBOSE, ofGetTimestampString() + " Start downloading zip file.");
+					#endif
+					
+					// We have to unzip the downloaded file.
 					//ofxUnZip("tempDownload.zip", "wng_test");
 					
 				}
 
 				
 			} else {
-				#ifdef DEBUG
-					printf("                       XML: File not found");
+				#ifdef OFXAPPUPDATER_LOG
+					ofSetLogLevel(OF_LOG_VERBOSE);
+					ofLog(OF_LOG_VERBOSE, "XML: File <  > not found");
 				#endif
 			}
 
-		}
+		//}
+		
+		
+		/*ofFile tempXmlFile;
+		//tempXmlFile.renameTo("test123.xml", true);
+		tempXmlFile.removeFile("tempVersioninfo.xml", true);*/
+		
+		//internetConnection = false;
 		
 	}
+	
+	
 	
 	/**
 	 * See decription below.
-	 */
-	void ofxAppUpdater::init(float userVer, string file, string url, string zip){
-		init(userVer, file, url, zip, true);
-	}
-	
-	
-	
-	/**
-	 * checkversion
 	 *
-	 * @param userVer
-	 *        Float of the User-Version
-	 * @param latestVer
-	 *        Float of the Latest-Version
-	 * @return bool
-	 *         true if the Version is the latest.
-	 */
-	bool ofxAppUpdater::checkVersion(float userVer, float latestVer){
-	
-		if (userVer == latestVer) {
-			#ifdef DEBUG
-				printf("[ofxUpdater] checkVersion() User-Version: %f Latest-Version: %f \n", userVer, latestVer);
-				printf("                            State: You're running the latest Application Release. \n");
-			#endif
-			return true;
-		} else {
-			#ifdef DEBUG
-				printf("[ofxUpdater] checkVersion() User-Version: %f Latest-Version: %f \n", userVer, latestVer);
-				printf("                            State: A new Version is Available. \n");
-			#endif
-			return false;
-		}
-		
-	}
+	void ofxAppUpdater::test(float userVer, string file, string url, string zip){
+		test(userVer, file, url, zip, true);
+	}*/
 	
 	
 }
