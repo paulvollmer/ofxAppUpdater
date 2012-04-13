@@ -2,6 +2,6 @@
 	<VERSION>1.0.1</VERSION>
 	<MODIFIED>2012.04.13</MODIFIED>
 	<AUTHOR>Paul Vollmer, wrong-entertainment.com</AUTHOR>
-	<CHANGES>[fixed] unzip release.zip</CHANGES>
-    <CHANGES>[test] testing ofxAppUpdater v.1.0.1</CHANGES>
+	<CHANGES>[fixed] unzip release.zip \n
+    [test] testing ofxAppUpdater v.1.0.1</CHANGES>
 </VERSIONING>
