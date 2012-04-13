@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.12
- * @version     0.1.0b
+ * @modified    2012.04.13
+ * @version     1.0.1
  */
 
 
@@ -51,7 +51,7 @@ namespace wng {
 		/**
 		 * Methods
 		 */
-		void init(float tempCurrentVer, string tempServer, string tempVersionInfo, string tempLatest);
+		void init(string tempCurrentVer, string tempServer, string tempVersionInfo, string tempLatest);
 		void checking();
 		void downloading();
 		void restart();
@@ -59,24 +59,24 @@ namespace wng {
 		int drawMode;
 		
 		// This variables we need for checking if a new release exist.
-		float currentVersion;
+		string currentVersion;
 		
 		// This variables store the information from our versioninfo.xml file.
 		// The variables will be set by parseXML method.
-		float latestVersion;   // Latest Software Version
+		string latestVersion;  // Latest Software Version
 		string modifiedDate;   // Date of last modification
 		string author;         // Name of the author/company
 		string changes;        // A list of changes that will shipped with the new update.
 		
-		void unzip(string src);
+		
 	private:
 		/**
 		 * Methods
 		 */
-		bool checkVersion(float currentVer, float latestVer);
+		bool checkVersion(string currentVer, string latestVer);
 		void parseXML(string filename);
 		void loadFile(string serverSrc, string tempFilepath);
-		
+		void unzip(string src);
 		
 		/**
 		 * Variables

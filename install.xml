@@ -1,6 +1,6 @@
 <install>
     <name>ofxAppUpdater</name>
-	<version>0.1.0</version>
+	<version>1.0.1</version>
 	<author>Paul Vollmer</author>
 	<url>http://www.wng.cc</url>
 	
@@ -18,6 +18,7 @@
 	
 	    <include>
 		    <path>../../../addons/ofxAppUpdater/src</path>
+			<path>../../../addons/ofxAppUpdater/src</path>
 	    </include>
     </add>
     

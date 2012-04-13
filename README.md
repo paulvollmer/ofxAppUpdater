@@ -90,12 +90,12 @@ The ofxAppUpdater Project Page is Hosted at ...
 Check out for New released Version at https://github.com/wrongentertainment/ofxAppUpdater/  
 
 This file is part of ofxAppUpdater.  
-Author: Paul Vollmer, Modified: 2012.04.12  
+Author: Paul Vollmer, Modified: 2012.04.13  
 
 
 ## Versioning 
 ofxAppUpdater is stable and versioned using [semantic versioning](http://semver.org/).  
-Current version: 0.1.0  
+Current version: 1.0.1  
 
 
 ## Authors
@@ -131,6 +131,10 @@ A detailed changelog, intended for programmers.
 
 - 0.1.0  
   starting addon Repository  
+- 1.0.1
+  first beta test  
+  for this we create a "release_storage" directory and add versioninfo.xml, release.zip  
+  (the versioninfo.xml can also used as a changelog history)  
 
 
 ## Bugs  

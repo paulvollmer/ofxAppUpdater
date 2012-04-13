@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.12
- * @version     0.1.0b
+ * @modified    2012.04.13
+ * @version     1.0.1
  */
 
 
@@ -66,7 +66,7 @@ namespace wng {
 	 *
 	 * @param currentVersion
 	 *        The current Application Version.
-	 *        Like this: 1.0
+	 *        Like this: "1.0.0"
 	 * @param serverUrl
 	 *        The url of the server to load the files.
 	 *        Like this: "http://www.wrong-entertainment.com/appupdate"
@@ -77,7 +77,7 @@ namespace wng {
 	 *        The name of the zip file.
 	 *        Like this: "latest.zip"
 	 */
-	void ofxAppUpdater::init(float currentVersion, string serverUrl, string versionInfoXml, string latestZip){
+	void ofxAppUpdater::init(string currentVersion, string serverUrl, string versionInfoXml, string latestZip){
 		
 		this->currentVersion = currentVersion;
 		this->serverUrl = serverUrl;
@@ -86,7 +86,7 @@ namespace wng {
 		
 		#ifdef OFXAPPUPDATER_LOG
 			ofSetLogLevel(OF_LOG_VERBOSE);
-			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] init() Current-Version: " + ofToString(this->currentVersion) + ", Server-Url: " + this->serverUrl + ", Version-Info-XML: " + this->versionInfoXml + ", Latest-ZIP: " + this->latestZip);
+			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] init() Current-Version: " + this->currentVersion + ", Server-Url: " + this->serverUrl + ", Version-Info-XML: " + this->versionInfoXml + ", Latest-ZIP: " + this->latestZip);
 		#endif
 		
 	}
@@ -147,7 +147,8 @@ namespace wng {
 		if(drawMode == 2){
 			
 			// At the moment we create a file at he same directory like the app.
-			string tempFile = ofFilePath::getCurrentWorkingDirectory()+"tempDownloadfile_002.zip";
+			//string tempFile = ofFilePath::getPathForDirectory("~/Desktop")+"tempDownloadfile.zip";
+			string tempFile = ofFilePath::getPathForDirectory("~/Desktop")+latestZip;
 			
 			loadFile(serverUrl+latestZip, tempFile);
 			
@@ -166,11 +167,17 @@ namespace wng {
 	void ofxAppUpdater::restart(){
 		
 		if(drawMode == 3){
-			cout << "unzip <" << ofFilePath::getCurrentWorkingDirectory()+"tempDownloadfile_002.zip" << ">\n";
-		
-			unzip(ofFilePath::getCurrentWorkingDirectory()+"tempDownloadfile_002.zip");
+			//string t = ofFilePath::getPathForDirectory("~/Desktop/")+"tempDownloadfile.zip";
+			string tempFile = ofFilePath::getPathForDirectory("~/Desktop/")+latestZip;
+			#ifdef OFXAPPUPDATER_LOG
+				cout << "unzip <" << tempFile << ">\n";
+			#endif
+			
+			unzip(tempFile);
 		
 			drawMode = 4;
+			
+			ofExit(1);
 		}
 	}
 	
@@ -188,7 +195,7 @@ namespace wng {
 	 * @return bool
 	 *         True if the Version is the latest.
 	 */
-	bool ofxAppUpdater::checkVersion(float currentVer, float latestVer){
+	bool ofxAppUpdater::checkVersion(string currentVer, string latestVer){
 		
 		if(currentVer == latestVer){
 			
@@ -233,13 +240,13 @@ namespace wng {
 		// We load our xml file.
 		// This is based on the openFrameworks xmlSettingsExample.
 		if(xml.loadFile(filename)){
-			latestVersion = xml.getValue("VERSIONING:VERSION",  0.0,          0);
+			latestVersion = xml.getValue("VERSIONING:VERSION",  "1.0.0", 0);
 			modifiedDate  = xml.getValue("VERSIONING:MODIFIED", "1970.01.01", 0);
-			author        = xml.getValue("VERSIONING:AUTHOR",   "wng.cc",     0);
-			changes       = xml.getValue("VERSIONING:CHANGES",  "nothing",    0);
+			author        = xml.getValue("VERSIONING:AUTHOR",   "wng.cc", 0);
+			changes       = xml.getValue("VERSIONING:CHANGES",  "nothing", 0);
 			#ifdef OFXAPPUPDATER_LOG
 			ofLog(OF_LOG_VERBOSE, "parseXML() File <" + filename + "> loaded!");
-			ofLog(OF_LOG_VERBOSE, "Latest Version: " + ofToString(latestVersion));
+			ofLog(OF_LOG_VERBOSE, "Latest Version: " + latestVersion);
 			ofLog(OF_LOG_VERBOSE, "Modified: " + modifiedDate);
 			ofLog(OF_LOG_VERBOSE, "Author: " + author);
 			ofLog(OF_LOG_VERBOSE, "Changes: " + changes);
@@ -296,8 +303,23 @@ namespace wng {
 	 */
 	void ofxAppUpdater::unzip(string src){
 		
-		string tempApplescript = "osascript -e 'do shell script (\"cd \" & \"" + src + "\" & \"; unzip -o tempDownloadfile.zip; rm -rf __MACOSX\")'";
-		system(tempApplescript.c_str());
+		// unzip file
+		#ifdef TARGET_OSX
+			// ok gotta be a better way then this,
+			// this is what I found...
+			string commandStr = "open /Users/wrongMacBookpro/Desktop/"+latestZip;
+			system(commandStr.c_str());
+		#endif
+		
+		
+		ofSleepMillis(4000);
+		
+		// Delete downloaded zip file.
+		ofFile tempXmlFile;
+		tempXmlFile.removeFile("/Users/wrongMacBookpro/Desktop/"+latestZip	, true);
+		
+		// Move downloaded file to current working directory.
+		
 		
 	}
 	

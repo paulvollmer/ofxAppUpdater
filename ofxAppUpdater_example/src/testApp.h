@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.12
- * @version     0.1.0
+ * @modified    2012.04.13
+ * @version     1.0.1
  */
 
 

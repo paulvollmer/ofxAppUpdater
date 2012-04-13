@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.12
- * @version     0.1.0
+ * @modified    2012.04.13
+ * @version     1.0.1
  */
 
 
@@ -50,10 +50,18 @@ void testApp::setup(){
 	//
 	// Keep clean the follwing Variables to update and release our software savely.
 	// For this you can use the [ semantic versioning ]( http://semver.org ) style.
-	updater.init(1.0,
-				 "http://dl.dropbox.com/u/2874680/ofxAppUpdater/",
-				 "versioninfo_1_0_0.xml",
+	// 
+	// The versioninfo.xml and release.zip are stored at github repository.
+	// https://raw.github.com/WrongEntertainment/ofxAppUpdater/master/release_storage/versioninfo_1_0_0.xml
+	updater.init("0.1.1",
+				 "https://raw.github.com/WrongEntertainment/ofxAppUpdater/master/release_storage/",
+				 "versioninfo_1_0_1.xml",
 				 "release_1_0_0.zip");
+	/*
+	updater.init("1.0.1",
+				 "http://dl.dropbox.com/u/2874680/ofxAppUpdater/",
+				 "versioninfo_1_0_1.xml",
+				 "release_1_0_1.zip");*/
 	
 	// TODO: a changelog system for release history.
 	// The changes will be shown at the application-update info alert.
@@ -65,7 +73,7 @@ void testApp::setup(){
 	//updater.checkVersion(1, 1);
 	//updater.parseXML("versioninfo.xml");
 	//updater.loadXml(updater.serverUrl+updater.versionInfoXml);
-	updater.unzip(ofFilePath::getCurrentWorkingDirectory()+"tempDownloadfile_002.zip");
+	//updater.unzip(ofFilePath::getCurrentWorkingDirectory()+"tempDownloadfile_002.zip");
 }
 
 //--------------------------------------------------------------
@@ -80,7 +88,7 @@ void testApp::draw(){
 	
 	
 	// Display our ofxAppUpdater Information.
-	
+	//
 	// Here is a list of the drawModes:
 	// - 0 = Default Mode (mo update checked)
 	// - 1 = After Checking (Version OK)
@@ -89,35 +97,47 @@ void testApp::draw(){
 	switch (updater.drawMode) {
 		case 0:
 			ofSetColor(0, 255, 255);
-			ofDrawBitmapString("Press 'u' for update check!", 100, 50);
+			ofDrawBitmapString("Press 'u' for update check!", 10, 20);
 			break;
+			
 		case 1:
-			ofSetColor(0, 255, 255);
-			ofDrawBitmapString("You're running the latest Application Release!", 100, 50);
+			// Draw something..
+			//ofSetColor(0, 255, 255);
+			//ofDrawBitmapString("You're running the latest Application Release!", 10, 20);
+			
+			// .. or display a System Alert.
+			ofSystemAlertDialog("You're running the latest Application Release!");
+			updater.drawMode = -1;
+			
 			break;
+		
 		case 2:
-			ofSetColor(0, 255, 255);
-			ofDrawBitmapString("A new Version is Available! Press 'd' for downloading new Release.", 100, 50);
-			ofSetColor(0, 255, 0);
-			ofDrawBitmapString("Current-Version: " + ofToString(updater.currentVersion), 100, 70);
-			ofDrawBitmapString("Latest-Version:  " + ofToString(updater.latestVersion), 100, 90);
-			ofDrawBitmapString("Author:          " + updater.author, 100, 110);
-			ofDrawBitmapString("ModifiedDate:    " + updater.modifiedDate, 100, 130);
-			ofDrawBitmapString("Changes:         " + updater.changes, 100, 150);
+			ofSetColor(ofColor::yellow);
+			ofRect(5, 5, ofGetWidth()-10, 38);
+			
+			ofSetColor(ofColor::black);
+			ofDrawBitmapString("A new Version is Available! \nPress 'd' for downloading new Release.", 10, 20);
+			ofSetColor(ofColor::yellow);
+			ofDrawBitmapString("Current-Version: " + ofToString(updater.currentVersion), 10, 70);
+			ofDrawBitmapString("Latest-Version:  " + ofToString(updater.latestVersion), 10, 90);
+			ofDrawBitmapString("Author:          " + updater.author, 10, 110);
+			ofDrawBitmapString("ModifiedDate:    " + updater.modifiedDate, 10, 130);
+			ofDrawBitmapString("Changes:         " + updater.changes, 10, 150);
 			break;
+		
 		case 3:
 			ofSetColor(0, 255, 255);
 			ofDrawBitmapString("Download Ready! Press 'r' to Restart your Application.", 100, 50);
 			break;
+		
 		case 4:
 			ofSetColor(0, 255, 255);
 			ofDrawBitmapString("Restarting Application!", 100, 50);
 			break;
-
+		
 		default:
 			break;
 	}
-	
 	
 }
 
@@ -125,17 +145,20 @@ void testApp::draw(){
 void testApp::keyPressed(int key){
 
 	switch (key) {
+			
 		// We use the key <u> to check if a new update is available.
 		case 'u':
-			updater.checking();
+			if (updater.drawMode == 0) {
+				updater.checking();
+			}
 			break;
 		
-		// Download
+		// key <d> to download the latest release.
 		case 'd':
 			if (updater.drawMode == 2) updater.downloading();
 			break;
 		
-		// Restart
+		// key <r> to restart the app.
 		case 'r':
 			if (updater.drawMode == 3) updater.restart();
 			break;
