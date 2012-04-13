@@ -59,41 +59,18 @@ void testApp::setup(){
 	// The changes will be shown at the application-update info alert.
 	
 	
-	
-	
-	/* Initiolize ofxUpdater class. */
-	/*updater.init(1.0,
-				 "versioninfo.xml",
-				 "http://dl.dropbox.com/u/2874680/ofxAppUpdater/",
-				 "latest.zip");*/
-	/* Or use the init method which you can set your internet connection. *
-	 updater.init(updaterVersion,
-	 updaterVersionFile,
-	 updaterServerUrl,
-	 updaterZipFile,
-	 false);*/
-	
-	/*
-	 updater.internetConnection;
-	 updater.userVersion;
-	 updater.latestVersion;
-	 */
-
-	
-	
 	// TEST
 	// This is used for development testing.
+	//updater.checking();
 	//updater.checkVersion(1, 1);
 	//updater.parseXML("versioninfo.xml");
 	//updater.loadXml(updater.serverUrl+updater.versionInfoXml);
+	updater.unzip(ofFilePath::getCurrentWorkingDirectory()+"tempDownloadfile_002.zip");
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-	if (updaterChecking == true) {
-		updater.checking();
-		updaterChecking = false;
-	}
+	
 }
 
 //--------------------------------------------------------------
@@ -101,25 +78,71 @@ void testApp::draw(){
 	
 	ofBackground(0);
 	
+	
 	// Display our ofxAppUpdater Information.
-	ofSetColor(0, 255, 255);
-	ofDrawBitmapString("ofxAppUpdater   -   Press 'u' for update check!", 100, 50);
-	ofSetColor(0, 255, 0);
-	ofDrawBitmapString("Current-Version: " + ofToString(updater.currentVersion), 100, 70);
-	ofDrawBitmapString("Latest-Version:  " + ofToString(updater.latestVersion), 100, 90);
-	ofDrawBitmapString("Author:          " + updater.author, 100, 110);
-	ofDrawBitmapString("ModifiedDate:    " + updater.modifiedDate, 100, 130);
-	ofDrawBitmapString("Changes:         " + updater.changes, 100, 150);
+	
+	// Here is a list of the drawModes:
+	// - 0 = Default Mode (mo update checked)
+	// - 1 = After Checking (Version OK)
+	// - 2 = After Checking (New Version)
+	// - 3 = Download ready
+	switch (updater.drawMode) {
+		case 0:
+			ofSetColor(0, 255, 255);
+			ofDrawBitmapString("Press 'u' for update check!", 100, 50);
+			break;
+		case 1:
+			ofSetColor(0, 255, 255);
+			ofDrawBitmapString("You're running the latest Application Release!", 100, 50);
+			break;
+		case 2:
+			ofSetColor(0, 255, 255);
+			ofDrawBitmapString("A new Version is Available! Press 'd' for downloading new Release.", 100, 50);
+			ofSetColor(0, 255, 0);
+			ofDrawBitmapString("Current-Version: " + ofToString(updater.currentVersion), 100, 70);
+			ofDrawBitmapString("Latest-Version:  " + ofToString(updater.latestVersion), 100, 90);
+			ofDrawBitmapString("Author:          " + updater.author, 100, 110);
+			ofDrawBitmapString("ModifiedDate:    " + updater.modifiedDate, 100, 130);
+			ofDrawBitmapString("Changes:         " + updater.changes, 100, 150);
+			break;
+		case 3:
+			ofSetColor(0, 255, 255);
+			ofDrawBitmapString("Download Ready! Press 'r' to Restart your Application.", 100, 50);
+			break;
+		case 4:
+			ofSetColor(0, 255, 255);
+			ofDrawBitmapString("Restarting Application!", 100, 50);
+			break;
+
+		default:
+			break;
+	}
+	
 	
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 
-	// We use the key <u> to check if a new update is available.
-	if (key == 'u') {
-		updaterChecking = true;
-		cout << "set updaterChecking true" << endl;
+	switch (key) {
+		// We use the key <u> to check if a new update is available.
+		case 'u':
+			updater.checking();
+			break;
+		
+		// Download
+		case 'd':
+			if (updater.drawMode == 2) updater.downloading();
+			break;
+		
+		// Restart
+		case 'r':
+			if (updater.drawMode == 3) updater.restart();
+			break;
+			
+		// Default
+		default:
+			break;
 	}
 	
 }

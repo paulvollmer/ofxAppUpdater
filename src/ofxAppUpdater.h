@@ -41,65 +41,61 @@ namespace wng {
 	
 	class ofxAppUpdater {
 		
-		public:
-			/**
-			 * Constructor
-			 */
-			ofxAppUpdater();
-	
-	
-			/**
-			 * Methods
-			 */
-			void init(float tempCurrentVer, string tempServer, string tempVersionInfo, string tempLatest);
-			void checking();
+	public:
+		/**
+		 * Constructor
+		 */
+		ofxAppUpdater();
 		
 		
-			bool checkVersion(float currentVer, float latestVer);
-			void parseXML(string filename);
-			void loadFile(string serverSrc, string tempFilepath);
+		/**
+		 * Methods
+		 */
+		void init(float tempCurrentVer, string tempServer, string tempVersionInfo, string tempLatest);
+		void checking();
+		void downloading();
+		void restart();
+		
+		int drawMode;
+		
+		// This variables we need for checking if a new release exist.
+		float currentVersion;
+		
+		// This variables store the information from our versioninfo.xml file.
+		// The variables will be set by parseXML method.
+		float latestVersion;   // Latest Software Version
+		string modifiedDate;   // Date of last modification
+		string author;         // Name of the author/company
+		string changes;        // A list of changes that will shipped with the new update.
+		
+		void unzip(string src);
+	private:
+		/**
+		 * Methods
+		 */
+		bool checkVersion(float currentVer, float latestVer);
+		void parseXML(string filename);
+		void loadFile(string serverSrc, string tempFilepath);
 		
 		
-		
-		
-		
-		
-			void test(float userVer, string file, string url, string zip, bool connection);
-			//void test(float userVer, string file, string url, string zip);
-		
-			
-			
-		
-		
-			
-			/**
-			 * Variables
-			 * Here will be listen all Variables of the ofxUpdater class.
-			 */
-			
-			// This variables we need for checking if a new release exist.
-			float currentVersion;
-			string serverUrl;
-			string versionInfoXml;
-			string latestZip;
-		
-			// This variables store the information from our versioninfo.xml file.
-			// The variables will be set by parseXML method.
-			float latestVersion;   // Latest Software Version
-			string modifiedDate;   // Date of last modification
-			string author;         // Name of the author/company
-			string changes;        // A list of changes that will shipped with the new update.
+		/**
+		 * Variables
+		 * Here will be listen all Variables of the ofxUpdater class.
+		 */
+		// Download Variables
+		string serverUrl;
+		string versionInfoXml;
+		string latestZip;
 		
 		
 		
+		// Trigger your web connection, if bool is true,
+		// your Application can check the version and
+		// download automatic if a new release is available.
+		bool internetConnection;
 		
-			// Trigger your web connection, if bool is true,
-			// your Application can check the version and
-			// download automatic if a new release is available.
-			bool internetConnection;
-		
-			// If the variable is true, the addon start downloading zip package.
-			//bool downloadActive;
+		// If the variable is true, the addon start downloading zip package.
+		//bool downloadActive;
 		
 		
 	};
