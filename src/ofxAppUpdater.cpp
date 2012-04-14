@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.13
- * @version     1.0.1
+ * @modified    2012.04.14
+ * @version     1.0.1a
  */
 
 
@@ -47,7 +47,7 @@ namespace wng {
 		
 		// We use the draw mode to design different ofxAppUpdater mode states.
 		// See at example draw.
-		drawMode = 0;
+		mode = 0;
 		
 		/*
 		#ifdef OFXAPPUPDATER_LOG
@@ -123,11 +123,11 @@ namespace wng {
 		// Check the Version numbers if it's false, you can download a new version.
 		if(checkVersion(currentVersion, latestVersion) == true){
 			// go to draw mode 1
-			drawMode = 1;
+			mode = 1;
 			
 		} else {
 			// go to draw mode 2
-			drawMode = 2;
+			mode = 2;
 		}
 		
 		
@@ -144,7 +144,7 @@ namespace wng {
 		//ofSetLogLevel(OF_LOG_VERBOSE);
 		//ofLog(OF_LOG_VERBOSE, "downloading");
 		
-		if(drawMode == 2){
+		if(mode == 2){
 			
 			// At the moment we create a file at he same directory like the app.
 			//string tempFile = ofFilePath::getPathForDirectory("~/Desktop")+"tempDownloadfile.zip";
@@ -154,7 +154,7 @@ namespace wng {
 			
 			ofSleepMillis(2000);
 			
-			drawMode = 3;
+			mode = 3;
 		}
 		
 	}
@@ -166,7 +166,7 @@ namespace wng {
 	 */
 	void ofxAppUpdater::restart(){
 		
-		if(drawMode == 3){
+		if(mode == 3){
 			//string t = ofFilePath::getPathForDirectory("~/Desktop/")+"tempDownloadfile.zip";
 			string tempFile = ofFilePath::getPathForDirectory("~/Desktop/")+latestZip;
 			#ifdef OFXAPPUPDATER_LOG
@@ -175,7 +175,7 @@ namespace wng {
 			
 			unzip(tempFile);
 		
-			drawMode = 4;
+			mode = 4;
 			
 			ofExit(1);
 		}

@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.13
- * @version     1.0.1
+ * @modified    2012.04.14
+ * @version     1.0.1a
  */
 
 
@@ -57,11 +57,6 @@ void testApp::setup(){
 				 "https://raw.github.com/WrongEntertainment/ofxAppUpdater/master/release_storage/",
 				 "versioninfo_1_0_1.xml",
 				 "release_1_0_0.zip");
-	/*
-	updater.init("1.0.1",
-				 "http://dl.dropbox.com/u/2874680/ofxAppUpdater/",
-				 "versioninfo_1_0_1.xml",
-				 "release_1_0_1.zip");*/
 	
 	// TODO: a changelog system for release history.
 	// The changes will be shown at the application-update info alert.
@@ -94,7 +89,7 @@ void testApp::draw(){
 	// - 1 = After Checking (Version OK)
 	// - 2 = After Checking (New Version)
 	// - 3 = Download ready
-	switch (updater.drawMode) {
+	switch (updater.mode) {
 		case 0:
 			ofSetColor(0, 255, 255);
 			ofDrawBitmapString("Press 'u' for update check!", 10, 20);
@@ -107,7 +102,7 @@ void testApp::draw(){
 			
 			// .. or display a System Alert.
 			ofSystemAlertDialog("You're running the latest Application Release!");
-			updater.drawMode = -1;
+			updater.mode = -1;
 			
 			break;
 		
@@ -148,19 +143,19 @@ void testApp::keyPressed(int key){
 			
 		// We use the key <u> to check if a new update is available.
 		case 'u':
-			if (updater.drawMode == 0) {
+			if (updater.mode == 0) {
 				updater.checking();
 			}
 			break;
 		
 		// key <d> to download the latest release.
 		case 'd':
-			if (updater.drawMode == 2) updater.downloading();
+			if (updater.mode == 2) updater.downloading();
 			break;
 		
 		// key <r> to restart the app.
 		case 'r':
-			if (updater.drawMode == 3) updater.restart();
+			if (updater.mode == 3) updater.restart();
 			break;
 			
 		// Default

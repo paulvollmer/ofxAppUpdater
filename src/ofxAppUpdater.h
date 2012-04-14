@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.13
- * @version     1.0.1
+ * @modified    2012.04.14
+ * @version     1.0.1a
  */
 
 
@@ -56,7 +56,8 @@ namespace wng {
 		void downloading();
 		void restart();
 		
-		int drawMode;
+		// The update modes.
+		int mode;
 		
 		// This variables we need for checking if a new release exist.
 		string currentVersion;
