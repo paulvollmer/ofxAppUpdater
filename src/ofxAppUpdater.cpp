@@ -175,6 +175,7 @@ namespace wng {
 			
 			unzip(tempFile);
 		
+			
 			drawMode = 4;
 			
 			ofExit(1);
@@ -307,7 +308,7 @@ namespace wng {
 		#ifdef TARGET_OSX
 			// ok gotta be a better way then this,
 			// this is what I found...
-			string commandStr = "open /Users/wrongMacBookpro/Desktop/"+latestZip;
+			string commandStr = "open "+src;
 			system(commandStr.c_str());
 		#endif
 		
@@ -316,7 +317,7 @@ namespace wng {
 		
 		// Delete downloaded zip file.
 		ofFile tempXmlFile;
-		tempXmlFile.removeFile("/Users/wrongMacBookpro/Desktop/"+latestZip	, true);
+		tempXmlFile.removeFile(src, true);
 		
 		// Move downloaded file to current working directory.
 		
