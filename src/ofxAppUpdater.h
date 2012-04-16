@@ -52,7 +52,9 @@ namespace wng {
 		
 			DOWNLOAD = 4,
 		
-			RESTART = 5
+			RESTART = 5,
+			
+			FINISHED = 6
 	};
 	
 	
@@ -69,7 +71,7 @@ namespace wng {
 		/**
 		 * Methods
 		 */
-		void init(string tempCurrentVer, string tempServer, string tempVersionInfo, string tempLatest);
+		void init(string tempCurrentVer, string tempServer, string tempVersionInfo, string tempLatest, bool internetConnenction);
 		void autoUpdate();
 		void checkVersion();
 		void download();

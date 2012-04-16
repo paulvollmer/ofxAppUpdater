@@ -76,12 +76,13 @@ namespace wng {
 	 *        The name of the zip file.
 	 *        Like this: "latest.zip"
 	 */
-	void ofxAppUpdater::init(string currentVersion, string serverUrl, string versionInfoXml, string latestZip){
+	void ofxAppUpdater::init(string currentVersion, string serverUrl, string versionInfoXml, string latestZip, bool internetConnection){
 		
 		this->currentVersion = currentVersion;
 		this->serverUrl = serverUrl;
 		this->versionInfoXml = versionInfoXml;
 		this->latestZip = latestZip;
+		this->internetConnection = internetConnection;
 		#ifdef OFXAPPUPDATER_LOG
 			// TODO add message = ... for advanced use.
 			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] init() --------------------------------------------------------");
@@ -89,10 +90,10 @@ namespace wng {
 			ofLog(OF_LOG_VERBOSE, "Server-Url: " + this->serverUrl);
 			ofLog(OF_LOG_VERBOSE, "Version-Info-XML: " + this->versionInfoXml);
 			ofLog(OF_LOG_VERBOSE, "Latest-ZIP: " + this->latestZip);
+			ofLog(OF_LOG_VERBOSE, "Internet-Connection: " + this->internetConnection);
 			ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
 		#endif
 		
-		internetConnection = false;
 		message = "Initialized";
 		//timer = 0;
 		mode = DEFAULT;
@@ -259,7 +260,9 @@ namespace wng {
 		
 		//ofLog(OF_LOG_VERBOSE, "downloading");
 		
-		if(mode == 2){
+		if(internetConnection == true && mode == NEW_RELEASE){
+			
+			mode = DOWNLOAD;
 			
 			// At the moment we create a file at the desktop.
 			string tempFile = ofFilePath::getPathForDirectory("~/Desktop")+latestZip;
@@ -267,7 +270,7 @@ namespace wng {
 			
 			ofSleepMillis(200);
 			
-			mode = 3;
+			message = "Download Ready!";
 		}
 		
 	}
@@ -279,7 +282,8 @@ namespace wng {
 	 */
 	void ofxAppUpdater::restart(){
 		
-		if(mode == 3){
+		if(internetConnection == true && mode == DOWNLOAD){
+			
 			//string t = ofFilePath::getPathForDirectory("~/Desktop/")+"tempDownloadfile.zip";
 			string tempFile = ofFilePath::getPathForDirectory("~/Desktop/")+latestZip;
 			#ifdef OFXAPPUPDATER_LOG
@@ -287,9 +291,13 @@ namespace wng {
 			#endif
 			
 			unzip(tempFile);
-		
+			
+			//ofFile fi;
+			//fi.moveTo(<#string path#>, <#bool bRelativeToData#>, <#bool overwrite#>)
+			
 			mode = 4;
 			
+			message = "Quit Application";
 			ofExit(1);
 		}
 	}

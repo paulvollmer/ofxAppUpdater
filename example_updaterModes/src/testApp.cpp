@@ -1,28 +1,28 @@
 /**
- * ofxAppUpdater_example is developed by Paul Vollmer
+ * ofxAppUpdater is developed by Paul Vollmer
  * http://www.wng.cc
  * 
  * 
  * Copyright (c) 2012 Paul Vollmer
  *
- * ofxAppUpdater_example is free software; you can redistribute it and/or
+ * ofxAppUpdater is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * ofxAppUpdater_example is distributed in the hope that it will be useful,
+ * ofxAppUpdater is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General
- * Public License along with ofxAppUpdater_example; if not, write to the
+ * Public License along with ofxAppUpdater; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.14
- * @version     1.0.1a
+ * @modified    2012.04.16
+ * @version     1.0.1b
  */
 
 
@@ -39,6 +39,9 @@
 void testApp::setup(){
 	
 	ofLogToConsole();
+	ofSetLogLevel(OF_LOG_VERBOSE);
+	
+	ofRegisterURLNotification(this);
 	
 	
 	// We store our updater Variables here (for the current Application Release).
@@ -53,22 +56,15 @@ void testApp::setup(){
 	// 
 	// The versioninfo.xml and release.zip are stored at github repository.
 	// https://raw.github.com/WrongEntertainment/ofxAppUpdater/master/release_storage/versioninfo_1_0_0.xml
-	updater.init("0.1.1",
+	updater.init("0.0.1",
 				 "https://raw.github.com/WrongEntertainment/ofxAppUpdater/master/release_storage/",
 				 "versioninfo_1_0_1.xml",
-				 "release_1_0_0.zip");
+				 "release_1_0_0.zip",
+				 true);
+	updater.internetConnection = true;
 	
-	// TODO: a changelog system for release history.
-	// The changes will be shown at the application-update info alert.
+	cout << ofFilePath::getCurrentWorkingDirectory() << endl;
 	
-	
-	// TEST
-	// This is used for development testing.
-	//updater.checking();
-	//updater.checkVersion(1, 1);
-	//updater.parseXML("versioninfo.xml");
-	//updater.loadXml(updater.serverUrl+updater.versionInfoXml);
-	//updater.unzip(ofFilePath::getCurrentWorkingDirectory()+"tempDownloadfile_002.zip");
 }
 
 //--------------------------------------------------------------
@@ -79,55 +75,52 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
 	
-	ofBackground(0);
+	ofBackground(ofColor::white);
 	
 	
 	// Display our ofxAppUpdater Information.
 	//
-	// Here is a list of the drawModes:
-	// - 0 = Default Mode (mo update checked)
-	// - 1 = After Checking (Version OK)
+	// Here is a list of the modes:
+	// - DEFAULT (mo update checked)
+	// -  (Version OK)
 	// - 2 = After Checking (New Version)
 	// - 3 = Download ready
 	switch (updater.mode) {
-		case 0:
-			ofSetColor(0, 255, 255);
+		case DEFAULT:
+			ofSetColor(ofColor::black);
 			ofDrawBitmapString("Press 'u' for update check!", 10, 20);
 			break;
 			
-		case 1:
-			// Draw something..
-			//ofSetColor(0, 255, 255);
-			//ofDrawBitmapString("You're running the latest Application Release!", 10, 20);
-			
-			// .. or display a System Alert.
-			ofSystemAlertDialog("You're running the latest Application Release!");
-			updater.mode = -1;
-			
+		case LATEST_RELEASE:
+			// Display a System Alert Dialog.
+			ofSystemAlertDialog(updater.message);
+			updater.mode = FINISHED;
 			break;
 		
-		case 2:
+		case NEW_RELEASE:
 			ofSetColor(ofColor::yellow);
 			ofRect(5, 5, ofGetWidth()-10, 38);
-			
 			ofSetColor(ofColor::black);
-			ofDrawBitmapString("A new Version is Available! \nPress 'd' for downloading new Release.", 10, 20);
-			ofSetColor(ofColor::yellow);
-			ofDrawBitmapString("Current-Version: " + ofToString(updater.currentVersion), 10, 70);
-			ofDrawBitmapString("Latest-Version:  " + ofToString(updater.latestVersion), 10, 90);
+			ofDrawBitmapString(updater.message+"\nPress 'd' for downloading new Release.", 10, 20);
+			ofDrawBitmapString("Current-Version: " + updater.currentVersion, 10, 70);
+			ofDrawBitmapString("Latest-Version:  " + updater.latestVersion, 10, 90);
 			ofDrawBitmapString("Author:          " + updater.author, 10, 110);
 			ofDrawBitmapString("ModifiedDate:    " + updater.modifiedDate, 10, 130);
 			ofDrawBitmapString("Changes:         " + updater.changes, 10, 150);
 			break;
 		
-		case 3:
-			ofSetColor(0, 255, 255);
-			ofDrawBitmapString("Download Ready! Press 'r' to Restart your Application.", 100, 50);
+		case DOWNLOAD:
+			ofSetColor(ofColor::black);
+			ofDrawBitmapString(updater.message+"\nPress 'r' to Restart your Application.", 100, 50);
 			break;
 		
-		case 4:
-			ofSetColor(0, 255, 255);
-			ofDrawBitmapString("Restarting Application!", 100, 50);
+		case RESTART:
+			ofSetColor(ofColor::black);
+			ofDrawBitmapString(updater.message, 100, 50);
+			break;
+		
+		case FINISHED:
+			
 			break;
 		
 		default:
@@ -139,23 +132,22 @@ void testApp::draw(){
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 
+	// We use different keys to check, download and restart if a new release is available.
 	switch (key) {
-			
-		// We use the key <u> to check if a new update is available.
+		
+		// Key <u> to check if a new update is available.
 		case 'u':
-			if (updater.mode == 0) {
-				updater.checking();
-			}
+			updater.checkVersion();
 			break;
 		
-		// key <d> to download the latest release.
+		// Key <d> to download the latest release.
 		case 'd':
-			if (updater.mode == 2) updater.downloading();
+			updater.download();
 			break;
 		
-		// key <r> to restart the app.
+		// Key <r> to restart the app.
 		case 'r':
-			if (updater.mode == 3) updater.restart();
+			updater.restart();
 			break;
 			
 		// Default
@@ -207,4 +199,16 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 
 void testApp::exit(){
 	
+}
+
+void testApp::urlResponse(ofHttpResponse & response){
+	if(response.status == 200 && response.request.name == "async_req") {
+		cout << "loading" << endl;
+	} else {
+		cout << response.status << " " << response.error << endl;
+		if(response.status != -1) {
+			cout << "loading = false \n" ;
+		}
+	}
+
 }
