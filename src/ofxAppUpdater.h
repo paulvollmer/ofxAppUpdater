@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.14
- * @version     1.0.1a
+ * @version     1.0.1b
  */
 
 
@@ -39,6 +39,24 @@
 
 namespace wng {
 	
+	
+	// The values of the different mode states.
+	enum OFXAPPUPDATER_MODE {
+			DEFAULT = 0,
+		
+			CHECK = 1,
+			
+			LATEST_RELEASE = 2,
+			
+			NEW_RELEASE = 3,
+		
+			DOWNLOAD = 4,
+		
+			RESTART = 5
+	};
+	
+	
+	
 	class ofxAppUpdater {
 		
 	public:
@@ -52,17 +70,29 @@ namespace wng {
 		 * Methods
 		 */
 		void init(string tempCurrentVer, string tempServer, string tempVersionInfo, string tempLatest);
-		void checking();
-		void downloading();
+		void autoUpdate();
+		void checkVersion();
+		void download();
 		void restart();
 		
+		
 		// The update modes.
+		//
+		// This we use to get the current state of the update process.
+		// If a process like checking() or downloading() runs correctly,
+		// the mode state will be set to the next mode value.
 		int mode;
 		
-		// This variables we need for checking if a new release exist.
+		// The current application version.
+		//
+		// This variables contains the version of this application and is
+		// hard coded at this release.
+		// We need it for checking if a new release exist. 
 		string currentVersion;
 		
-		// This variables store the information from our versioninfo.xml file.
+		// The versioninfo.xml
+		//
+		// This variables will be filled with the tags from our versioninfo.xml file.
 		// The variables will be set by parseXML method.
 		string latestVersion;  // Latest Software Version
 		string modifiedDate;   // Date of last modification
@@ -70,34 +100,32 @@ namespace wng {
 		string changes;        // A list of changes that will shipped with the new update.
 		
 		
-	private:
-		/**
-		 * Methods
-		 */
-		bool checkVersion(string currentVer, string latestVer);
-		void parseXML(string filename);
-		void loadFile(string serverSrc, string tempFilepath);
-		void unzip(string src);
-		
-		/**
-		 * Variables
-		 * Here will be listen all Variables of the ofxUpdater class.
-		 */
-		// Download Variables
-		string serverUrl;
-		string versionInfoXml;
-		string latestZip;
-		
-		
-		
 		// Trigger your web connection, if bool is true,
 		// your Application can check the version and
 		// download automatic if a new release is available.
 		bool internetConnection;
 		
+		// Messages container for the ofxAppUpdater class.
+		string message;
+		
+		
+		
+	private:
+		/**
+		 * Methods
+		 */
+		void loadFile(string serverSrc, string tempFilepath);
+		void parseXML(string filename);
+		void unzip(string src);
+		
+		
+		// Download Variables
+		string serverUrl;
+		string versionInfoXml;
+		string latestZip;
+		
 		// If the variable is true, the addon start downloading zip package.
 		//bool downloadActive;
-		
 		
 	};
 

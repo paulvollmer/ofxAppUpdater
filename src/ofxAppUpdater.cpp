@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.14
- * @version     1.0.1a
+ * @version     1.0.1b
  */
 
 
@@ -45,16 +45,15 @@ namespace wng {
 		// change it at openFrameworks setup.
 		internetConnection = false;
 		
-		// We use the draw mode to design different ofxAppUpdater mode states.
+		// We use the mode variable to design different ofxAppUpdater mode states.
 		// See at example draw.
-		mode = 0;
+		mode = DEFAULT;
 		
-		/*
-		#ifdef OFXAPPUPDATER_LOG
+		/*#ifdef OFXAPPUPDATER_LOG
 			ofSetLogLevel(OF_LOG_VERBOSE);
-			ofLog(OF_LOG_VERBOSE, "Constructor Ready! ");
-		#endif
-		*/
+			ofLog(OF_LOG_VERBOSE, "Constructor Ready!");
+		#endif*/
+		
 	}
 
 
@@ -83,11 +82,115 @@ namespace wng {
 		this->serverUrl = serverUrl;
 		this->versionInfoXml = versionInfoXml;
 		this->latestZip = latestZip;
-		
 		#ifdef OFXAPPUPDATER_LOG
-			ofSetLogLevel(OF_LOG_VERBOSE);
-			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] init() Current-Version: " + this->currentVersion + ", Server-Url: " + this->serverUrl + ", Version-Info-XML: " + this->versionInfoXml + ", Latest-ZIP: " + this->latestZip);
+			// TODO add message = ... for advanced use.
+			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] init() --------------------------------------------------------");
+			ofLog(OF_LOG_VERBOSE, "Current-Version: " + this->currentVersion);
+			ofLog(OF_LOG_VERBOSE, "Server-Url: " + this->serverUrl);
+			ofLog(OF_LOG_VERBOSE, "Version-Info-XML: " + this->versionInfoXml);
+			ofLog(OF_LOG_VERBOSE, "Latest-ZIP: " + this->latestZip);
+			ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
 		#endif
+		
+		internetConnection = false;
+		message = "Initialized";
+		//timer = 0;
+		mode = DEFAULT;
+		
+	}
+	
+	
+	
+	
+	
+	/**
+	 * auto
+	 */
+	void ofxAppUpdater::autoUpdate(){
+		
+		internetConnection = true;
+		
+		checkVersion();
+		download();
+		//restart();
+		
+		
+		
+		/*ofSetColor(ofColor::black);
+		
+		switch (mode) {
+			case DEFAULT:
+				mode = CHECK;
+				timer = 0;
+				break;
+				
+			case CHECK:
+				if(timer < 1000){
+					message = "CHECK: Start";
+					timer++;
+				} else if (timer == 1000) {
+					message = "CHECK: Load versioninfo xml";
+					timer++;
+				} else if (timer > 1000) {
+					message = "CHECK: Read xml";
+					timer++;
+				} 
+
+				break;
+				
+			case CHECK_START:
+				message = "[ofxAppUpdater] CHECK_START";
+				break;
+				
+			case CHECK_STOP:
+				message = "[ofxAppUpdater] CHECK_STOP";
+				break;
+				
+			case DOWNLOAD:
+				message = "[ofxAppUpdater] DOWNLOAD";
+				break;
+				
+			case DOWNLOAD_START:
+				message = "[ofxAppUpdater] DOWNLOAD_START";
+				break;
+				
+			case DOWNLOAD_STOP:
+				message = "[ofxAppUpdater] DOWNLOAD_STOP";
+				break;
+				
+			case RESTART:
+				message = "[ofxAppUpdater] RESTART";
+				break;
+				
+			default:
+				message = "[ofxAppUpdater] switch default";
+				break;
+		}
+		//checking();
+		//loadFile("versioninfo_1_0_1b.xml", "tempversioninfo_1_0_1b.xml"); // TODO RENAME TO
+		//loadVersionXml("versioninfo_1_0_1b.xml");
+		
+		//parseVersionXml();
+		
+		//checkVersion(<#string currentVer#>, <#string latestVer#>);
+		 
+		 */
+		
+		/*switch (mode) {
+			case DEFAULT:
+				
+				break;
+			case DOWNLOAD_START:
+				cout << "test ";
+				break;
+
+			default:
+				break;
+		}*/
+		
+		//downloading();
+		
+		//restart();
 		
 	}
 	
@@ -98,36 +201,49 @@ namespace wng {
 	/**
 	 * checking
 	 */
-	void ofxAppUpdater::checking(){
+	void ofxAppUpdater::checkVersion(){
 		
-		#ifdef OFXAPPUPDATER_LOG
-			ofSetLogLevel(OF_LOG_VERBOSE);
-			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] check() Start");
-		#endif
-		
-		// At the moment we create a file at he same directory like the app.
-		// after parsing the xml, we remove file.
-		string tempFile = ofFilePath::getCurrentWorkingDirectory()+"tempVersionInfo.xml";
-		loadFile(serverUrl+versionInfoXml, tempFile);
-		
-		ofSleepMillis(200);
-		
-		parseXML(tempFile);
-		
-		ofSleepMillis(200);
-		
-		ofFile tempXmlFile;
-		tempXmlFile.removeFile(tempFile, true);
-		
-		
-		// Check the Version numbers if it's false, you can download a new version.
-		if(checkVersion(currentVersion, latestVersion) == true){
-			// go to draw mode 1
-			mode = 1;
+		if(internetConnection == true && mode == DEFAULT){
 			
-		} else {
-			// go to draw mode 2
-			mode = 2;
+			#ifdef OFXAPPUPDATER_LOG
+				ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] checkVersion() ------------------------------------------------");
+			#endif
+		
+			// At the moment we create a file at he same directory like the app.
+			// after parsing the xml, we remove file.
+			string tempFile = ofFilePath::getCurrentWorkingDirectory()+"tempVersionInfo.xml";
+			loadFile(serverUrl+versionInfoXml, tempFile);
+			ofSleepMillis(200);
+			
+			parseXML(tempFile);
+			ofSleepMillis(200);
+		
+			ofFile tempXmlFile;
+			tempXmlFile.removeFile(tempFile, true);
+		
+		
+			// Check the Version numbers if it's false, you can download a new version.
+			if(currentVersion == latestVersion){
+				// change mode.
+				mode = LATEST_RELEASE;
+				message = "You're running the latest Application Release!";
+			
+				#ifdef OFXAPPUPDATER_LOG
+					ofLog(OF_LOG_VERBOSE, "Message: "+message);
+					ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
+				#endif
+			} else {
+				// change mode.
+				mode = NEW_RELEASE;
+				message = "A new Version is Available!";
+			
+				#ifdef OFXAPPUPDATER_LOG
+					ofLog(OF_LOG_VERBOSE, "Message: "+message);
+					ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
+				#endif
+			}
+			
+			
 		}
 		
 		
@@ -139,20 +255,17 @@ namespace wng {
 	/**
 	 *
 	 */
-	void ofxAppUpdater::downloading(){
+	void ofxAppUpdater::download(){
 		
-		//ofSetLogLevel(OF_LOG_VERBOSE);
 		//ofLog(OF_LOG_VERBOSE, "downloading");
 		
 		if(mode == 2){
 			
-			// At the moment we create a file at he same directory like the app.
-			//string tempFile = ofFilePath::getPathForDirectory("~/Desktop")+"tempDownloadfile.zip";
+			// At the moment we create a file at the desktop.
 			string tempFile = ofFilePath::getPathForDirectory("~/Desktop")+latestZip;
-			
 			loadFile(serverUrl+latestZip, tempFile);
 			
-			ofSleepMillis(2000);
+			ofSleepMillis(200);
 			
 			mode = 3;
 		}
@@ -185,82 +298,6 @@ namespace wng {
 	
 	
 	
-	/**
-	 * checkVersion
-	 *
-	 * @param currentVer
-	 *        Float of the Current-Version.
-	 * @param latestVer
-	 *        Float of the Latest-Version.
-	 * @return bool
-	 *         True if the Version is the latest.
-	 */
-	bool ofxAppUpdater::checkVersion(string currentVer, string latestVer){
-		
-		if(currentVer == latestVer){
-			
-			/*#ifdef OFXAPPUPDATER_LOG
-			ofSetLogLevel(OF_LOG_VERBOSE);
-			ofLog(OF_LOG_VERBOSE, "[ofxUpdater] checkVersion() Current-Version: " + ofToString(currentVer) + " Latest-Version: " + ofToString(latestVer));
-			ofLog(OF_LOG_VERBOSE, "                            State: You're running the latest Application Release.");
-			#endif*/
-			return true;
-			
-		} else {
-			
-			/*#ifdef OFXAPPUPDATER_LOG
-			ofSetLogLevel(OF_LOG_VERBOSE);
-			ofLog(OF_LOG_VERBOSE, "[ofxUpdater] checkVersion() Current-Version: " + ofToString(currentVer) + " Latest-Version: " + ofToString(latestVer));
-			ofLog(OF_LOG_VERBOSE, "                            State: A new Version is Available.");
-			#endif*/
-			return false;
-			
-		}
-		
-	}
-	
-	
-	
-	
-	
-	/**
-	 * parseXML
-	 */
-	void ofxAppUpdater::parseXML(string filename){
-		
-		#ifdef OFXAPPUPDATER_LOG
-			ofSetLogLevel(OF_LOG_VERBOSE);
-			ofLog(OF_LOG_VERBOSE, "[ofxUpdater] parseXML() Start");
-		#endif
-		
-		
-		//  Create a new ofxXmlSettings object for reading the saved file.		
-		ofxXmlSettings xml;
-		
-		// We load our xml file.
-		// This is based on the openFrameworks xmlSettingsExample.
-		if(xml.loadFile(filename)){
-			latestVersion = xml.getValue("VERSIONING:VERSION",  "1.0.0", 0);
-			modifiedDate  = xml.getValue("VERSIONING:MODIFIED", "1970.01.01", 0);
-			author        = xml.getValue("VERSIONING:AUTHOR",   "wng.cc", 0);
-			changes       = xml.getValue("VERSIONING:CHANGES",  "nothing", 0);
-			#ifdef OFXAPPUPDATER_LOG
-			ofLog(OF_LOG_VERBOSE, "parseXML() File <" + filename + "> loaded!");
-			ofLog(OF_LOG_VERBOSE, "Latest Version: " + latestVersion);
-			ofLog(OF_LOG_VERBOSE, "Modified: " + modifiedDate);
-			ofLog(OF_LOG_VERBOSE, "Author: " + author);
-			ofLog(OF_LOG_VERBOSE, "Changes: " + changes);
-			#endif
-		} else {
-			#ifdef OFXAPPUPDATER_LOG
-				ofLog(OF_LOG_VERBOSE, "parseXML() File <" + filename + "> not found");
-			#endif
-		}
-		
-	}
-	
-	
-	
 	
 	
 	/**
@@ -283,7 +320,6 @@ namespace wng {
 		//ofSaveURLAsync(serverUrl+versionInfoXml, tempFilename);
 		//cout << ofGetTimestampString() << " DOWNLOAD XML FILE READY." << endl;	
 		
-		
 		// Solution 2:
 		// we use applescript to download our xml file.
 		//
@@ -292,10 +328,51 @@ namespace wng {
 		// tell application "URL Access Scripting"
 		// download "http://www.wrong-entertainment.com/code/wngUpdater/versioninfo.xml" to file "/testfile.txt" replacing yes
 		// end tell
-		string tempApplescript = "osascript -e 'tell app \"URL Access Scripting\" \n download \""+serverSrc+"\" to file \""+tempFilepath+"\" replacing yes \n end tell'";
-		system(tempApplescript.c_str());
+		#ifdef TARGET_OS_MAC
+			string tempApplescript = "osascript -e 'tell app \"URL Access Scripting\" \n download \""+serverSrc+"\" to file \""+tempFilepath+"\" replacing yes \n end tell'";
+			system(tempApplescript.c_str());
+		#endif
 		
 	}
+	
+	
+	
+	
+	
+	/**
+	 * parseXML
+	 * At the monent we use hard coded xml tags.
+	 */
+	void ofxAppUpdater::parseXML(string filename){
+		
+		//  Create a new ofxXmlSettings object for reading the saved file.		
+		ofxXmlSettings xml;
+		
+		// We load our xml file.
+		// This is based on the openFrameworks xmlSettingsExample.
+		if(xml.loadFile(filename)){
+			latestVersion = xml.getValue("VERSIONING:VERSION",  "1.0.0", 0);
+			modifiedDate  = xml.getValue("VERSIONING:MODIFIED", "1970.01.01", 0);
+			author        = xml.getValue("VERSIONING:AUTHOR",   "wng.cc", 0);
+			changes       = xml.getValue("VERSIONING:CHANGES",  "nothing", 0);
+			#ifdef OFXAPPUPDATER_LOG
+				ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] parseXML()");
+				ofLog(OF_LOG_VERBOSE, "File <" + filename + "> loaded!");
+				ofLog(OF_LOG_VERBOSE, "Latest Version: " + latestVersion);
+				ofLog(OF_LOG_VERBOSE, "Modified: " + modifiedDate);
+				ofLog(OF_LOG_VERBOSE, "Author: " + author);
+				ofLog(OF_LOG_VERBOSE, "Changes: " + changes);
+			#endif
+		} else {
+			#ifdef OFXAPPUPDATER_LOG
+				ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] parseXML()");
+				ofLog(OF_LOG_VERBOSE, "File <" + filename + "> not found!");
+			#endif
+		}
+		
+	}
+	
+	
 	
 	
 	/**
