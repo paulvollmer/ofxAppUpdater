@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.16
- * @version     1.0.1b
+ * @modified    2012.04.20
+ * @version     1.0.1c
  */
 
 
@@ -44,26 +44,22 @@ void testApp::setup(){
 	ofRegisterURLNotification(this);
 	
 	
-	// We store our updater Variables here (for the current Application Release).
+	// We store our updater Variables here (FOR THE CURRENT APPLICATION RELEASE).
 	// For our ofxAppUpdater::init method we need the following variables:
-	// - An Application Release version (float value)
-	// - A Server-URL who will be stored the Application Release files.
-	// - A versioninfo Filename
-	// - A .zip Filename (this contains the latest released Application version).
+	// - An Application Release version (string)
+	// - A Server-URL who will be stored the Appcast.xml file.
+	// - A boolean that set the internetConnection.
+	//   If it's true, the ofxAppUpdater class start the update process.
 	//
-	// Keep clean the follwing Variables to update and release our software savely.
-	// For this you can use the [ semantic versioning ]( http://semver.org ) style.
+	// KEEP CLEAN THE FOLLWING VARIABLES TO UPDATE AND RELEASE OUR SOFTWARE SAVELY.
+	// FOR THIS YOU CAN USE THE [semantic versioning]( http://semver.org ) STYLE.
 	// 
-	// The versioninfo.xml and release.zip are stored at github repository.
-	// https://raw.github.com/WrongEntertainment/ofxAppUpdater/master/release_storage/versioninfo_1_0_0.xml
-	updater.init("0.0.1",
-				 "https://raw.github.com/WrongEntertainment/ofxAppUpdater/master/release_storage/",
-				 "versioninfo_1_0_1.xml",
-				 "release_1_0_0.zip",
+	// The appcast.xml and release.zip are stored at github repository.
+	updater.init("0.9.0",
+				 "https://github.com/WrongEntertainment/ofxAppUpdater/raw/develope/release_storage/appcast.xml",
 				 true);
-	updater.internetConnection = true;
 	
-	cout << ofFilePath::getCurrentWorkingDirectory() << endl;
+	//cout << "getCurrentWorkingDirectory: " << ofFilePath::getCurrentWorkingDirectory() << endl;
 	
 }
 
@@ -104,9 +100,6 @@ void testApp::draw(){
 			ofDrawBitmapString(updater.message+"\nPress 'd' for downloading new Release.", 10, 20);
 			ofDrawBitmapString("Current-Version: " + updater.currentVersion, 10, 70);
 			ofDrawBitmapString("Latest-Version:  " + updater.latestVersion, 10, 90);
-			ofDrawBitmapString("Author:          " + updater.author, 10, 110);
-			ofDrawBitmapString("ModifiedDate:    " + updater.modifiedDate, 10, 130);
-			ofDrawBitmapString("Changes:         " + updater.changes, 10, 150);
 			break;
 		
 		case DOWNLOAD:
@@ -114,7 +107,7 @@ void testApp::draw(){
 			ofDrawBitmapString(updater.message+"\nPress 'r' to Restart your Application.", 100, 50);
 			break;
 		
-		case RESTART:
+		case RELAUNCH:
 			ofSetColor(ofColor::black);
 			ofDrawBitmapString(updater.message, 100, 50);
 			break;
@@ -147,7 +140,7 @@ void testApp::keyPressed(int key){
 		
 		// Key <r> to restart the app.
 		case 'r':
-			updater.restart();
+			updater.relaunch();
 			break;
 			
 		// Default

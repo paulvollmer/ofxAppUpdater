@@ -49,7 +49,9 @@ namespace wng {
 		// See at example draw.
 		mode = DEFAULT;
 		
-		temporaryDownloadFilename = "latestRelease.zip";
+		latestVersion = "not available";
+		
+		temporaryDownloadFilename = "tempDownload.zip";
 		
 		#ifdef OFXAPPUPDATER_LOG
 			ofLog(OF_LOG_VERBOSE, "Constructor Ready!");
@@ -104,8 +106,17 @@ namespace wng {
 	void ofxAppUpdater::autoUpdate(){
 		
 		checkVersion();
-		download();
-		restart();
+		
+		if(mode == NEW_RELEASE){
+			//ofSystemAlertDialog(message);
+			
+			#ifdef TARGET_OS_MAC
+				
+			#endif
+		}
+		
+		//download();
+		//relaunch();
 		
 		
 		
@@ -278,7 +289,7 @@ namespace wng {
 	/**
 	 * 
 	 */
-	void ofxAppUpdater::restart(){
+	void ofxAppUpdater::relaunch(){
 		
 		if(internetConnection == true && mode == DOWNLOAD){
 			

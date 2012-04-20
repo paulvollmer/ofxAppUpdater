@@ -55,8 +55,8 @@ void testApp::setup(){
 	// FOR THIS YOU CAN USE THE [semantic versioning]( http://semver.org ) STYLE.
 	// 
 	// The appcast.xml and release.zip are stored at github repository.
-	updater.init("2.0.0",
-				 "http://dl.dropbox.com/u/2874680/appcast_3.xml",
+	updater.init("1.0.2",
+				 "https://github.com/WrongEntertainment/ofxAppUpdater/raw/develope/release_storage/appcast.xml",
 				 true);
 	
 	updater.autoUpdate();
@@ -70,19 +70,13 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	
-	/*ofBackground(ofColor::white);
-	
-	ofEnableAlphaBlending();
-	ofSetColor(ofColor::black, 30);
-	ofRect(10, 10, ofGetWidth()-20, ofGetHeight()-20);
-	ofDisableAlphaBlending();
+	ofBackground(ofColor::white);
 	
 	ofSetColor(ofColor::black);
 	ofDrawBitmapString("Current Version: "+updater.currentVersion+", latest Version: "+updater.latestVersion, 70, 70);
+	ofSetColor(ofColor::blue);
 	ofDrawBitmapString("Message:", 70, 90);
-	ofDrawBitmapString(updater.message, 70, 110);*/
-	
+	ofDrawBitmapString(updater.message, 150, 90);
 }
 
 //--------------------------------------------------------------

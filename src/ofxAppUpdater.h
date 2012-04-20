@@ -42,13 +42,13 @@ namespace wng {
 	
 	// The values of the different mode states.
 	enum OFXAPPUPDATER_MODE {
-			DEFAULT = 0,
-			CHECK = 1,
-			LATEST_RELEASE = 2,
-			NEW_RELEASE = 3,
-			DOWNLOAD = 4,
-			RESTART = 5,
-			FINISHED = 6
+			DEFAULT,
+			CHECK,
+			LATEST_RELEASE,
+			NEW_RELEASE,
+			DOWNLOAD,
+			RELAUNCH,
+			FINISHED
 	};
 	
 	
@@ -70,7 +70,7 @@ namespace wng {
 		void autoUpdate();
 		void checkVersion();
 		void download();
-		void restart();
+		void relaunch();
 		
 		
 		// The update modes.
