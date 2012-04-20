@@ -49,10 +49,9 @@ namespace wng {
 		// See at example draw.
 		mode = DEFAULT;
 		
-		/*#ifdef OFXAPPUPDATER_LOG
-			ofSetLogLevel(OF_LOG_VERBOSE);
+		#ifdef OFXAPPUPDATER_LOG
 			ofLog(OF_LOG_VERBOSE, "Constructor Ready!");
-		#endif*/
+		#endif
 		
 	}
 
@@ -66,40 +65,33 @@ namespace wng {
 	 * @param currentVersion
 	 *        The current Application Version.
 	 *        Like this: "1.0.0"
-	 * @param serverUrl
-	 *        The url of the server to load the files.
-	 *        Like this: "http://www.wrong-entertainment.com/appupdate"
-	 * @param versionInfoXml
-	 *        The name of our version information xml file.
-	 *        Like this: "versioninfo.xml"
-	 * @param latestZip
-	 *        The name of the zip file.
-	 *        Like this: "latest.zip"
+	 * @param appcastSrc
+	 *        The url of the appcast.xml file.
+	 * @param internetConnection
+	 *        Boolean to trigger the internetConnection Variable.
 	 */
-	void ofxAppUpdater::init(string currentVersion, string serverUrl, string versionInfoXml, string latestZip, bool internetConnection){
+	void ofxAppUpdater::init(string currentVersion, string appcastSrc, bool internetConnection){
 		
 		this->currentVersion = currentVersion;
-		this->serverUrl = serverUrl;
-		this->versionInfoXml = versionInfoXml;
-		this->latestZip = latestZip;
+		this->appcastSrc = appcastSrc;
 		this->internetConnection = internetConnection;
 		#ifdef OFXAPPUPDATER_LOG
-			// TODO add message = ... for advanced use.
+			// TODO add to message variable = ... for advanced use.
 			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] init() --------------------------------------------------------");
 			ofLog(OF_LOG_VERBOSE, "Current-Version: " + this->currentVersion);
-			ofLog(OF_LOG_VERBOSE, "Server-Url: " + this->serverUrl);
-			ofLog(OF_LOG_VERBOSE, "Version-Info-XML: " + this->versionInfoXml);
-			ofLog(OF_LOG_VERBOSE, "Latest-ZIP: " + this->latestZip);
-			ofLog(OF_LOG_VERBOSE, "Internet-Connection: " + this->internetConnection);
+			ofLog(OF_LOG_VERBOSE, "Appcast.xml: " + this->appcastSrc);
+			ofLog(OF_LOG_VERBOSE, "Internet-Connection: " + ofToString(this->internetConnection));
 			ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
 		#endif
 		
 		message = "Initialized";
-		//timer = 0;
 		mode = DEFAULT;
 		
 	}
 	
+	void ofxAppUpdater::init(string currentVersion, string appcastSrc){
+		init(currentVersion, appcastSrc, true);
+	}
 	
 	
 	
@@ -108,8 +100,6 @@ namespace wng {
 	 * auto
 	 */
 	void ofxAppUpdater::autoUpdate(){
-		
-		internetConnection = true;
 		
 		checkVersion();
 		download();
@@ -213,10 +203,10 @@ namespace wng {
 			// At the moment we create a file at he same directory like the app.
 			// after parsing the xml, we remove file.
 			string tempFile = ofFilePath::getCurrentWorkingDirectory()+"tempVersionInfo.xml";
-			loadFile(serverUrl+versionInfoXml, tempFile);
+			loadFile(appcastSrc, tempFile);
 			ofSleepMillis(200);
 			
-			parseXML(tempFile);
+			parseAppcast(tempFile);
 			ofSleepMillis(200);
 		
 			ofFile tempXmlFile;
@@ -233,6 +223,15 @@ namespace wng {
 					ofLog(OF_LOG_VERBOSE, "Message: "+message);
 					ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
 				#endif
+			} else if(latestVersion == "0xDEADC0DE"){
+				// change mode.
+				mode = LATEST_RELEASE;
+				message = "ERROR! Something went wrong with our Appcast content.";
+				
+				#ifdef OFXAPPUPDATER_LOG
+					ofLog(OF_LOG_VERBOSE, "Message: "+message);
+					ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
+				#endif
 			} else {
 				// change mode.
 				mode = NEW_RELEASE;
@@ -243,10 +242,7 @@ namespace wng {
 					ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
 				#endif
 			}
-			
-			
 		}
-		
 		
 	}
 	
@@ -282,7 +278,7 @@ namespace wng {
 	 */
 	void ofxAppUpdater::restart(){
 		
-		if(internetConnection == true && mode == DOWNLOAD){
+		/*if(internetConnection == true && mode == DOWNLOAD){
 			
 			//string t = ofFilePath::getPathForDirectory("~/Desktop/")+"tempDownloadfile.zip";
 			string tempFile = ofFilePath::getPathForDirectory("~/Desktop/")+latestZip;
@@ -299,7 +295,7 @@ namespace wng {
 			
 			message = "Quit Application";
 			ofExit(1);
-		}
+		}*/
 	}
 	
 	
@@ -348,33 +344,32 @@ namespace wng {
 	
 	
 	/**
-	 * parseXML
+	 * parseAppcast
 	 * At the monent we use hard coded xml tags.
+	 *
+	 * @param filepath
+	 *        The path to our Appcast RSS feed.
 	 */
-	void ofxAppUpdater::parseXML(string filename){
+	void ofxAppUpdater::parseAppcast(string filepath){
 		
 		//  Create a new ofxXmlSettings object for reading the saved file.		
 		ofxXmlSettings xml;
 		
 		// We load our xml file.
 		// This is based on the openFrameworks xmlSettingsExample.
-		if(xml.loadFile(filename)){
-			latestVersion = xml.getValue("VERSIONING:VERSION",  "1.0.0", 0);
-			modifiedDate  = xml.getValue("VERSIONING:MODIFIED", "1970.01.01", 0);
-			author        = xml.getValue("VERSIONING:AUTHOR",   "wng.cc", 0);
-			changes       = xml.getValue("VERSIONING:CHANGES",  "nothing", 0);
+		if(xml.loadFile(filepath)){
+			latestVersion = xml.getValue("rss:channel:item:appcastVersion", "0xDEADC0DE", 0);
+			downloadUrl = xml.getAttribute("rss:channel:item:enclosure", "url", "0xDEADC0DE", 0);
 			#ifdef OFXAPPUPDATER_LOG
-				ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] parseXML()");
-				ofLog(OF_LOG_VERBOSE, "File <" + filename + "> loaded!");
+				ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] parseAppcast()");
+				ofLog(OF_LOG_VERBOSE, "Filepath <" + filepath + "> loaded!");
 				ofLog(OF_LOG_VERBOSE, "Latest Version: " + latestVersion);
-				ofLog(OF_LOG_VERBOSE, "Modified: " + modifiedDate);
-				ofLog(OF_LOG_VERBOSE, "Author: " + author);
-				ofLog(OF_LOG_VERBOSE, "Changes: " + changes);
+				ofLog(OF_LOG_VERBOSE, "Download URL: " + downloadUrl);
 			#endif
 		} else {
 			#ifdef OFXAPPUPDATER_LOG
-				ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] parseXML()");
-				ofLog(OF_LOG_VERBOSE, "File <" + filename + "> not found!");
+				ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] parseAppcast()");
+				ofLog(OF_LOG_VERBOSE, "File <" + filepath + "> not found!");
 			#endif
 		}
 		
@@ -389,7 +384,7 @@ namespace wng {
 	void ofxAppUpdater::unzip(string src){
 		
 		// unzip file
-		#ifdef TARGET_OSX
+		/*#ifdef TARGET_OSX
 			// ok gotta be a better way then this,
 			// this is what I found...
 			string commandStr = "open /Users/wrongMacBookpro/Desktop/"+latestZip;
@@ -405,7 +400,7 @@ namespace wng {
 		
 		// Move downloaded file to current working directory.
 		
-		
+		*/
 	}
 	
 	

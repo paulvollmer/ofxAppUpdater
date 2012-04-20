@@ -43,17 +43,11 @@ namespace wng {
 	// The values of the different mode states.
 	enum OFXAPPUPDATER_MODE {
 			DEFAULT = 0,
-		
 			CHECK = 1,
-			
 			LATEST_RELEASE = 2,
-			
 			NEW_RELEASE = 3,
-		
 			DOWNLOAD = 4,
-		
 			RESTART = 5,
-			
 			FINISHED = 6
 	};
 	
@@ -71,7 +65,8 @@ namespace wng {
 		/**
 		 * Methods
 		 */
-		void init(string tempCurrentVer, string tempServer, string tempVersionInfo, string tempLatest, bool internetConnenction);
+		void init(string currentVersion, string appcastSrc, bool internetConnenction);
+		void init(string currentVersion, string appcastSrc);
 		void autoUpdate();
 		void checkVersion();
 		void download();
@@ -92,22 +87,20 @@ namespace wng {
 		// We need it for checking if a new release exist. 
 		string currentVersion;
 		
-		// The versioninfo.xml
+		// The Appcast RSS file
 		//
-		// This variables will be filled with the tags from our versioninfo.xml file.
-		// The variables will be set by parseXML method.
-		string latestVersion;  // Latest Software Version
-		string modifiedDate;   // Date of last modification
-		string author;         // Name of the author/company
-		string changes;        // A list of changes that will shipped with the new update.
+		// This variables will be filled with the tags from our Appcast RSS file.
+		// The variables will be set by parseAppcast method.
+		string latestVersion;   // Latest Software Version
 		
-		
+		// internetConnection
+		//
 		// Trigger your web connection, if bool is true,
 		// your Application can check the version and
-		// download automatic if a new release is available.
+		// download if a new release is available.
 		bool internetConnection;
 		
-		// Messages container for the ofxAppUpdater class.
+		// Message container for the ofxAppUpdater class.
 		string message;
 		
 		
@@ -117,14 +110,11 @@ namespace wng {
 		 * Methods
 		 */
 		void loadFile(string serverSrc, string tempFilepath);
-		void parseXML(string filename);
+		void parseAppcast(string filepath);
 		void unzip(string src);
 		
-		
-		// Download Variables
-		string serverUrl;
-		string versionInfoXml;
-		string latestZip;
+		string appcastSrc;
+		string downloadUrl;
 		
 		// If the variable is true, the addon start downloading zip package.
 		//bool downloadActive;
