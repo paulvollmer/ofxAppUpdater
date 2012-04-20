@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.14
- * @version     1.0.1b
+ * @modified    2012.04.20
+ * @version     1.0.1c
  */
 
 
@@ -115,6 +115,7 @@ namespace wng {
 		
 		string appcastSrc;
 		string downloadUrl;
+		string temporaryDownloadFilename;
 		
 		// If the variable is true, the addon start downloading zip package.
 		//bool downloadActive;

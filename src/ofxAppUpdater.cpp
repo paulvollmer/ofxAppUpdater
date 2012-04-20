@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.14
- * @version     1.0.1b
+ * @modified    2012.04.20
+ * @version     1.0.1c
  */
 
 
@@ -48,6 +48,8 @@ namespace wng {
 		// We use the mode variable to design different ofxAppUpdater mode states.
 		// See at example draw.
 		mode = DEFAULT;
+		
+		temporaryDownloadFilename = "latestRelease.zip";
 		
 		#ifdef OFXAPPUPDATER_LOG
 			ofLog(OF_LOG_VERBOSE, "Constructor Ready!");
@@ -103,7 +105,7 @@ namespace wng {
 		
 		checkVersion();
 		download();
-		//restart();
+		restart();
 		
 		
 		
@@ -261,8 +263,8 @@ namespace wng {
 			mode = DOWNLOAD;
 			
 			// At the moment we create a file at the desktop.
-			string tempFile = ofFilePath::getPathForDirectory("~/Desktop")+latestZip;
-			loadFile(serverUrl+latestZip, tempFile);
+			string tempFile = ofFilePath::getPathForDirectory("~/Desktop/")+temporaryDownloadFilename;
+			loadFile(downloadUrl, tempFile);
 			
 			ofSleepMillis(200);
 			
@@ -278,15 +280,14 @@ namespace wng {
 	 */
 	void ofxAppUpdater::restart(){
 		
-		/*if(internetConnection == true && mode == DOWNLOAD){
+		if(internetConnection == true && mode == DOWNLOAD){
 			
-			//string t = ofFilePath::getPathForDirectory("~/Desktop/")+"tempDownloadfile.zip";
-			string tempFile = ofFilePath::getPathForDirectory("~/Desktop/")+latestZip;
+			string tempFile = ofFilePath::getPathForDirectory("~/Desktop/")+temporaryDownloadFilename;
 			#ifdef OFXAPPUPDATER_LOG
 				cout << "unzip <" << tempFile << ">\n";
 			#endif
 			
-			unzip(tempFile);
+			unzip(temporaryDownloadFilename);
 			
 			//ofFile fi;
 			//fi.moveTo(<#string path#>, <#bool bRelativeToData#>, <#bool overwrite#>)
@@ -295,7 +296,7 @@ namespace wng {
 			
 			message = "Quit Application";
 			ofExit(1);
-		}*/
+		}
 	}
 	
 	
@@ -384,23 +385,21 @@ namespace wng {
 	void ofxAppUpdater::unzip(string src){
 		
 		// unzip file
-		/*#ifdef TARGET_OSX
+		#ifdef TARGET_OSX
 			// ok gotta be a better way then this,
 			// this is what I found...
-			string commandStr = "open /Users/wrongMacBookpro/Desktop/"+latestZip;
+			string commandStr = "open /Users/wrongMacBookpro/Desktop/"+src;
 			system(commandStr.c_str());
 		#endif
-		
 		
 		ofSleepMillis(4000);
 		
 		// Delete downloaded zip file.
 		ofFile tempXmlFile;
-		tempXmlFile.removeFile("/Users/wrongMacBookpro/Desktop/"+latestZip	, true);
+		tempXmlFile.removeFile("/Users/wrongMacBookpro/Desktop/"+src	, true);
 		
 		// Move downloaded file to current working directory.
 		
-		*/
 	}
 	
 	

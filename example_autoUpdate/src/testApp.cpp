@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.16
- * @version     1.0.1a
+ * @modified    2012.04.20
+ * @version     1.0.1b
  */
 
 
@@ -44,22 +44,20 @@ void testApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	
 	
-	// We store our updater Variables here (for the current Application Release).
+	// We store our updater Variables here (FOR THE CURRENT APPLICATION RELEASE).
 	// For our ofxAppUpdater::init method we need the following variables:
-	// - An Application Release version (float value)
-	// - A Server-URL who will be stored the Application Release files.
-	// - A versioninfo Filename
-	// - A .zip Filename (this contains the latest released Application version).
+	// - An Application Release version (string)
+	// - A Server-URL who will be stored the Appcast.xml file.
+	// - A boolean that set the internetConnection.
+	//   If it's true, the ofxAppUpdater class start the update process.
 	//
-	// Keep clean the follwing Variables to update and release our software savely.
-	// For this you can use the [ semantic versioning ]( http://semver.org ) style.
+	// KEEP CLEAN THE FOLLWING VARIABLES TO UPDATE AND RELEASE OUR SOFTWARE SAVELY.
+	// FOR THIS YOU CAN USE THE [semantic versioning]( http://semver.org ) STYLE.
 	// 
-	// The versioninfo.xml and release.zip are stored at github repository.
-	// https://raw.github.com/WrongEntertainment/ofxAppUpdater/master/release_storage/versioninfo_1_0_0.xml
-	updater.init("1.0.1",
-				 "https://raw.github.com/WrongEntertainment/ofxAppUpdater/master/release_storage/",
-				 "versioninfo_1_0_1.xml",
-				 "release_1_0_0.zip");
+	// The appcast.xml and release.zip are stored at github repository.
+	updater.init("2.0.0",
+				 "http://dl.dropbox.com/u/2874680/appcast_3.xml",
+				 true);
 	
 	updater.autoUpdate();
 	
