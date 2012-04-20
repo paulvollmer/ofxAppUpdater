@@ -10,6 +10,10 @@
 		<item>
 			<title>ofxAppUpdater release v.1.0.0</title>
 			<description>
+				<h3>Changes</h3>
+					<ul>
+						<li>Change versioninfo.xml to Appcast RSS</li>
+					</ul>
 				<h3>New</h3>
 					<ul>
 						<li>Added GitHub Page</li>
@@ -21,13 +25,13 @@
 					</ul>
 				<h3>Internal</h3>
 					<ul>
-						<li>Changes at init method</li>
-						<li>Test example</li>
+						<li>Changes at init method (because of apcast.xml contains variables that we set in previous version at versioninfo.xml)</li>
+						<li>Test examples and methods</li>
 						<li>Added release_storage directory, added appcast rss feed to check if a new version is available.</li>
 					</ul>
 			</description>
-			<pubDate>Fri, 20 Apr 2012 20:56:00 GMT</pubDate>
-			<enclosure url="https://github.com/WrongEntertainment/ofxAppUpdater/zipball/master" type="application/octet-stream"/>
+			<pubDate>Fri, 20 Apr 2012 15:45:00 GMT</pubDate>
+			<enclosure url="https://github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/release_1_0_0.zip" type="application/octet-stream"/>
 			<appcastVersion>1.0.0</appcastVersion>
 		</item>
 	
@@ -44,7 +48,7 @@
 					</ul>
 			</description>
 			<pubDate>Thu, 12 Apr 2012 17:56:00 GMT</pubDate>
-			<enclosure url="https://raw.github.com/WrongEntertainment/ofxAppUpdater/master/release_storage/versioninfo_0_1_1.xml" type="application/octet-stream"/>
+			<enclosure url="https://github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/release_1_0_0.zip" type="application/octet-stream"/>
 			<appcastVersion>0.1.1</appcastVersion>
 	     </item>
 	
