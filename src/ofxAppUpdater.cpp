@@ -21,7 +21,7 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.20
+ * @modified    2012.04.22
  * @version     1.0.1c
  */
 
@@ -30,6 +30,11 @@
 #include "ofxAppUpdater.h"
 
 #include "ofxXmlSettings.h"
+
+// This we need for cocoa dialog
+#ifdef TARGET_OSX
+#include <Carbon/Carbon.h>
+#endif
 
 
 
@@ -51,7 +56,7 @@ namespace wng {
 		
 		latestVersion = "not available";
 		
-		temporaryDownloadFilename = "tempDownload.zip";
+		temporaryDownloadFilename = "tempDownload_wng.zip";
 		
 		#ifdef OFXAPPUPDATER_LOG
 			ofLog(OF_LOG_VERBOSE, "Constructor Ready!");
@@ -100,102 +105,61 @@ namespace wng {
 	
 	
 	
+	
 	/**
-	 * auto
+	 * autoUpdate
 	 */
 	void ofxAppUpdater::autoUpdate(){
 		
 		checkVersion();
 		
 		if(mode == NEW_RELEASE){
-			//ofSystemAlertDialog(message);
+		#ifdef TARGET_OS_MAC
+			// based on http://jorgearimany.blogspot.de/2010/05/messagebox-from-windows-to-mac.html
+			string m = "Current Version: "+currentVersion+"\nLatest Version: "+latestVersion;
+			//convert the strings from char* to CFStringRef
+			CFStringRef header_ref   = CFStringCreateWithCString( NULL, message.c_str(), strlen(message.c_str()) );
+			CFStringRef message_ref  = CFStringCreateWithCString( NULL, m.c_str(), strlen(m.c_str()) );
 			
-			#ifdef TARGET_OS_MAC
-				
-			#endif
-		}
-		
-		//download();
-		//relaunch();
-		
-		
-		
-		/*ofSetColor(ofColor::black);
-		
-		switch (mode) {
-			case DEFAULT:
-				mode = CHECK;
-				timer = 0;
-				break;
-				
-			case CHECK:
-				if(timer < 1000){
-					message = "CHECK: Start";
-					timer++;
-				} else if (timer == 1000) {
-					message = "CHECK: Load versioninfo xml";
-					timer++;
-				} else if (timer > 1000) {
-					message = "CHECK: Read xml";
-					timer++;
-				} 
+			CFOptionFlags result;  //result code from the message box
+			
+			//launch the message box
+			CFUserNotificationDisplayAlert(0, // no timeout
+										   kCFUserNotificationNoteAlertLevel, //change it depending message_type flags ( MB_ICONASTERISK.... etc.)
+										   NULL, //icon url, use default, you can change it depending message_type flags
+										   NULL, //not used
+										   NULL, //localization of strings
+										   header_ref, //header text 
+										   message_ref, //message text
+										   CFSTR("Download and Relaunch"), //default "ok" text in button
+										   CFSTR("Later"), //alternate button title
+										   NULL, //other button title, null--> no other button
+										   &result //response flags
+										   );
+			
+			//Clean up the strings
+			CFRelease(header_ref);
+			CFRelease(message_ref);
+			
+			//Convert the result
+			//cout << kCFUserNotificationDefaultResponse << endl;
+			
+			if(result == kCFUserNotificationDefaultResponse){
+				// At the moment we create a file at the desktop.
+				// I think we can handle this variable as an intern variable.
+				string tempFile = ofFilePath::getPathForDirectory("~/Downloads/")+temporaryDownloadFilename;
+				download(tempFile);
+				ofSleepMillis(200);
+			}
+			/*else {
+				cout << "cancel";
+			}*/
 
-				break;
-				
-			case CHECK_START:
-				message = "[ofxAppUpdater] CHECK_START";
-				break;
-				
-			case CHECK_STOP:
-				message = "[ofxAppUpdater] CHECK_STOP";
-				break;
-				
-			case DOWNLOAD:
-				message = "[ofxAppUpdater] DOWNLOAD";
-				break;
-				
-			case DOWNLOAD_START:
-				message = "[ofxAppUpdater] DOWNLOAD_START";
-				break;
-				
-			case DOWNLOAD_STOP:
-				message = "[ofxAppUpdater] DOWNLOAD_STOP";
-				break;
-				
-			case RESTART:
-				message = "[ofxAppUpdater] RESTART";
-				break;
-				
-			default:
-				message = "[ofxAppUpdater] switch default";
-				break;
+			
+		#endif
 		}
-		//checking();
-		//loadFile("versioninfo_1_0_1b.xml", "tempversioninfo_1_0_1b.xml"); // TODO RENAME TO
-		//loadVersionXml("versioninfo_1_0_1b.xml");
-		
-		//parseVersionXml();
-		
-		//checkVersion(<#string currentVer#>, <#string latestVer#>);
-		 
-		 */
-		
-		/*switch (mode) {
-			case DEFAULT:
+			relaunch();
 				
-				break;
-			case DOWNLOAD_START:
-				cout << "test ";
-				break;
-
-			default:
-				break;
-		}*/
-		
-		//downloading();
-		
-		//restart();
-		
 	}
 	
 	
@@ -265,23 +229,25 @@ namespace wng {
 	/**
 	 *
 	 */
-	void ofxAppUpdater::download(){
+	void ofxAppUpdater::download(string src){
 		
 		//ofLog(OF_LOG_VERBOSE, "downloading");
 		
 		if(internetConnection == true && mode == NEW_RELEASE){
 			
-			mode = DOWNLOAD;
-			
-			// At the moment we create a file at the desktop.
-			string tempFile = ofFilePath::getPathForDirectory("~/Desktop/")+temporaryDownloadFilename;
-			loadFile(downloadUrl, tempFile);
+			loadFile(downloadUrl, src);
 			
 			ofSleepMillis(200);
 			
 			message = "Download Ready!";
+			
+			mode = DOWNLOAD;
 		}
 		
+	}
+	
+	void ofxAppUpdater::download(){
+		download(ofFilePath::getPathForDirectory("~/Downloads/")+temporaryDownloadFilename);
 	}
 	
 	
@@ -293,17 +259,40 @@ namespace wng {
 		
 		if(internetConnection == true && mode == DOWNLOAD){
 			
-			string tempFile = ofFilePath::getPathForDirectory("~/Desktop/")+temporaryDownloadFilename;
-			#ifdef OFXAPPUPDATER_LOG
-				cout << "unzip <" << tempFile << ">\n";
+			string tempFile = ofFilePath::getPathForDirectory("~/Downloads/")+temporaryDownloadFilename;
+			unzip(tempFile);
+			
+			message = "Please replace the downloaded App \nwith your local version.\nYou can find the downloaded zip file at the \"downloads\" directory";
+			ofSystemAlertDialog(message);
+			
+			// Open download folder in finder
+			#ifdef TARGET_OS_MAC
+				//string tempApplescript_AppWindow =
+				//"osascript -e 'tell app \"Finder\" \n activate \n set this_window to make new Finder window \n set x to (path to application folder as text) & \"downloads\" as alias \n set the target of this_window to the x \n set the current view of this_window to icon view \n end tell'";
+				//system(tempApplescript_AppWindow.c_str());
+				/*string tempApplescript =
+				"osascript -e 'tell app \"Finder\" \n activate \n set this_window to make new Finder window \n set x to (path to home folder as text) & \"downloads\" as alias \n set the target of this_window to the x \n set the current view of this_window to icon view \n end tell'";
+				system(tempApplescript.c_str());*/
 			#endif
 			
-			unzip(temporaryDownloadFilename);
 			
-			//ofFile fi;
-			//fi.moveTo(<#string path#>, <#bool bRelativeToData#>, <#bool overwrite#>)
+			// !!! Work in Progress !!!
+			// File Dialog to move app away from downoad folder.
+			/*ofFileDialogResult dialog_result = ofSystemLoadDialog("Loadimage", false);
+			if(dialog_result.bSuccess){
+				cout<<"name:"<<dialog_result.getName()<<endl;
+				cout<<"filepath:"<<dialog_result.getPath()<<endl;
+			}*/
 			
-			mode = 4;
+			
+			// Delete downloaded zip file.
+			ofFile tempXmlFile;
+			tempXmlFile.removeFile(tempFile, true);
+			
+			// TODO
+			// Move downloaded file to current working directory.
+			
+			mode = RELAUNCH;
 			
 			message = "Quit Application";
 			ofExit(1);
@@ -318,13 +307,13 @@ namespace wng {
 	
 	/**
 	 * loadFile
+	 * 
+	 * @param serverSrc
+	 *        url of the file
+	 * @param tempFilepath
+	 *        A path and name for the file we load from server.
 	 */
 	void ofxAppUpdater::loadFile(string serverSrc, string tempFilepath){
-		
-		// A path and name for the file we load from server. 
-		// I think we can handle this as an intern variable.
-		//string tempFilename = "tempVersioninfo.xml";
-		
 		
 		// Xml file download
 		//
@@ -350,9 +339,6 @@ namespace wng {
 		#endif
 		
 	}
-	
-	
-	
 	
 	
 	/**
@@ -388,28 +374,24 @@ namespace wng {
 	}
 	
 	
-	
-	
 	/**
 	 * unzip
 	 */
 	void ofxAppUpdater::unzip(string src){
 		
+		#ifdef OFXAPPUPDATER_LOG
+			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] unzip( " +src+ " )");
+		#endif
+		
 		// unzip file
 		#ifdef TARGET_OSX
 			// ok gotta be a better way then this,
 			// this is what I found...
-			string commandStr = "open /Users/wrongMacBookpro/Desktop/"+src;
+			string commandStr = "open "+src;
 			system(commandStr.c_str());
 		#endif
 		
-		ofSleepMillis(4000);
-		
-		// Delete downloaded zip file.
-		ofFile tempXmlFile;
-		tempXmlFile.removeFile("/Users/wrongMacBookpro/Desktop/"+src	, true);
-		
-		// Move downloaded file to current working directory.
+		ofSleepMillis(200);
 		
 	}
 	

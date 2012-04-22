@@ -21,7 +21,7 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.20
+ * @modified    2012.04.22
  * @version     1.0.1c
  */
 
@@ -40,7 +40,7 @@
 namespace wng {
 	
 	
-	// The values of the different mode states.
+	// The values of the different mode-states.
 	enum OFXAPPUPDATER_MODE {
 			DEFAULT,
 			CHECK,
@@ -69,6 +69,7 @@ namespace wng {
 		void init(string currentVersion, string appcastSrc);
 		void autoUpdate();
 		void checkVersion();
+		void download(string src);
 		void download();
 		void relaunch();
 		
@@ -77,7 +78,7 @@ namespace wng {
 		//
 		// This we use to get the current state of the update process.
 		// If a process like checking() or downloading() runs correctly,
-		// the mode state will be set to the next mode value.
+		// the mode state will be set to the next mode value (OFXAPPUPDATER_MODE enum).
 		int mode;
 		
 		// The current application version.
