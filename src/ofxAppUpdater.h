@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.22
- * @version     1.0.1c
+ * @version     1.0.1c2
  */
 
 
@@ -115,6 +115,7 @@ namespace wng {
 		void loadFile(string serverSrc, string tempFilepath);
 		void parseAppcast(string filepath);
 		void unzip(string src);
+		string getAppName();
 		
 		string appcastSrc;
 		string downloadUrl;

@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.22
- * @version     1.0.1c
+ * @version     1.0.1c2
  */
 
 
@@ -315,6 +315,19 @@ namespace wng {
 	#endif
 	}
 	
+	
+	
+	
+	
+	string ofxAppUpdater::getAppName(){
+		string appPath = ofFilePath::getCurrentExePath();
+		vector <string> te;
+		te = ofSplitString(appPath, "/");
+		//cout << ofToString(ofSplitString(appPath, "/")) << endl;
+		//cout << "### " << te[te.size()-1] << endl;
+		
+		return ofToString(te[te.size()-1]);
+	}	
 	
 	
 	
