@@ -73,6 +73,8 @@ namespace wng {
 		void download();
 		void relaunch();
 		
+		void downloadWithAlert(string src, string header, string message);
+		
 		
 		// The update modes.
 		//

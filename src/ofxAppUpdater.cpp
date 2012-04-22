@@ -54,8 +54,10 @@ namespace wng {
 		// See at example draw.
 		mode = DEFAULT;
 		
+		// Default string for latestVersion variable.
 		latestVersion = "not available";
 		
+		// Default string for temporaryDownloadFilename variable.
 		temporaryDownloadFilename = "tempDownload_wng.zip";
 		
 		#ifdef OFXAPPUPDATER_LOG
@@ -84,6 +86,7 @@ namespace wng {
 		this->currentVersion = currentVersion;
 		this->appcastSrc = appcastSrc;
 		this->internetConnection = internetConnection;
+		
 		#ifdef OFXAPPUPDATER_LOG
 			// TODO add to message variable = ... for advanced use.
 			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] init() --------------------------------------------------------");
@@ -114,49 +117,11 @@ namespace wng {
 		checkVersion();
 		
 		if(mode == NEW_RELEASE){
-		#ifdef TARGET_OS_MAC
-			// based on http://jorgearimany.blogspot.de/2010/05/messagebox-from-windows-to-mac.html
-			string m = "Current Version: "+currentVersion+"\nLatest Version: "+latestVersion;
-			//convert the strings from char* to CFStringRef
-			CFStringRef header_ref   = CFStringCreateWithCString( NULL, message.c_str(), strlen(message.c_str()) );
-			CFStringRef message_ref  = CFStringCreateWithCString( NULL, m.c_str(), strlen(m.c_str()) );
-			
-			CFOptionFlags result;  //result code from the message box
-			
-			//launch the message box
-			CFUserNotificationDisplayAlert(0, // no timeout
-										   kCFUserNotificationNoteAlertLevel, //change it depending message_type flags ( MB_ICONASTERISK.... etc.)
-										   NULL, //icon url, use default, you can change it depending message_type flags
-										   NULL, //not used
-										   NULL, //localization of strings
-										   header_ref, //header text 
-										   message_ref, //message text
-										   CFSTR("Download and Relaunch"), //default "ok" text in button
-										   CFSTR("Later"), //alternate button title
-										   NULL, //other button title, null--> no other button
-										   &result //response flags
-										   );
-			
-			//Clean up the strings
-			CFRelease(header_ref);
-			CFRelease(message_ref);
-			
-			//Convert the result
-			//cout << kCFUserNotificationDefaultResponse << endl;
-			
-			if(result == kCFUserNotificationDefaultResponse){
-				// At the moment we create a file at the desktop.
-				// I think we can handle this variable as an intern variable.
-				string tempFile = ofFilePath::getPathForDirectory("~/Downloads/")+temporaryDownloadFilename;
-				download(tempFile);
-				ofSleepMillis(200);
-			}
-			/*else {
-				cout << "cancel";
-			}*/
-
-			
-		#endif
+			// At the moment we create a file at the desktop.
+			// I think we can handle this variable as an intern variable.
+			downloadWithAlert(ofFilePath::getPathForDirectory("~/Downloads/")+temporaryDownloadFilename,
+							  message,
+							  "Latest Version: "+latestVersion+"\nCurrent Version: "+currentVersion);
 		}
 			relaunch();
 				
@@ -177,6 +142,7 @@ namespace wng {
 				ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] checkVersion() ------------------------------------------------");
 			#endif
 		
+			
 			// At the moment we create a file at he same directory like the app.
 			// after parsing the xml, we remove file.
 			string tempFile = ofFilePath::getCurrentWorkingDirectory()+"tempVersionInfo.xml";
@@ -189,17 +155,11 @@ namespace wng {
 			ofFile tempXmlFile;
 			tempXmlFile.removeFile(tempFile, true);
 		
-		
-<<<<<<< HEAD
-			
-			drawMode = 4;
-=======
 			// Check the Version numbers if it's false, you can download a new version.
 			if(currentVersion == latestVersion){
 				// change mode.
 				mode = LATEST_RELEASE;
 				message = "You're running the latest Application Release!";
->>>>>>> develope
 			
 				#ifdef OFXAPPUPDATER_LOG
 					ofLog(OF_LOG_VERBOSE, "Message: "+message);
@@ -311,6 +271,55 @@ namespace wng {
 	
 	
 	/**
+	 * downloadWithAlert
+	 * based on http://jorgearimany.blogspot.de/2010/05/messagebox-from-windows-to-mac.html
+	 */
+	void ofxAppUpdater::downloadWithAlert(string src, string header, string message){
+	#ifdef TARGET_OS_MAC
+		// Convert the strings to CFStringRef
+		CFStringRef header_ref   = CFStringCreateWithCString( NULL, header.c_str(), strlen(header.c_str()) );
+		CFStringRef message_ref  = CFStringCreateWithCString( NULL, message.c_str(), strlen(message.c_str()) );
+		
+		// Result code from the message box
+		CFOptionFlags result;
+		
+		//Launch the message box
+		CFUserNotificationDisplayAlert(0,                                   // no timeout
+									   kCFUserNotificationNoteAlertLevel,   // change it depending message_type flags 
+									                                        // ( MB_ICONASTERISK.... etc.)
+									   NULL,                                // icon url, use default, you can change it 
+									                                        // depending message_type flags
+									   NULL,                                // not used
+									   NULL,                                // localization of strings
+									   header_ref,                          // header text 
+									   message_ref,                         // message text
+									   CFSTR("Download Now"),               // default "ok" text in button
+									   CFSTR("Later"),                      // alternate button title
+									   NULL,                                // other button title, null--> no other button
+									   &result                              // response flags
+									   );
+		
+		//Clean up the strings
+		CFRelease(header_ref);
+		CFRelease(message_ref);
+		
+		//Convert the result
+		if(result == kCFUserNotificationDefaultResponse){
+			download(src);
+			ofSleepMillis(200);
+		}
+		/*else {
+		 cout << "cancel";
+		 }*/
+		
+	#endif
+	}
+	
+	
+	
+	
+	
+	/**
 	 * loadFile
 	 * 
 	 * @param serverSrc
@@ -395,20 +404,8 @@ namespace wng {
 			string commandStr = "open "+src;
 			system(commandStr.c_str());
 		#endif
-		
-<<<<<<< HEAD
-		
-		ofSleepMillis(4000);
-		
-		// Delete downloaded zip file.
-		ofFile tempXmlFile;
-		tempXmlFile.removeFile(src, true);
-		
-		// Move downloaded file to current working directory.
-		
-=======
+
 		ofSleepMillis(200);
->>>>>>> develope
 		
 	}
 	
