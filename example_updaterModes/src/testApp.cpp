@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.20
- * @version     1.0.1c
+ * @modified    2012.04.22
+ * @version     1.0.1c2
  */
 
 
@@ -55,11 +55,9 @@ void testApp::setup(){
 	// FOR THIS YOU CAN USE THE [semantic versioning]( http://semver.org ) STYLE.
 	// 
 	// The appcast.xml and release.zip are stored at github repository.
-	updater.init("0.9.0",
+	updater.init("0.0.0",
 				 "https://github.com/WrongEntertainment/ofxAppUpdater/raw/develope/release_storage/appcast.xml",
 				 true);
-	
-	//cout << "getCurrentWorkingDirectory: " << ofFilePath::getCurrentWorkingDirectory() << endl;
 	
 }
 
@@ -73,6 +71,8 @@ void testApp::draw(){
 	
 	ofBackground(ofColor::white);
 	
+	ofRectangle updateButton;
+	updateButton.set(ofGetWidth()-30, 10, 20, 20);
 	
 	// Display our ofxAppUpdater Information.
 	//
@@ -83,28 +83,56 @@ void testApp::draw(){
 	// - 3 = Download ready
 	switch (updater.mode) {
 		case DEFAULT:
-			ofSetColor(ofColor::black);
-			ofDrawBitmapString("Press 'u' for update check!", 10, 20);
+			/*ofSetColor(ofColor::black);
+			ofDrawBitmapString("Press 'u' for update check!", 10, 20);*/
+			updater.checkVersion();
 			break;
 			
 		case LATEST_RELEASE:
-			// Display a System Alert Dialog.
-			ofSystemAlertDialog(updater.message);
-			updater.mode = FINISHED;
+			ofSetColor(ofColor::gray);
+			ofRect(5, 5, ofGetWidth()-10, ofGetHeight()-10);
+			ofSetColor(ofColor::black);
+			ofDrawBitmapString("This is our default content.", 100, 100);
+			ofDrawBitmapString("ofxAppUpdater Message:         " + updater.message, 100, 120);
+			ofDrawBitmapString("ofxAppUpdater Current-Version: " + updater.currentVersion, 100, 140);
+			ofDrawBitmapString("ofxAppUpdater Latest-Version:  " + updater.latestVersion, 100, 160);
 			break;
 		
 		case NEW_RELEASE:
-			ofSetColor(ofColor::yellow);
-			ofRect(5, 5, ofGetWidth()-10, 38);
 			ofSetColor(ofColor::black);
-			ofDrawBitmapString(updater.message+"\nPress 'd' for downloading new Release.", 10, 20);
-			ofDrawBitmapString("Current-Version: " + updater.currentVersion, 10, 70);
-			ofDrawBitmapString("Latest-Version:  " + updater.latestVersion, 10, 90);
+			ofRect(updateButton.x, updateButton.y, updateButton.width, updateButton.height);
+			ofSetColor(ofColor::white);
+			ofLine(ofGetWidth()-20, 15, ofGetWidth()-20, 25);
+			ofLine(ofGetWidth()-25, 20, ofGetWidth()-20, 25);
+			ofLine(ofGetWidth()-15, 20, ofGetWidth()-20, 25);
+			
+			if(updateButton.inside(ofGetMouseX(), ofGetMouseY())){
+				ofSetColor(ofColor::black);
+				ofDrawBitmapString(updater.message+"\nClick to download the update.", ofGetWidth()-250, 50);
+				
+				if(ofGetMousePressed(0)){
+					cout << "pressed\n";
+					updater.download("tempDownload.zip");
+				}
+			}
 			break;
 		
 		case DOWNLOAD:
-			ofSetColor(ofColor::black);
-			ofDrawBitmapString(updater.message+"\nPress 'r' to Restart your Application.", 100, 50);
+			ofSetColor(ofColor::green);
+			ofRect(updateButton.x, updateButton.y, updateButton.width, updateButton.height);
+			ofSetColor(ofColor::white);
+			ofLine(ofGetWidth()-25, 15, ofGetWidth()-20, 25);
+			ofLine(ofGetWidth()-15, 15, ofGetWidth()-20, 25);
+			
+			if(updateButton.inside(ofGetMouseX(), ofGetMouseY())){
+				ofSetColor(ofColor::black);
+				ofDrawBitmapString(updater.message+"\nClick to Relauch App.", ofGetWidth()-250, 50);
+				
+				if(ofGetMousePressed(0)){
+					cout << "pressed\n";
+					updater.relaunch();
+				}
+			}
 			break;
 		
 		case RELAUNCH:
