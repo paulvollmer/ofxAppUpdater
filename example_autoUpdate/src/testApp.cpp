@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.20
- * @version     1.0.1b
+ * @modified    2012.04.22
+ * @version     1.0.1c
  */
 
 
@@ -51,32 +51,36 @@ void testApp::setup(){
 	// - A boolean that set the internetConnection.
 	//   If it's true, the ofxAppUpdater class start the update process.
 	//
-	// KEEP CLEAN THE FOLLWING VARIABLES TO UPDATE AND RELEASE OUR SOFTWARE SAVELY.
+	// KEEP CLEAN THE FOLLWING VARIABLES TO UPDATE AND RELEASE OUR SOFTWARE SAVETY.
 	// FOR THIS YOU CAN USE THE [semantic versioning]( http://semver.org ) STYLE.
 	// 
 	// The appcast.xml and release.zip are stored at github repository.
-	updater.init("1.0.2",
-				 "https://github.com/WrongEntertainment/ofxAppUpdater/raw/develope/release_storage/appcast.xml",
-				 true);
-	
-	updater.autoUpdate();
+	updater.init("0.0.0", "https://github.com/WrongEntertainment/ofxAppUpdater/raw/develope/release_storage/appcast.xml");
 	
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 	
+	switch (ofGetFrameNum()) {
+		case 10:
+			updater.autoUpdate();
+			break;
+		default:
+			break;
+	}
+	
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
+	
 	ofBackground(ofColor::white);
 	
 	ofSetColor(ofColor::black);
-	ofDrawBitmapString("Current Version: "+updater.currentVersion+", latest Version: "+updater.latestVersion, 70, 70);
-	ofSetColor(ofColor::blue);
 	ofDrawBitmapString("Message:", 70, 90);
 	ofDrawBitmapString(updater.message, 150, 90);
+
 }
 
 //--------------------------------------------------------------
