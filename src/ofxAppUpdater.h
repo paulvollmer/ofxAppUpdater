@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.13
- * @version     1.0.1
+ * @modified    2012.04.22
+ * @version     1.0.1c
  */
 
 
@@ -39,6 +39,20 @@
 
 namespace wng {
 	
+	
+	// The values of the different mode-states.
+	enum OFXAPPUPDATER_MODE {
+			DEFAULT,
+			CHECK,
+			LATEST_RELEASE,
+			NEW_RELEASE,
+			DOWNLOAD,
+			RELAUNCH,
+			FINISHED
+	};
+	
+	
+	
 	class ofxAppUpdater {
 		
 	public:
@@ -51,52 +65,61 @@ namespace wng {
 		/**
 		 * Methods
 		 */
-		void init(string tempCurrentVer, string tempServer, string tempVersionInfo, string tempLatest);
-		void checking();
-		void downloading();
-		void restart();
+		void init(string currentVersion, string appcastSrc, bool internetConnenction);
+		void init(string currentVersion, string appcastSrc);
+		void autoUpdate();
+		void checkVersion();
+		void download(string src);
+		void download();
+		void relaunch();
 		
-		int drawMode;
 		
-		// This variables we need for checking if a new release exist.
+		// The update modes.
+		//
+		// This we use to get the current state of the update process.
+		// If a process like checking() or downloading() runs correctly,
+		// the mode state will be set to the next mode value (OFXAPPUPDATER_MODE enum).
+		int mode;
+		
+		// The current application version.
+		//
+		// This variables contains the version of this application and is
+		// hard coded at this release.
+		// We need it for checking if a new release exist. 
 		string currentVersion;
 		
-		// This variables store the information from our versioninfo.xml file.
-		// The variables will be set by parseXML method.
-		string latestVersion;  // Latest Software Version
-		string modifiedDate;   // Date of last modification
-		string author;         // Name of the author/company
-		string changes;        // A list of changes that will shipped with the new update.
+		// The Appcast RSS file
+		//
+		// This variables will be filled with the tags from our Appcast RSS file.
+		// The variables will be set by parseAppcast method.
+		string latestVersion;   // Latest Software Version
+		
+		// internetConnection
+		//
+		// Trigger your web connection, if bool is true,
+		// your Application can check the version and
+		// download if a new release is available.
+		bool internetConnection;
+		
+		// Message container for the ofxAppUpdater class.
+		string message;
+		
 		
 		
 	private:
 		/**
 		 * Methods
 		 */
-		bool checkVersion(string currentVer, string latestVer);
-		void parseXML(string filename);
 		void loadFile(string serverSrc, string tempFilepath);
+		void parseAppcast(string filepath);
 		void unzip(string src);
 		
-		/**
-		 * Variables
-		 * Here will be listen all Variables of the ofxUpdater class.
-		 */
-		// Download Variables
-		string serverUrl;
-		string versionInfoXml;
-		string latestZip;
-		
-		
-		
-		// Trigger your web connection, if bool is true,
-		// your Application can check the version and
-		// download automatic if a new release is available.
-		bool internetConnection;
+		string appcastSrc;
+		string downloadUrl;
+		string temporaryDownloadFilename;
 		
 		// If the variable is true, the addon start downloading zip package.
 		//bool downloadActive;
-		
 		
 	};
 

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+	<channel>
+		<title>ofxAppUpdater - AppCast</title>
+		<link>http://www.github.com/wrongentertainment/ofxAppUpdater</link>
+		<description>ofxAppUpdater most recent changes with links to updates.</description>
+		<language>en</language>
+		<pubDate>Wed, 04 Apr 2010 23:56:00 GMT</pubDate>
+		
+		<item>
+			<title>ofxAppUpdater release v.1.0.0</title>
+			<description>
+				<h3>Changes</h3>
+					<ul>
+						<li>Change versioninfo.xml to Appcast RSS</li>
+					</ul>
+				<h3>New</h3>
+					<ul>
+						<li>Added GitHub Page</li>
+					</ul>
+				<h3>Improved</h3>
+					<ul>
+						<li>Download, unzip and relaunche App.</li>
+						<li>Test Session finished</li>
+					</ul>
+				<h3>Internal</h3>
+					<ul>
+						<li>Changes at init method (because of apcast.xml contains variables that we set in previous version at versioninfo.xml)</li>
+						<li>Test examples and methods</li>
+						<li>Added release_storage directory, added appcast rss feed to check if a new version is available.</li>
+					</ul>
+			</description>
+			<pubDate>Fri, 20 Apr 2012 15:45:00 GMT</pubDate>
+			<enclosure url="https://github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/release_1_0_0.zip" type="application/octet-stream"/>
+			<appcastVersion>1.0.0</appcastVersion>
+		</item>
+	
+		<item>
+			<title>ofxAppUpdater release v.0.1.1</title>
+			<description>
+				<h3>New</h3>
+					<ul>
+						<li>Create GitHub Repository</li>
+					</ul>
+				<h3>Internal</h3>
+					<ul>
+						<li>Added addon src directory, ofxAppUpdater class and first example sourcecode + Xcode project.</li>
+					</ul>
+			</description>
+			<pubDate>Thu, 12 Apr 2012 17:56:00 GMT</pubDate>
+			<enclosure url="https://github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/release_1_0_0.zip" type="application/octet-stream"/>
+			<appcastVersion>0.1.1</appcastVersion>
+	     </item>
+	
+	</channel>
+</rss>
