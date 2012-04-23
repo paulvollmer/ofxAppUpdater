@@ -103,9 +103,7 @@ void testApp::draw(){
 			ofSetColor(ofColor::black);
 			ofRect(updateButton.x, updateButton.y, updateButton.width, updateButton.height);
 			ofSetColor(ofColor::white);
-			ofLine(ofGetWidth()-20, 15, ofGetWidth()-20, 25);
-			ofLine(ofGetWidth()-25, 20, ofGetWidth()-20, 25);
-			ofLine(ofGetWidth()-15, 20, ofGetWidth()-20, 25);
+			ofTriangle(ofGetWidth()-25, 15, ofGetWidth()-15, 15, ofGetWidth()-20, 25);
 			
 			if(updateButton.inside(ofGetMouseX(), ofGetMouseY())){
 				ofSetColor(ofColor::black);
@@ -122,8 +120,7 @@ void testApp::draw(){
 			ofSetColor(ofColor::green);
 			ofRect(updateButton.x, updateButton.y, updateButton.width, updateButton.height);
 			ofSetColor(ofColor::white);
-			ofLine(ofGetWidth()-25, 15, ofGetWidth()-20, 25);
-			ofLine(ofGetWidth()-15, 15, ofGetWidth()-20, 25);
+			ofTriangle(ofGetWidth()-25, 15, ofGetWidth()-15, 15, ofGetWidth()-20, 25);
 			
 			if(updateButton.inside(ofGetMouseX(), ofGetMouseY())){
 				ofSetColor(ofColor::black);
