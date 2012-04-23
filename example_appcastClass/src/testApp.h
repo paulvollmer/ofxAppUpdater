@@ -55,10 +55,13 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
+	void urlResponse(ofHttpResponse & response);  
 	void exit();
-	
+		
 	
 private:
+	ofTrueTypeFont vera;
+	
 	ofxXmlSettings xml;
 	ofxAppcast appcast;
 	// this variables will be filled by our appcast file.
