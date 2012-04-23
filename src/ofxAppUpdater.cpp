@@ -428,9 +428,6 @@ namespace wng {
 	 */
 	void ofxAppUpdater::parseAppcast(string filepath){
 		
-		//  Create a new ofxXmlSettings object for reading the saved file.		
-		ofxXmlSettings xml;
-		
 		// We load our xml file.
 		// This is based on the openFrameworks xmlSettingsExample.
 		if(xml.loadFile(filepath)){

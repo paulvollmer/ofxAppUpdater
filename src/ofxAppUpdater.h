@@ -108,6 +108,9 @@ namespace wng {
 		string message;
 		
 		
+		ofxXmlSettings xml;
+		
+		
 		
 	private:
 		ofxAppcast appcast;
