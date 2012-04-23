@@ -117,11 +117,36 @@ namespace wng {
 		checkVersion();
 		
 		if(mode == NEW_RELEASE){
-			// At the moment we create a file at the desktop.
-			// I think we can handle this variable as an intern variable.
-			downloadWithAlert(ofFilePath::getPathForDirectory("~/Downloads/")+temporaryDownloadFilename,
-							  message,
-							  "Latest Version: "+latestVersion+"\nCurrent Version: "+currentVersion);
+			// We create an integer for our notification display dialog.
+			// this variables can be checked later.
+			string tempDesc = "Latest Version: "+latestVersion+"\nCurrent Version: "+currentVersion;
+			int tempDialog = userNotificationDisplay(message, tempDesc, "Download Now", "Cancel", "Check changes");
+			
+			switch (tempDialog) {
+				case 0:
+					cout << "Default response\n";
+					
+					// At the moment we create a file at the desktop.
+					// I think we can handle this variable as an intern variable.
+					//download(ofFilePath::getPathForDirectory("~/Downloads/")+temporaryDownloadFilename);
+					
+					download();
+					
+					ofSleepMillis(200);
+					
+					break;
+				case 1:
+					cout << "Alternate response\n";
+					break;
+				case 2:
+					cout << "Other response\n";
+					break;
+				case 3:
+					cout << "Cancel response\n";
+					break;
+				default:
+					break;
+			}
 		}
 			relaunch();
 				
@@ -268,52 +293,78 @@ namespace wng {
 	
 	
 	
-	
-	
 	/**
-	 * downloadWithAlert
-	 * based on http://jorgearimany.blogspot.de/2010/05/messagebox-from-windows-to-mac.html
+	 * 
+	 * 
+	 * @param header
+	 *        Header test
+	 * @param message
+	 *        Messsage test
+	 * @param buttonDefault
+	 *        Default text in button (like "ok")
+	 * @param buttonAlternate
+	 *        Alternate button title (like "cancel")
+	 * @param buttonOther
+	 *        Other button title
 	 */
-	void ofxAppUpdater::downloadWithAlert(string src, string header, string message){
-	#ifdef TARGET_OS_MAC
+	int ofxAppUpdater::userNotificationDisplay(string header, string message, string buttonDefault, string buttonAlternate, string buttonOther){
+		
+		// we use a temp variable for the return value.
+		int temp = 0;
+		
+		#ifdef TARGET_OS_MAC
 		// Convert the strings to CFStringRef
 		CFStringRef header_ref   = CFStringCreateWithCString( NULL, header.c_str(), strlen(header.c_str()) );
 		CFStringRef message_ref  = CFStringCreateWithCString( NULL, message.c_str(), strlen(message.c_str()) );
+		CFStringRef buttonDefault_ref  = CFStringCreateWithCString( NULL, buttonDefault.c_str(), strlen(buttonDefault.c_str()) );
+		CFStringRef buttonAlternate_ref  = CFStringCreateWithCString( NULL, buttonAlternate.c_str(), strlen(buttonAlternate.c_str()) );
+		CFStringRef buttonOther_ref  = CFStringCreateWithCString( NULL, buttonOther.c_str(), strlen(buttonOther.c_str()) );
 		
 		// Result code from the message box
 		CFOptionFlags result;
 		
 		//Launch the message box
-		CFUserNotificationDisplayAlert(0,                                   // no timeout
-									   kCFUserNotificationNoteAlertLevel,   // change it depending message_type flags 
-									                                        // ( MB_ICONASTERISK.... etc.)
-									   NULL,                                // icon url, use default, you can change it 
-									                                        // depending message_type flags
-									   NULL,                                // not used
-									   NULL,                                // localization of strings
-									   header_ref,                          // header text 
-									   message_ref,                         // message text
-									   CFSTR("Download Now"),               // default "ok" text in button
-									   CFSTR("Later"),                      // alternate button title
-									   NULL,                                // other button title, null--> no other button
-									   &result                              // response flags
+		CFUserNotificationDisplayAlert(0,                                 // no timeout
+									   kCFUserNotificationNoteAlertLevel, // change it depending message_type flags 
+		                                                                  // ( MB_ICONASTERISK.... etc.)
+									   NULL,                              // icon url, use default, you can change it 
+		                                                                  // depending message_type flags
+									   NULL,                              // not used
+									   NULL,                              // localization of strings
+									   header_ref, message_ref,
+									   buttonDefault_ref, buttonAlternate_ref, buttonOther_ref,
+									   &result                            // response flags
 									   );
 		
 		//Clean up the strings
 		CFRelease(header_ref);
 		CFRelease(message_ref);
 		
-		//Convert the result
-		if(result == kCFUserNotificationDefaultResponse){
-			download(src);
-			ofSleepMillis(200);
+		// Set our temp variable.
+		switch(result){
+			case kCFUserNotificationDefaultResponse:
+				temp = 0;
+				break;
+			case kCFUserNotificationAlternateResponse:
+				temp = 1;
+				break;
+			case kCFUserNotificationOtherResponse:
+				temp = 2;
+				break;
+			default:
+				temp = 3;
+				break;
 		}
-		/*else {
-		 cout << "cancel";
-		 }*/
 		
-	#endif
+		#endif
+		
+		return temp;
+		
 	}
+	
+	
+	
+	
 	
 	
 	

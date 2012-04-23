@@ -74,7 +74,7 @@ namespace wng {
 		void download();
 		void relaunch();
 		
-		void downloadWithAlert(string src, string header, string message);
+		int userNotificationDisplay(string header, string message, const string buttonOk, const string buttonCancle, const string buttonAlternate);
 		
 		
 		// The update modes.
