@@ -70,12 +70,14 @@ void testApp::draw(){
 	vera.drawString("appcastLicense: "+appcastLicense, 100, 340);
 	vera.drawString("appcastDownloads: "+appcastDownloads, 100, 360);
 	
-	
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-	ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml","load");
+	
+	// You can reload your appcast.xml like this
+	//ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml","load");
+	
 }
 
 //--------------------------------------------------------------
@@ -120,7 +122,7 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 
 //--------------------------------------------------------------
 void testApp::exit(){
-	ofUnregisterURLNotification(this);
+	
 }
 
 //--------------------------------------------------------------
@@ -149,40 +151,42 @@ void testApp::urlResponse(ofHttpResponse & response){
 		appcastDownloads = appcast.getAppcastDownloadCount(xml, 0);
 		
 		// This is a list example of all get methods.
-		/*
 		cout << "\nGet a tag from our channel: \n";
-		cout << "getChannelTitle            = " << appcast.getChannelTitle() << endl;
-		cout << "getChannelLink             = " << appcast.getChannelLink() << endl;
-		cout << "getChannelDescription      = " << appcast.getChannelDescription() << endl;
-		cout << "getChannelLanguage         = " << appcast.getChannelLanguage() << endl;
-		cout << "getChannelPubDate          = " << appcast.getChannelPubDate() << endl;
+		cout << "getChannelTitle            = " << appcast.getChannelTitle(xml) << endl;
+		cout << "getChannelLink             = " << appcast.getChannelLink(xml) << endl;
+		cout << "getChannelDescription      = " << appcast.getChannelDescription(xml) << endl;
+		cout << "getChannelLanguage         = " << appcast.getChannelLanguage(xml) << endl;
+		cout << "getChannelPubDate          = " << appcast.getChannelPubDate(xml) << endl;
 		cout << "\nGet the tags from our first item: \n";
-		cout << "getTitle                   = " << appcast.getTitle(0) << endl;
-		cout << "getDescription             = " << appcast.getDescription(0) << endl;
-		cout << "getPubDate                 = " << appcast.getPubDate(0) << endl;
-		cout << "getEnclosureUrl            = " << appcast.getEnclosureUrl(0) << endl;
-		cout << "getEnclosureType           = " << appcast.getEnclosureType(0) << endl;
+		cout << "getTitle                   = " << appcast.getTitle(xml, 0) << endl;
+		cout << "getDescription             = " << appcast.getDescription(xml, 0) << endl;
+		cout << "getPubDate                 = " << appcast.getPubDate(xml, 0) << endl;
+		cout << "getEnclosureUrl            = " << appcast.getEnclosureUrl(xml, 0) << endl;
+		cout << "getEnclosureType           = " << appcast.getEnclosureType(xml, 0) << endl;
 		cout << "\nGet the appcast tags from our first item: \n";
-		cout << "getAppcastVersion          = " << appcast.getAppcastVersion(0) << endl;
-		cout << "getAppcastAuthor           = " << appcast.getAppcastAuthor(0) << endl;
-		cout << "getAppcastAuthorUrl        = " << appcast.getAppcastAuthorUrl(0) << endl;
-		cout << "getAppcastAuthorEmail      = " << appcast.getAppcastAuthorEmail(0) << endl;
-		cout << "getAppcastShortDescription = " << appcast.getAppcastShortDescription(0) << endl;
-		cout << "getAppcastLicense          = " << appcast.getAppcastLicense(0) << endl;
-		cout << "getAppcastLicenseUrl       = " << appcast.getAppcastLicenseUrl(0) << endl;
-		cout << "getAppcastHash             = " << appcast.getAppcastHash(0) << endl;
-		cout << "getAppcastHashAlgo         = " << appcast.getAppcastHashAlgo(0) << endl;
-		cout << "getAppcastRating           = " << appcast.getAppcastRating(0) << endl;
-		cout << "getAppcastRatingVotes      = " << appcast.getAppcastRatingVotes(0) << endl;
-		cout << "getAppcastDownloadCount    = " << appcast.getAppcastDownloadCount(0) << endl;
-		cout << "getAppcastKeywords         = " << appcast.getAppcastKeywords(0) << endl;
-		cout << "getAppcastDocLink          = " << appcast.getAppcastDocLink(0) << endl;
-		cout << "getAppcastSourceLink       = " << appcast.getAppcastSourceLink(0) << endl;
-		cout << "getAppcastPreviewLink      = " << appcast.getAppcastPreviewLink(0) << endl;
-		*/
+		cout << "getAppcastVersion          = " << appcast.getAppcastVersion(xml, 0) << endl;
+		cout << "getAppcastAuthor           = " << appcast.getAppcastAuthor(xml, 0) << endl;
+		cout << "getAppcastAuthorUrl        = " << appcast.getAppcastAuthorUrl(xml, 0) << endl;
+		cout << "getAppcastAuthorEmail      = " << appcast.getAppcastAuthorEmail(xml, 0) << endl;
+		cout << "getAppcastShortDescription = " << appcast.getAppcastShortDescription(xml, 0) << endl;
+		cout << "getAppcastLicense          = " << appcast.getAppcastLicense(xml, 0) << endl;
+		cout << "getAppcastLicenseUrl       = " << appcast.getAppcastLicenseUrl(xml, 0) << endl;
+		cout << "getAppcastHash             = " << appcast.getAppcastHash(xml, 0) << endl;
+		cout << "getAppcastHashAlgo         = " << appcast.getAppcastHashAlgo(xml, 0) << endl;
+		cout << "getAppcastRating           = " << appcast.getAppcastRating(xml, 0) << endl;
+		cout << "getAppcastRatingVotes      = " << appcast.getAppcastRatingVotes(xml, 0) << endl;
+		cout << "getAppcastDownloadCount    = " << appcast.getAppcastDownloadCount(xml, 0) << endl;
+		cout << "getAppcastKeywords         = " << appcast.getAppcastKeywords(xml, 0) << endl;
+		cout << "getAppcastDocLink          = " << appcast.getAppcastDocLink(xml, 0) << endl;
+		cout << "getAppcastSourceLink       = " << appcast.getAppcastSourceLink(xml, 0) << endl;
+		cout << "getAppcastPreviewLink      = " << appcast.getAppcastPreviewLink(xml, 0) << endl;
+		
 		
     }else{  
         cout << response.status << " " << response.error << endl;  
     }
+	
+	ofSleepMillis(200);
+	ofUnregisterURLNotification(this);
 	
 }
