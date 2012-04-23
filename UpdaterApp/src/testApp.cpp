@@ -96,7 +96,7 @@ void testApp::draw(){
 	
 	ofSetColor(ofColor::black);
 	ofRect(0, 0, ofGetWidth(), 40);
-	vera9.drawString("Console: " + updater.message, 20, ofGetHeight()-25);
+	//vera9.drawString("Console: " + updater.message, 20, ofGetHeight()-25);
 	
 	ofSetColor(ofColor::white);
 	veraBold12.drawString("Update Settings", 20, 25);
@@ -131,31 +131,36 @@ void testApp::draw(){
 			chTitle = appcast.getChannelTitle(updater.xml);
 			chDescription = appcast.getChannelDescription(updater.xml);
 			chDate = appcast.getChannelPubDate(updater.xml);
+			
+			acVersion =appcast.getAppcastVersion(updater.xml, 0);
+			acAuthor = appcast.getAppcastAuthor(updater.xml, 0);
+			acDoclink = appcast.getAppcastDocLink(updater.xml, 0);
+			acSourcelink = appcast.getAppcastSourceLink(updater.xml, 0);
 			break;
+			
 			
 		case LATEST_RELEASE:
 			ofSetColor(ofColor::white);
 			veraBold12.drawString(updater.message+"\nversion "+updater.latestVersion, 20, 65);
 			//vera9.drawString("Latest version: " + updater.latestVersion, 20, 105);
-			
-			veraBold12.drawString(chTitle, 20, 140);
-			vera9.drawString(chDate, 20, 160);
-			vera9.drawString(chDescription, 20, 200);
-			
 			/*ofSetColor(ofColor::black);
 			ofRect(updateButton.x, updateButton.y, updateButton.width, updateButton.height);
 			// X
 			ofSetColor(ofColor::white);
 			ofLine(25, 55, 55, 85);
 			ofLine(55, 55, 25, 85);*/
+			
+			//displayAppcast();
 			break;
 		
+			
 		case NEW_RELEASE:
 			ofSetColor(ofColor::white);
 			veraBold12.drawString(updater.message+"\nDownload the update now!", 75, 65);
 			vera9.drawString("Latest version: " + updater.latestVersion +  ", current version: " + updater.currentVersion, 20, 105);
-			vera9.drawString(appcast.getChannelTitle(updater.xml), 20, 140);
+			//vera9.drawString(appcast.getChannelTitle(updater.xml), 20, 140);
 			
+			// Download Button
 			ofSetColor(ofColor::black);
 			if(updateButton.inside(ofGetMouseX(), ofGetMouseY())){
 				ofSetColor(0, 200, 255);
@@ -170,8 +175,11 @@ void testApp::draw(){
 			ofLine(40, 55, 40, 85);
 			ofLine(25, 70, 40, 85);
 			ofLine(55, 70, 40, 85);
+			
+			displayAppcast();
 			break;
 		
+			
 		case DOWNLOAD:
 			ofSetColor(ofColor::green);
 			ofRect(updateButton.x, updateButton.y, updateButton.width, updateButton.height);
@@ -294,5 +302,27 @@ void testApp::urlResponse(ofHttpResponse & response){
 		}
 	}
 */
+	
+}
+
+
+void testApp::displayAppcast(){
+	
+	ofSetColor(ofColor::black);
+	veraBold12.drawString(chTitle, 20, 140);
+	vera9.drawString("Last modified: " + chDate, 20, 155);
+	
+	vector <string> temp = ofSplitString(chDescription, " // ");
+	//cout << temp.size() << endl;
+	for(int i=0; i<temp.size(); i++){
+		//cout << temp[i] << endl;
+		vera9.drawString(ofToString(temp[i]), 20, 180+(20*i));
+	}
+	
+	vera9.drawString("Version: "+acVersion, ofGetWidth()-leftControlWidth, 220);
+	vera9.drawString("Author: "+acAuthor, ofGetWidth()-leftControlWidth, 240);
+	vera9.drawString("Documentation: "+acDoclink, ofGetWidth()-leftControlWidth, 260);
+	vera9.drawString("Source: "+acSourcelink, ofGetWidth()-leftControlWidth, 280);
+	
 	
 }

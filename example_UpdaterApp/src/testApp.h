@@ -1,28 +1,28 @@
 /**
- * UpdaterApp is developed by Paul Vollmer
+ * ofxAppUpdater is developed by Paul Vollmer
  * http://www.wng.cc
  * 
  * 
  * Copyright (c) 2012 Paul Vollmer
  *
- * UpdaterApp is free software; you can redistribute it and/or
+ * ofxAppUpdater is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * UpdaterApp is distributed in the hope that it will be useful,
+ * ofxAppUpdater is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General
- * Public License along with UpdaterApp; if not, write to the
+ * Public License along with ofxAppUpdater; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.23
- * @version     0.0.1a
+ * @version     0.0.1
  */
 
 
@@ -31,7 +31,6 @@
 
 #include "ofMain.h"
 #include "ofxAppUpdater.h"
-#include "ofxGui.h"
 
 using namespace wng;
 
@@ -48,37 +47,20 @@ public:
 	
 	void keyPressed(int key);
 	void keyReleased(int key);
-	void mouseMoved(int x, int y );
+	void mouseMoved(int x, int y);
 	void mouseDragged(int x, int y, int button);
 	void mousePressed(int x, int y, int button);
 	void mouseReleased(int x, int y, int button);
 	void windowResized(int w, int h);
-	//void dragEvent(ofDragInfo dragInfo);
+	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
+	void urlResponse(ofHttpResponse & response);  
 	void exit();
-	
-	void urlResponse(ofHttpResponse & response);
-	
-	void displayAppcast();
+		
 	
 private:
-	// Fonts we use
-	ofTrueTypeFont vera9;
-	ofTrueTypeFont veraBold12;
-	
-	
-	int leftControlWidth;
-	ofxToggle autoUpdateToggle;
-	ofxToggle LogUpdateToggle;
-	ofxToggle userInformationToggle;
-	//ofxToggle debugInformationToggle;
-	
-	
-	// Added ofxAppUpdater addon to testApp
 	ofxAppUpdater updater;
+	bool updaterToggle;
 	
-	ofxAppcast appcast;
-	string chTitle, chDate, chDescription;
-	string acVersion, acAuthor, acDoclink, acSourcelink;
 
 };
