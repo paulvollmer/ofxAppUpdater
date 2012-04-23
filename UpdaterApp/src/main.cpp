@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.23
- * @version     0.0.1
+ * @version     0.0.1a
  */
 
 
@@ -35,7 +35,7 @@
 int main( ){
 
     ofAppGlutWindow window;
-	ofSetupOpenGL(&window, 350, 150, OF_WINDOW);			// <-------- setup the GL context
+	ofSetupOpenGL(&window, 800,400, OF_WINDOW);			// <-------- setup the GL context
 
 	// this kicks off the running of my app
 	// can be OF_WINDOW or OF_FULLSCREEN

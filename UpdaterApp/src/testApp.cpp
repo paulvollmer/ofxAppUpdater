@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.23
- * @version     0.0.1
+ * @version     0.0.1a
  */
 
 
@@ -38,31 +38,47 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
-	ofLogToConsole();
-	ofSetLogLevel(OF_LOG_VERBOSE);
+	ofSetVerticalSync(true);
 	
 	ofSetWindowTitle("UpdaterApp version 0.0.1");
 	
-	vera10.loadFont("Vera.ttf", 10, true, false);
-	veraBold14.loadFont("VeraBd.ttf", 14, true, false);
+	ofLogToConsole();
+	ofSetLogLevel(OF_LOG_VERBOSE);
 	
 	ofRegisterURLNotification(this);
+	
+	
+	// Load fonts
+	vera9.loadFont("Vera.ttf", 9, false, true);
+	veraBold12.loadFont("VeraBd.ttf", 12, true, true);
+	
+	
+	// Set the size of our left control area
+	leftControlWidth = 300;
+	// setup gui
+	autoUpdateToggle.setup("Auto Update", 10, leftControlWidth, 20);
+	LogUpdateToggle.setup("Log Update Prosess", 10, leftControlWidth, 20);
+	userInformationToggle.setup("Submit User Information", 10, leftControlWidth, 20);
+	// set gui position
+	autoUpdateToggle.setPosition(ofGetWidth()-leftControlWidth, 55);
+	LogUpdateToggle.setPosition(ofGetWidth()-leftControlWidth, 76);
+	userInformationToggle.setPosition(ofGetWidth()-leftControlWidth, 97);
+	
 	
 	
 	// We store our updater Variables here (FOR THE CURRENT APPLICATION RELEASE).
 	// For our ofxAppUpdater::init method we need the following variables:
 	// - An Application Release version (string)
 	// - A Server-URL who will be stored the Appcast.xml file.
-	// - A boolean that set the internetConnection.
-	//   If it's true, the ofxAppUpdater class start the update process.
 	//
 	// KEEP CLEAN THE FOLLWING VARIABLES TO UPDATE AND RELEASE OUR SOFTWARE SAVELY.
 	// FOR THIS YOU CAN USE THE [semantic versioning]( http://semver.org ) STYLE.
 	// 
 	// The appcast.xml and release.zip are stored at github repository.
-	updater.init("0.0.0",
-				 "https://github.com/WrongEntertainment/ofxAppUpdater/raw/develope/release_storage/appcast.xml",
-				 true);
+	updater.init("0.0.2",
+				 "http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml");
+	
+	
 	
 }
 
@@ -73,27 +89,31 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	
 	ofBackground(ofColor::gray);
 	
 	
-	ofEnableAlphaBlending();
+	ofEnableSmoothing();
 	
 	ofSetColor(ofColor::black);
-	ofRect(0, 0, ofGetWidth(), 50);
-	ofSetColor(ofColor::white);
-	veraBold14.drawString("Update Settings", 50, 20);
-	
-	ofDisableAlphaBlending();
-	
-	
-	
+	ofRect(0, 0, ofGetWidth(), 40);
+	vera9.drawString("Console: " + updater.message, 20, ofGetHeight()-25);
 	
 	ofSetColor(ofColor::white);
-	ofRect(5, 50, ofGetWidth()-10, ofGetHeight()-60);
+	veraBold12.drawString("Update Settings", 20, 25);
+	ofSetColor(ofColor::gray);
+	//vera9.drawString("0.0.1", 175, 25);
+	
+	ofDisableSmoothing();
+	
+	
+	autoUpdateToggle.draw();
+	LogUpdateToggle.draw();
+	userInformationToggle.draw();
+	
+	
 	
 	ofRectangle updateButton;
-	updateButton.set(ofGetWidth()-30, 10, 20, 20);
+	updateButton.set(20, 50, 40, 40);
 	
 	// Display our ofxAppUpdater Information.
 	//
@@ -107,35 +127,49 @@ void testApp::draw(){
 			/*ofSetColor(ofColor::black);
 			ofDrawBitmapString("Press 'u' for update check!", 10, 20);*/
 			updater.checkVersion();
+			
+			chTitle = appcast.getChannelTitle(updater.xml);
+			chDescription = appcast.getChannelDescription(updater.xml);
+			chDate = appcast.getChannelPubDate(updater.xml);
 			break;
 			
 		case LATEST_RELEASE:
-			ofSetColor(ofColor::gray);
-			ofRect(5, 5, ofGetWidth()-10, ofGetHeight()-10);
-			ofSetColor(ofColor::black);
-			ofDrawBitmapString("This is our default content.", 100, 100);
-			ofDrawBitmapString("ofxAppUpdater Message:         " + updater.message, 100, 120);
-			ofDrawBitmapString("ofxAppUpdater Current-Version: " + updater.currentVersion, 100, 140);
-			ofDrawBitmapString("ofxAppUpdater Latest-Version:  " + updater.latestVersion, 100, 160);
+			ofSetColor(ofColor::white);
+			veraBold12.drawString(updater.message+"\nversion "+updater.latestVersion, 20, 65);
+			//vera9.drawString("Latest version: " + updater.latestVersion, 20, 105);
+			
+			veraBold12.drawString(chTitle, 20, 140);
+			vera9.drawString(chDate, 20, 160);
+			vera9.drawString(chDescription, 20, 200);
+			
+			/*ofSetColor(ofColor::black);
+			ofRect(updateButton.x, updateButton.y, updateButton.width, updateButton.height);
+			// X
+			ofSetColor(ofColor::white);
+			ofLine(25, 55, 55, 85);
+			ofLine(55, 55, 25, 85);*/
 			break;
 		
 		case NEW_RELEASE:
-			ofSetColor(ofColor::black);
-			ofRect(updateButton.x, updateButton.y, updateButton.width, updateButton.height);
 			ofSetColor(ofColor::white);
-			ofLine(ofGetWidth()-20, 15, ofGetWidth()-20, 25);
-			ofLine(ofGetWidth()-25, 20, ofGetWidth()-20, 25);
-			ofLine(ofGetWidth()-15, 20, ofGetWidth()-20, 25);
+			veraBold12.drawString(updater.message+"\nDownload the update now!", 75, 65);
+			vera9.drawString("Latest version: " + updater.latestVersion +  ", current version: " + updater.currentVersion, 20, 105);
+			vera9.drawString(appcast.getChannelTitle(updater.xml), 20, 140);
 			
+			ofSetColor(ofColor::black);
 			if(updateButton.inside(ofGetMouseX(), ofGetMouseY())){
-				ofSetColor(ofColor::black);
-				ofDrawBitmapString(updater.message+"\nClick to download the update.", ofGetWidth()-250, 50);
-				
+				ofSetColor(0, 200, 255);
 				if(ofGetMousePressed(0)){
 					cout << "pressed\n";
 					updater.download("tempDownload.zip");
 				}
 			}
+			ofRect(updateButton.x, updateButton.y, updateButton.width, updateButton.height);
+			// Arrow
+			ofSetColor(ofColor::white);
+			ofLine(40, 55, 40, 85);
+			ofLine(25, 70, 40, 85);
+			ofLine(55, 70, 40, 85);
 			break;
 		
 		case DOWNLOAD:
@@ -175,7 +209,7 @@ void testApp::draw(){
 void testApp::keyPressed(int key){
 
 	// We use different keys to check, download and restart if a new release is available.
-	switch (key) {
+	/*switch (key) {
 		
 		// Key <u> to check if a new update is available.
 		case 'u':
@@ -195,7 +229,7 @@ void testApp::keyPressed(int key){
 		// Default
 		default:
 			break;
-	}
+	}*/
 	
 }
 
@@ -211,7 +245,7 @@ void testApp::mouseMoved(int x, int y){
 
 //--------------------------------------------------------------
 void testApp::mouseDragged(int x, int y, int button){
-
+	
 }
 
 //--------------------------------------------------------------
@@ -226,7 +260,14 @@ void testApp::mouseReleased(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h){
-
+	
+	if (w >= 800) {
+		// copycat from setup
+		autoUpdateToggle.setPosition(ofGetWidth()-leftControlWidth, 50);
+		LogUpdateToggle.setPosition(ofGetWidth()-leftControlWidth, 71);
+		userInformationToggle.setPosition(ofGetWidth()-leftControlWidth, 92);
+	}
+	
 }
 
 //--------------------------------------------------------------
@@ -235,16 +276,16 @@ void testApp::gotMessage(ofMessage msg){
 }
 
 //--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){ 
+/*void testApp::dragEvent(ofDragInfo dragInfo){ 
 
-}
+}*/
 
 void testApp::exit(){
 	
 }
 
 void testApp::urlResponse(ofHttpResponse & response){
-	if(response.status == 200 && response.request.name == "async_req") {
+	/*if(response.status == 200 && response.request.name == "async_req") {
 		cout << "loading" << endl;
 	} else {
 		cout << response.status << " " << response.error << endl;
@@ -252,5 +293,6 @@ void testApp::urlResponse(ofHttpResponse & response){
 			cout << "loading = false \n" ;
 		}
 	}
-
+*/
+	
 }

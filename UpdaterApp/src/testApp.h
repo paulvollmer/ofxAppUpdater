@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.23
- * @version     0.0.1
+ * @version     0.0.1a
  */
 
 
@@ -31,6 +31,7 @@
 
 #include "ofMain.h"
 #include "ofxAppUpdater.h"
+#include "ofxGui.h"
 
 using namespace wng;
 
@@ -52,7 +53,7 @@ public:
 	void mousePressed(int x, int y, int button);
 	void mouseReleased(int x, int y, int button);
 	void windowResized(int w, int h);
-	void dragEvent(ofDragInfo dragInfo);
+	//void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 	void exit();
 	
@@ -60,10 +61,21 @@ public:
 	
 	
 private:
-	ofTrueTypeFont vera10;
-	ofTrueTypeFont veraBold14;
+	// Fonts we use
+	ofTrueTypeFont vera9;
+	ofTrueTypeFont veraBold12;
+	
+	
+	int leftControlWidth;
+	ofxToggle autoUpdateToggle;
+	ofxToggle LogUpdateToggle;
+	ofxToggle userInformationToggle;
+	//ofxToggle debugInformationToggle;
+	
 	
 	// Added ofxAppUpdater addon to testApp
 	ofxAppUpdater updater;
+	ofxAppcast appcast;
+	string chTitle, chDate, chDescription;
 
 };
