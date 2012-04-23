@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.22
- * @version     1.0.1c2
+ * @version     1.0.1d
  */
 
 
@@ -383,8 +383,11 @@ namespace wng {
 		// We load our xml file.
 		// This is based on the openFrameworks xmlSettingsExample.
 		if(xml.loadFile(filepath)){
-			latestVersion = xml.getValue("rss:channel:item:appcastVersion", "0xDEADC0DE", 0);
-			downloadUrl = xml.getAttribute("rss:channel:item:enclosure", "url", "0xDEADC0DE", 0);
+			
+			// we get the version and download vars by ofxAppcast class.
+			latestVersion = appcast.getAppcastVersion(xml, 0);
+			downloadUrl = appcast.getEnclosureUrl(xml, 0);
+			
 			#ifdef OFXAPPUPDATER_LOG
 				ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] parseAppcast()");
 				ofLog(OF_LOG_VERBOSE, "Filepath <" + filepath + "> loaded!");

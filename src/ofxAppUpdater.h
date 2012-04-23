@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.22
- * @version     1.0.1c2
+ * @version     1.0.1d
  */
 
 
@@ -30,6 +30,7 @@
 #pragma once
 
 #include <ofMain.h>
+#include "ofxAppcast.h"
 
 #define OFXAPPUPDATER_LOG
 
@@ -94,7 +95,7 @@ namespace wng {
 		//
 		// This variables will be filled with the tags from our Appcast RSS file.
 		// The variables will be set by parseAppcast method.
-		string latestVersion;   // Latest Software Version
+		string latestVersion;   // Latest Software Version (this will be set by ofxAppcast class)
 		
 		// internetConnection
 		//
@@ -109,6 +110,9 @@ namespace wng {
 		
 		
 	private:
+		ofxAppcast appcast;
+		
+		
 		/**
 		 * Methods
 		 */
