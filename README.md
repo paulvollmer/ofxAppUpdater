@@ -4,7 +4,7 @@
 With this addon you can release your [openFrameworks](http://www.openframeworks.cc/) Application with an update feature. It can be a solution for managing Application Releases.   
 Addon documentation can be found at [GitHub wiki](https://github.com/WrongEntertainment/ofxAppUpdater/wiki).  
 
-**Current version:** 1.0.1c  
+**Current version:** 1.0.1d  
 ofxAppUpdater is stable and versioned using [semantic versioning](http://semver.org/).  
 
 **Tested Platform:** MacOS 10.6  

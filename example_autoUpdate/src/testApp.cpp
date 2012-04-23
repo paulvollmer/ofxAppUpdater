@@ -1,28 +1,28 @@
 /**
- * autoUpdate_example is developed by Paul Vollmer
+ * ofxAppUpdater is developed by Paul Vollmer
  * http://www.wng.cc
  * 
  * 
  * Copyright (c) 2012 Paul Vollmer
  *
- * autoUpdate_example is free software; you can redistribute it and/or
+ * ofxAppUpdater is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * autoUpdate_example is distributed in the hope that it will be useful,
+ * ofxAppUpdater is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General
- * Public License along with autoUpdate_example; if not, write to the
+ * Public License along with ofxAppUpdater; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.22
- * @version     1.0.1c
+ * @version     1.0.1c2
  */
 
 
@@ -43,13 +43,10 @@ void testApp::setup(){
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	
-	
 	// We store our updater Variables here (FOR THE CURRENT APPLICATION RELEASE).
 	// For our ofxAppUpdater::init method we need the following variables:
 	// - An Application Release version (string)
 	// - A Server-URL who will be stored the Appcast.xml file.
-	// - A boolean that set the internetConnection.
-	//   If it's true, the ofxAppUpdater class start the update process.
 	//
 	// KEEP CLEAN THE FOLLWING VARIABLES TO UPDATE AND RELEASE OUR SOFTWARE SAVETY.
 	// FOR THIS YOU CAN USE THE [semantic versioning]( http://semver.org ) STYLE.

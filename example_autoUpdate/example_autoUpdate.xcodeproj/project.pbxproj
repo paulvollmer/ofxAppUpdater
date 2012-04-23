@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E0A037E154557AD001FB454 /* ofxAppcast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A037C154557AD001FB454 /* ofxAppcast.cpp */; };
 		4E19D6EC152CDC0400DAD4F7 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E19D6E5152CDC0400DAD4F7 /* tinyxml.cpp */; };
 		4E19D6ED152CDC0400DAD4F7 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E19D6E7152CDC0400DAD4F7 /* tinyxmlerror.cpp */; };
 		4E19D6EE152CDC0400DAD4F7 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E19D6E8152CDC0400DAD4F7 /* tinyxmlparser.cpp */; };
@@ -62,6 +63,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4E0A037C154557AD001FB454 /* ofxAppcast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxAppcast.cpp; sourceTree = "<group>"; };
+		4E0A037D154557AD001FB454 /* ofxAppcast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxAppcast.h; sourceTree = "<group>"; };
 		4E19D6E3152CDC0400DAD4F7 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
 		4E19D6E5152CDC0400DAD4F7 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
 		4E19D6E6152CDC0400DAD4F7 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
@@ -164,8 +167,10 @@
 		4E19D7D0152CFB1000DAD4F7 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				4E19D7D1152CFB1000DAD4F7 /* ofxAppUpdater.cpp */,
 				4E19D7D2152CFB1000DAD4F7 /* ofxAppUpdater.h */,
+				4E19D7D1152CFB1000DAD4F7 /* ofxAppUpdater.cpp */,
+				4E0A037D154557AD001FB454 /* ofxAppcast.h */,
+				4E0A037C154557AD001FB454 /* ofxAppcast.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -345,6 +350,7 @@
 				4E19D6EE152CDC0400DAD4F7 /* tinyxmlparser.cpp in Sources */,
 				4E19D6EF152CDC0400DAD4F7 /* ofxXmlSettings.cpp in Sources */,
 				4E19D7D5152CFB1000DAD4F7 /* ofxAppUpdater.cpp in Sources */,
+				4E0A037E154557AD001FB454 /* ofxAppcast.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

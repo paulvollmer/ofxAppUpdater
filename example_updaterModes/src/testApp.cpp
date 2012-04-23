@@ -41,7 +41,7 @@ void testApp::setup(){
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	
-	ofRegisterURLNotification(this);
+	//ofRegisterURLNotification(this);
 	
 	
 	// We store our updater Variables here (FOR THE CURRENT APPLICATION RELEASE).
@@ -56,7 +56,7 @@ void testApp::setup(){
 	// 
 	// The appcast.xml and release.zip are stored at github repository.
 	updater.init("0.0.0",
-				 "https://github.com/WrongEntertainment/ofxAppUpdater/raw/develope/release_storage/appcast.xml",
+				 "https://raw.github.com/WrongEntertainment/ofxAppUpdater/master/release_storage/appcast.xml",
 				 true);
 	
 }
@@ -71,6 +71,7 @@ void testApp::draw(){
 	
 	ofBackground(ofColor::white);
 	
+	// Our update button size and position.
 	ofRectangle updateButton;
 	updateButton.set(ofGetWidth()-30, 10, 20, 20);
 	
