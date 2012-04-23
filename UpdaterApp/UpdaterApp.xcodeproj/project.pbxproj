@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E0A069A15458AF7001FB454 /* ofxAppcast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A069815458AF7001FB454 /* ofxAppcast.cpp */; };
 		4E19D6EC152CDC0400DAD4F7 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E19D6E5152CDC0400DAD4F7 /* tinyxml.cpp */; };
 		4E19D6ED152CDC0400DAD4F7 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E19D6E7152CDC0400DAD4F7 /* tinyxmlerror.cpp */; };
 		4E19D6EE152CDC0400DAD4F7 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E19D6E8152CDC0400DAD4F7 /* tinyxmlparser.cpp */; };
@@ -62,6 +63,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4E0A069815458AF7001FB454 /* ofxAppcast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxAppcast.cpp; sourceTree = "<group>"; };
+		4E0A069915458AF7001FB454 /* ofxAppcast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxAppcast.h; sourceTree = "<group>"; };
 		4E19D6E3152CDC0400DAD4F7 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
 		4E19D6E5152CDC0400DAD4F7 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
 		4E19D6E6152CDC0400DAD4F7 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
@@ -83,7 +86,7 @@
 		E45BE9770E8CC7DD009D7055 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		E45BE9790E8CC7DD009D7055 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
-		E4B69B5B0A3A1756003C02F2 /* UpdaterApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UpdaterApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* UpdaterAppDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UpdaterAppDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = testApp.cpp; path = src/testApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = testApp.h; path = src/testApp.h; sourceTree = SOURCE_ROOT; };
@@ -164,6 +167,8 @@
 		4E19D7D0152CFB1000DAD4F7 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				4E0A069815458AF7001FB454 /* ofxAppcast.cpp */,
+				4E0A069915458AF7001FB454 /* ofxAppcast.h */,
 				4E19D7D1152CFB1000DAD4F7 /* ofxAppUpdater.cpp */,
 				4E19D7D2152CFB1000DAD4F7 /* ofxAppUpdater.h */,
 			);
@@ -232,7 +237,7 @@
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
-				E4B69B5B0A3A1756003C02F2 /* UpdaterApp.app */,
+				E4B69B5B0A3A1756003C02F2 /* UpdaterAppDebug.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -274,7 +279,7 @@
 			);
 			name = UpdaterApp;
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* UpdaterApp.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* UpdaterAppDebug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -345,6 +350,7 @@
 				4E19D6EE152CDC0400DAD4F7 /* tinyxmlparser.cpp in Sources */,
 				4E19D6EF152CDC0400DAD4F7 /* ofxXmlSettings.cpp in Sources */,
 				4E19D7D5152CFB1000DAD4F7 /* ofxAppUpdater.cpp in Sources */,
+				4E0A069A15458AF7001FB454 /* ofxAppcast.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
