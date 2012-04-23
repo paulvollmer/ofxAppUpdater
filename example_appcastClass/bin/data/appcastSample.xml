@@ -8,6 +8,24 @@
 		<pubDate>Mon, 23 Apr 2010 11:18:00 GMT</pubDate>
 		
 		<item>
+			<title>appcastSample version 0.0.2</title>
+			<description>Added missing appcast tags</description>
+			<pubDate>Mon, 23 Apr 2010 11:18:00 GMT</pubDate>
+			<enclosure url="http://github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/release_1_0_0.zip" type="application/octet-stream"/>
+			<appcastVersion>0.0.2</appcastVersion>
+			<appcastAuthor url="http://www.wng.cc/" email="paul.vollmer@fh-potsdam.de">Paul Vollmer</appcastAuthor>
+			<appcastShortDescription type="plain">This is a datagrid component with drag/drop animation.</appcastShortDescription>
+			<appcastLicense url="http://www.opensource.org/licenses/LGPL-3.0">LGPL-3.0</appcastLicense>
+			<appcastHash algo="md5">a297aebb68e137682fa72e3f3325cd1d</appcastHash>
+			<appcastRating votes="10">4</appcastRating>
+			<appcastDownloadCount>2</appcastDownloadCount>
+			<appcastKeywords>hello, world, sample, appcast</appcastKeywords>
+			<appcastDocsLink>http://www.example.com/docslink.html</appcastDocsLink>
+			<appcastSourcesLink>http://www.example.com/sourcelink.html</appcastSourcesLink>
+			<appcastPreviewLink>http://www.example.com/previewlink.html</appcastPreviewLink>
+	     </item>
+		
+		<item>
 			<title>appcastSample version 0.0.1</title>
 			<description>Create appcastSample.xml</description>
 			<pubDate>Mon, 23 Apr 2010 11:18:00 GMT</pubDate>
