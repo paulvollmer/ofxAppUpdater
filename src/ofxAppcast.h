@@ -45,7 +45,7 @@ namespace wng {
 		ofxAppcast();
 		
 		
-		void load(string url);
+		//void load(string url);
 		// TODO: void remove();
 		
 		string getChannelTitle(ofxXmlSettings xml);
@@ -78,7 +78,7 @@ namespace wng {
 		string getAppcastPreviewLink(ofxXmlSettings xml, int which);
 		
 		
-		ofxXmlSettings xml;
+		//ofxXmlSettings xml;
 		
 	};
 	
