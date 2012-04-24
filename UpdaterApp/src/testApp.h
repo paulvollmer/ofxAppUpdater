@@ -62,12 +62,15 @@ public:
 	void displayAppcast();
 	
 private:
+	string workingDir;
+	
 	// Fonts we use
 	ofTrueTypeFont vera9;
 	ofTrueTypeFont veraBold12;
 	
 	
 	int leftControlWidth;
+	int leftControlBackgroundX;
 	ofxToggle autoUpdateToggle;
 	ofxToggle LogUpdateToggle;
 	ofxToggle userInformationToggle;
