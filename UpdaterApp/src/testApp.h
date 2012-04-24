@@ -31,6 +31,7 @@
 
 #include "ofMain.h"
 #include "ofxAppUpdater.h"
+#include "ofxUpdateManager.h"
 #include "ofxGui.h"
 
 using namespace wng;
@@ -53,13 +54,13 @@ public:
 	void mousePressed(int x, int y, int button);
 	void mouseReleased(int x, int y, int button);
 	void windowResized(int w, int h);
-	//void dragEvent(ofDragInfo dragInfo);
+	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 	void exit();
-	
 	void urlResponse(ofHttpResponse & response);
 	
 	void displayAppcast();
+	
 	
 private:
 	string workingDir;
@@ -69,6 +70,11 @@ private:
 	ofTrueTypeFont veraBold12;
 	
 	
+	// Network connection to get messages from other application.
+	ofxUpdateManager updateManager;
+	
+	
+	// Gui objects
 	int leftControlWidth;
 	int leftControlBackgroundX;
 	ofxToggle autoUpdateToggle;
@@ -80,6 +86,7 @@ private:
 	// Added ofxAppUpdater addon to testApp
 	ofxAppUpdater updater;
 	
+	// Appcast class and string variables to sore content
 	ofxAppcast appcast;
 	string chTitle, chDate, chDescription;
 	string acVersion, acAuthor, acDoclink, acSourcelink;

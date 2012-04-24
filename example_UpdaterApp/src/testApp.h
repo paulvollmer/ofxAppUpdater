@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.23
- * @version     0.0.1
+ * @modified    2012.04.24
+ * @version     0.0.1b
  */
 
 
@@ -30,7 +30,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxAppUpdater.h"
+#include "ofxUpdateManager.h"
 
 using namespace wng;
 
@@ -54,13 +54,10 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
-	void urlResponse(ofHttpResponse & response);  
 	void exit();
 		
 	
 private:
-	ofxAppUpdater updater;
-	bool updaterToggle;
+	ofxUpdateManager updateManager;
 	
-
 };
