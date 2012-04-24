@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.23
- * @version     1.0.1d
+ * @version     1.0.1d2
  */
 
 
@@ -34,18 +34,6 @@ namespace wng {
 	
 	ofxAppcast::ofxAppcast(){}
 	
-	
-	/**
-	 *
-	 * TODO: did we need to check if a tag exist?
-	 *
-	 * if(xml.tagExists("rss:channel:title", 0)){
-	 * return ofToString(xml.getValue("rss:channel:title", "ox11120119", 0));
-	 * } else {
-	 * return "not available";
-	 * }
-	 *
-	 */
 	
 	
 	/**

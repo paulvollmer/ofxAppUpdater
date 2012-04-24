@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.23
- * @version     1.0.1d
+ * @modified    2012.04.24
+ * @version     1.0.1d2
  */
 
 
@@ -43,10 +43,6 @@ namespace wng {
 		
 	public:
 		ofxAppcast();
-		
-		
-		//void load(string url);
-		// TODO: void remove();
 		
 		string getChannelTitle(ofxXmlSettings xml);
 		string getChannelLink(ofxXmlSettings xml);
@@ -76,9 +72,6 @@ namespace wng {
 		string getAppcastDocLink(ofxXmlSettings xml, int which);
 		string getAppcastSourceLink(ofxXmlSettings xml, int which);
 		string getAppcastPreviewLink(ofxXmlSettings xml, int which);
-		
-		
-		//ofxXmlSettings xml;
 		
 	};
 	
