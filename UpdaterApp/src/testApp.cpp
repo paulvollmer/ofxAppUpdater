@@ -38,21 +38,31 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
+	// of settings
 	ofSetVerticalSync(true);
-	
+	ofSetFrameRate(60);
 	ofSetWindowTitle("UpdaterApp version 0.0.1");
-	
+	ofRegisterURLNotification(this);
+	// ofLog settings
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	
-	ofRegisterURLNotification(this);
+	
+	// create the socket and bind to port 11999
+	updateManager.bind(11120119, true);
+	
+	
+	// Get the working directory of the app.
+	// this we need to load files form UpdateManager.app/Contents/MacOS/
+	workingDir = ofFilePath::getCurrentWorkingDirectory();
 	
 	
 	// Load fonts
-	vera9.loadFont("Vera.ttf", 9, false, true);
-	veraBold12.loadFont("VeraBd.ttf", 12, true, true);
+	vera9.loadFont(workingDir+"/Vera.ttf", 9, false, true);
+	veraBold12.loadFont(workingDir+"/VeraBd.ttf", 12, true, true);
 	
 	
+	// Gui settings
 	// Set the size of our left control area
 	leftControlWidth = 300;
 	// setup gui
@@ -65,55 +75,60 @@ void testApp::setup(){
 	userInformationToggle.setPosition(ofGetWidth()-leftControlWidth, 97);
 	
 	
-	
-	// We store our updater Variables here (FOR THE CURRENT APPLICATION RELEASE).
-	// For our ofxAppUpdater::init method we need the following variables:
-	// - An Application Release version (string)
-	// - A Server-URL who will be stored the Appcast.xml file.
-	//
-	// KEEP CLEAN THE FOLLWING VARIABLES TO UPDATE AND RELEASE OUR SOFTWARE SAVELY.
-	// FOR THIS YOU CAN USE THE [semantic versioning]( http://semver.org ) STYLE.
-	// 
-	// The appcast.xml and release.zip are stored at github repository.
-	updater.init("0.0.2",
-				 "http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml");
-	
-	
+	// updater settings
+	updater.init("0.0.5", "http://www.wrong-entertainment.com/code/ofxAppUpdater/UpdaterApp_appcast.xml");
 	
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 	
+	string temp = updateManager.receive();
+	
+	// Network connection
+	if (updateManager.receive() == "") {
+		cout << temp << endl;
+	}
+
+	
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	ofBackground(ofColor::gray);
+	ofBackground(ofColor::white);
 	
 	
 	ofEnableSmoothing();
 	
+	
+	// Left Control background
+	ofSetColor(ofColor::gray);
+	ofRect(leftControlBackgroundX, 0, leftControlWidth+10, ofGetHeight());
+	// header background
 	ofSetColor(ofColor::black);
 	ofRect(0, 0, ofGetWidth(), 40);
-	//vera9.drawString("Console: " + updater.message, 20, ofGetHeight()-25);
-	
+	// Appcast text
 	ofSetColor(ofColor::white);
-	veraBold12.drawString("Update Settings", 20, 25);
-	ofSetColor(ofColor::gray);
-	//vera9.drawString("0.0.1", 175, 25);
+	veraBold12.drawString("Appcast", 20, 25);
+	// Update Setting test
+	ofSetColor(ofColor::white);
+	veraBold12.drawString("Update Settings", leftControlBackgroundX+10, 25);
 	
-	ofDisableSmoothing();
 	
-	
+	// Left Control Gui
 	autoUpdateToggle.draw();
 	LogUpdateToggle.draw();
 	userInformationToggle.draw();
 	
 	
 	
+	ofDisableSmoothing();
+	
+	
+	// create rectange for custom download button
 	ofRectangle updateButton;
 	updateButton.set(20, 50, 40, 40);
+	
 	
 	// Display our ofxAppUpdater Information.
 	//
@@ -140,7 +155,7 @@ void testApp::draw(){
 			
 			
 		case LATEST_RELEASE:
-			ofSetColor(ofColor::white);
+			ofSetColor(ofColor::black);
 			veraBold12.drawString(updater.message+"\nversion "+updater.latestVersion, 20, 65);
 			//vera9.drawString("Latest version: " + updater.latestVersion, 20, 105);
 			/*ofSetColor(ofColor::black);
@@ -150,13 +165,13 @@ void testApp::draw(){
 			ofLine(25, 55, 55, 85);
 			ofLine(55, 55, 25, 85);*/
 			
-			//displayAppcast();
+			displayAppcast();
 			break;
 		
 			
 		case NEW_RELEASE:
-			ofSetColor(ofColor::white);
-			veraBold12.drawString(updater.message+"\nDownload the update now!", 75, 65);
+			ofSetColor(ofColor::black);
+			veraBold12.drawString(updater.message+"\nDownload update now!", 75, 65);
 			vera9.drawString("Latest version: " + updater.latestVersion +  ", current version: " + updater.currentVersion, 20, 105);
 			//vera9.drawString(appcast.getChannelTitle(updater.xml), 20, 140);
 			
@@ -204,6 +219,8 @@ void testApp::draw(){
 			break;
 		
 		case FINISHED:
+			ofSetColor(ofColor::black);
+			veraBold12.drawString("Something went Wrong.\nWe could not connect with server.", 20, 65);
 			
 			break;
 		
@@ -270,6 +287,7 @@ void testApp::mouseReleased(int x, int y, int button){
 void testApp::windowResized(int w, int h){
 	
 	if (w >= 800) {
+		leftControlBackgroundX = ofGetWidth()-leftControlWidth-10;
 		// copycat from setup
 		autoUpdateToggle.setPosition(ofGetWidth()-leftControlWidth, 50);
 		LogUpdateToggle.setPosition(ofGetWidth()-leftControlWidth, 71);
@@ -284,14 +302,16 @@ void testApp::gotMessage(ofMessage msg){
 }
 
 //--------------------------------------------------------------
-/*void testApp::dragEvent(ofDragInfo dragInfo){ 
+void testApp::dragEvent(ofDragInfo dragInfo){ 
 
-}*/
+}
 
+//--------------------------------------------------------------
 void testApp::exit(){
 	
 }
 
+//--------------------------------------------------------------
 void testApp::urlResponse(ofHttpResponse & response){
 	/*if(response.status == 200 && response.request.name == "async_req") {
 		cout << "loading" << endl;
@@ -305,7 +325,7 @@ void testApp::urlResponse(ofHttpResponse & response){
 	
 }
 
-
+//--------------------------------------------------------------
 void testApp::displayAppcast(){
 	
 	ofSetColor(ofColor::black);
@@ -319,10 +339,10 @@ void testApp::displayAppcast(){
 		vera9.drawString(ofToString(temp[i]), 20, 180+(20*i));
 	}
 	
-	vera9.drawString("Version: "+acVersion, ofGetWidth()-leftControlWidth, 220);
-	vera9.drawString("Author: "+acAuthor, ofGetWidth()-leftControlWidth, 240);
-	vera9.drawString("Documentation: "+acDoclink, ofGetWidth()-leftControlWidth, 260);
-	vera9.drawString("Source: "+acSourcelink, ofGetWidth()-leftControlWidth, 280);
+	vera9.drawString("Version: "+acVersion, leftControlBackgroundX+10, 220);
+	vera9.drawString("Author: "+acAuthor, leftControlBackgroundX+10, 240);
+	vera9.drawString("Documentation: "+acDoclink, leftControlBackgroundX+10, 260);
+	vera9.drawString("Source: "+acSourcelink, leftControlBackgroundX+10, 280);
 	
 	
 }

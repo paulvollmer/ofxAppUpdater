@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.23
- * @version     0.0.1
+ * @modified    2012.04.24
+ * @version     0.0.1b
  */
 
 
@@ -38,38 +38,23 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
+	ofSetVerticalSync(true);
+	ofSetFrameRate(60);
+	
+	// We set the updateManager App connection.
+    updateManager.connect();
+	
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-	if(ofGetFrameNum() == 25){
-		string shPath;
-		shPath = ofToDataPath( "openChildApp.sh", true );
-		
-		char *shPathChar;
-		shPathChar = new char[ shPath.length() + 1 ];
-		
-		strcpy( shPathChar, shPath.c_str() );
-		
-		//--
-		int pid = fork();
-		cout << "pid :: " << pid << endl;
-		
-		switch(pid){
-			case -1 :
-				cout << "Uh-Oh! fork() failed.\n" << endl;
-			case  0 :
-				execl( shPathChar, shPathChar, NULL );
-			default :
-				return;
-		}
-	}
+	
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	ofBackground( 255, 255, 255 );
 	
+	ofBackground( 255, 255, 255 );
 	ofSetColor( 255, 0, 0 );
 	ofDrawBitmapString( "PARENT APPLICATION LAUNCHED.", 20, 20 );
 	
@@ -77,6 +62,11 @@ void testApp::draw(){
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
+	
+	// open our UpdatManager by pressing key '1'
+	if(key == '1'){
+		updateManager.open(ofToDataPath("openChildApp.sh", true));
+	}
 	
 }
 
@@ -97,7 +87,11 @@ void testApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
-
+	
+	// send the app infos.
+	string temp = ofToString(x) + ", " + ofToString(y);
+	updateManager.send(temp);
+	
 }
 
 //--------------------------------------------------------------
@@ -122,10 +116,5 @@ void testApp::dragEvent(ofDragInfo dragInfo){
 
 //--------------------------------------------------------------
 void testApp::exit(){
-	
-}
-
-//--------------------------------------------------------------
-void testApp::urlResponse(ofHttpResponse & response){
 	
 }

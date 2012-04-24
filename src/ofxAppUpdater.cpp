@@ -55,7 +55,7 @@ namespace wng {
 		mode = DEFAULT;
 		
 		// Default string for latestVersion variable.
-		latestVersion = "not available";
+		latestVersion = "0xDEADC0DE";
 		
 		// Default string for temporaryDownloadFilename variable.
 		temporaryDownloadFilename = "tempDownload_wng.zip";
@@ -191,9 +191,10 @@ namespace wng {
 					ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
 				#endif
 			} else if(latestVersion == "0xDEADC0DE"){
+				latestVersion  = " ";
 				// change mode.
-				mode = LATEST_RELEASE;
-				message = "ERROR! Something went wrong with our Appcast content.";
+				mode = FINISHED;
+				message = "ERROR! Something went wrong with your Appcast content.";
 				
 				#ifdef OFXAPPUPDATER_LOG
 					ofLog(OF_LOG_VERBOSE, "Message: "+message);
