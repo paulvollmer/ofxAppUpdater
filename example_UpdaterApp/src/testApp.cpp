@@ -65,7 +65,7 @@ void testApp::keyPressed(int key){
 	
 	// open our UpdatManager by pressing key '1'
 	if(key == '1'){
-		updateManager.open(ofToDataPath("openChildApp.sh", true));
+		updateManager.start(ofToDataPath("openChildApp.sh", true));
 	}
 	
 }
