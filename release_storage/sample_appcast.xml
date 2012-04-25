@@ -3,16 +3,18 @@
   <channel>
   <title>ofxAppUpdater - Sample Appcast</title>
   <link>http://www.github.com/wrongentertainment/ofxAppUpdater</link>
-  <description>This is a sample appcast to test and debug ofxAppUpdater // 
-               Lorem ipsum dolor sit amet, consectetur adipisicing elit, // 
-               sed do eiusmod tempor incididunt ut labore et dolore magna // 
-               aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</description>
+  <description>This is a sample appcast to test and debug ofxAppUpdater. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</description>
   <language>en</language>
   <pubDate>Mon, 23 Apr 2010 11:18:00 GMT</pubDate>
   
   <item>
     <title>appcastSample version 0.0.2</title>
-    <description>Added missing appcast tags</description>
+    <description>
+      [new] This is a sample appcast to test and debug ofxAppUpdater // 
+      [change] Lorem ipsum dolor sit amet, consectetur adipisicing elit, // 
+      [fixed] sed do eiusmod tempor incididunt ut labore et dolore magna // 
+      [internal] aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
+    </description>
     <pubDate>Mon, 23 Apr 2010 11:18:00 GMT</pubDate>
     <enclosure url="http://github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/release_1_0_0.zip" type="application/octet-stream"/>
     <appcastVersion>0.0.2</appcastVersion>
