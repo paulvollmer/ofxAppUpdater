@@ -40,8 +40,24 @@ void testApp::setup(){
 	
 	vera.loadFont("vera.ttf", 9, true, false);
 	
+	// Start url notification.
 	ofRegisterURLNotification(this);
-	ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml","load");
+	// With this we call the urlResponse event.
+	// If it is placed at setup() the app check version at start.
+	// You can move ofLoadURLAsync it anywhere you want.
+	// NOTE: on every ofLoadURLAsync the app will check the version!
+	// IMPORTANT: https is not working!
+	//            You need a small php script to get content.
+	//            check the releaseStorage/php_helper folder for php script.
+	
+	// If you want to load from http, you can use ofLoadURLAsync without php script
+	ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml", "load");
+	
+	// Or the https solution...
+	/*const string phpHelper = "http://www.wrong-entertainment.com/code/getHttps.php?url=";
+	const string httpsUrl = "https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/appcast.xml";
+	ofLoadURLAsync(phpHelper+httpsUrl, "load");
+	*/
 	
 }
 
@@ -110,7 +126,7 @@ void testApp::urlResponse(ofHttpResponse & response){
 		appcastLicense = appcast.getAppcastLicense(xml, 0);
 		appcastDownloads = appcast.getAppcastDownloadCount(xml, 0);
 		
-		// This is a list example of all get methods.
+		// This is a list of all appcast get methods.
 		cout << "\nGet a tag from our channel: \n";
 		cout << "getChannelTitle            = " << channelTitle << endl;
 		cout << "getChannelLink             = " << channelLink << endl;
