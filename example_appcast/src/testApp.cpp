@@ -92,6 +92,8 @@ void testApp::draw(){
 void testApp::keyPressed(int key){
 	
 	// You can reload your appcast.xml like this
+	// NOTE: We have unregister URLNotification at the end of urlResponse()
+	//       Uncomment it to reload
 	//ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml","load");
 	
 }
@@ -153,8 +155,8 @@ void testApp::urlResponse(ofHttpResponse & response){
 		cout << "getAppcastRatingVotes      = " << appcast.getAppcastRatingVotes(xml, 0) << endl;
 		cout << "getAppcastDownloadCount    = " << appcastDownloads << endl;
 		cout << "getAppcastKeywords         = " << appcast.getAppcastKeywords(xml, 0) << endl;
-		cout << "getAppcastDocLink          = " << appcast.getAppcastDocLink(xml, 0) << endl;
-		cout << "getAppcastSourceLink       = " << appcast.getAppcastSourceLink(xml, 0) << endl;
+		cout << "getAppcastDocsLink          = " << appcast.getAppcastDocsLink(xml, 0) << endl;
+		cout << "getAppcastSourcesLink       = " << appcast.getAppcastSourcesLink(xml, 0) << endl;
 		cout << "getAppcastPreviewLink      = " << appcast.getAppcastPreviewLink(xml, 0) << endl;
 		
 		
@@ -163,6 +165,8 @@ void testApp::urlResponse(ofHttpResponse & response){
     }
 	
 	ofSleepMillis(200);
+	
+	// Unregister URLNotification to close event.
 	ofUnregisterURLNotification(this);
 	
 }

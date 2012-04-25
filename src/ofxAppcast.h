@@ -69,8 +69,8 @@ namespace wng {
 		string getAppcastRatingVotes(ofxXmlSettings xml, int which);
 		string getAppcastDownloadCount(ofxXmlSettings xml, int which);
 		string getAppcastKeywords(ofxXmlSettings xml, int which);
-		string getAppcastDocLink(ofxXmlSettings xml, int which);
-		string getAppcastSourceLink(ofxXmlSettings xml, int which);
+		string getAppcastDocsLink(ofxXmlSettings xml, int which);
+		string getAppcastSourcesLink(ofxXmlSettings xml, int which);
 		string getAppcastPreviewLink(ofxXmlSettings xml, int which);
 		
 	};

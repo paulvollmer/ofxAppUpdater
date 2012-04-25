@@ -144,12 +144,12 @@ namespace wng {
 		return ofToString(xml.getValue("rss:channel:item:appcastKeywords", "not available", which));
 	}
 	
-	string ofxAppcast::getAppcastDocLink(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastDocLink", "not available", which));
+	string ofxAppcast::getAppcastDocsLink(ofxXmlSettings xml, int which){
+		return ofToString(xml.getValue("rss:channel:item:appcastDocsLink", "not available", which));
 	}
 	
-	string ofxAppcast::getAppcastSourceLink(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastSourceLink", "not available", which));
+	string ofxAppcast::getAppcastSourcesLink(ofxXmlSettings xml, int which){
+		return ofToString(xml.getValue("rss:channel:item:appcastSourcesLink", "not available", which));
 	}
 	
 	string ofxAppcast::getAppcastPreviewLink(ofxXmlSettings xml, int which){
