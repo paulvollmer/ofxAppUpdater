@@ -36,6 +36,37 @@ namespace wng {
 	ofxUpdateManager::ofxUpdateManager(){}
 
 
+	
+	/**
+	 *
+	 */
+	void ofxUpdateManager::start(string shPath){
+		
+		char *shPathChar;
+		shPathChar = new char[ shPath.length() + 1 ];
+		
+		strcpy( shPathChar, shPath.c_str() );
+		
+		
+		int pid = fork();
+		cout << "pid :: " << pid << endl;
+		
+		switch(pid){
+			case -1 :
+				cout << "Uh-Oh! fork() failed.\n" << endl;
+			case  0 :
+				execl( shPathChar, shPathChar, NULL );
+			default :
+				return;
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * Create and connect the socket.
 	 * Based on oF networkUdpSender-, ReceiverExample
@@ -89,33 +120,6 @@ namespace wng {
 		}*/
 		return udpMessage;
 	}
-	
-	
-	
-	
-	
-	void ofxUpdateManager::open(string shPath){
-		
-		char *shPathChar;
-		shPathChar = new char[ shPath.length() + 1 ];
-		
-		strcpy( shPathChar, shPath.c_str() );
-		
-		
-		int pid = fork();
-		cout << "pid :: " << pid << endl;
-		
-		switch(pid){
-			case -1 :
-				cout << "Uh-Oh! fork() failed.\n" << endl;
-			case  0 :
-				execl( shPathChar, shPathChar, NULL );
-			default :
-				return;
-		}
-		
-	}
-	
 	
 	
 }

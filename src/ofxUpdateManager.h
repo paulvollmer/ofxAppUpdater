@@ -41,14 +41,14 @@ namespace wng {
 		
 	public:
 		ofxUpdateManager();
-
+		
+		void start(string shPath);
 		void connect(string ip, int port, bool blocking);
 		void connect();
 		void bind(int port, bool blocking);
 		void bind();
 		void send(string message);
 		string receive();
-		void open(string shPath);
 
 		
 	private:
