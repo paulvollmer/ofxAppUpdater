@@ -51,13 +51,12 @@ void testApp::setup(){
 	//            check the releaseStorage/php_helper folder for php script.
 	
 	// If you want to load from http, you can use ofLoadURLAsync without php script
-	ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml", "load");
+	//ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml", "load");
 	
 	// Or the https solution...
-	/*const string phpHelper = "http://www.wrong-entertainment.com/code/getHttps.php?url=";
+	const string phpHelperUrl = "http://www.wrong-entertainment.com/code/getHttps.php?url=";
 	const string httpsUrl = "https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/appcast.xml";
-	ofLoadURLAsync(phpHelper+httpsUrl, "load");
-	*/
+	ofLoadURLAsync(phpHelperUrl+httpsUrl, "load");
 	
 }
 
