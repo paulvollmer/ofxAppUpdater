@@ -31,12 +31,9 @@
 #include "testApp.h"
 #include "ofAppGlutWindow.h"
 
-// Using NSMenu outside the NIB
-// Found at openFrameworks forum. http://forum.openframeworks.cc/index.php/topic,78.0.html (Reply #6)
-// IMPORTANT:
-// right-click on that file (in my case main.cpp), select "Get Info",
-// then in the "General" tab set your "File Type" to sourcecode.cpp.objcpp
-#include "Cocoa/Cocoa.h"
+#ifdef TARGET_OSX
+	#include "Cocoa/Cocoa.h"
+#endif
 
 //========================================================================
 int main( ){
@@ -45,13 +42,17 @@ int main( ){
 	ofSetupOpenGL(&window, 800,400, OF_WINDOW);			// <-------- setup the GL context
 
 	
-	// Modified menubar
+	// Using NSMenu outside the NIB
+	// Found at openFrameworks forum. http://forum.openframeworks.cc/index.php/topic,78.0.html (Reply #6)
+	// IMPORTANT:
+	// right-click on that file (in my case main.cpp), select "Get Info",
+	// then in the "General" tab set your "File Type" to sourcecode.cpp.objcpp
+	#ifdef TARGET_OSX
 	if (NSApp){  
         NSMenu      *menu;  
         NSMenuItem  *menuItem;   
 		
         [NSApp setMainMenu:[[NSMenu alloc] init]];  
-		
 		
 		// Appname menu
 		menu = [[NSMenu alloc] initWithTitle:@""];  
@@ -77,6 +78,7 @@ int main( ){
 		// Tell the application object that this is now the application menu
 		//[NSApp setMainMenu:menu];
     } 
+	#endif
 	
 	
 	// this kicks off the running of my app
