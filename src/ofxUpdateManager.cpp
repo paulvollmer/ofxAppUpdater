@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.24
- * @version     1.0.1d
+ * @modified    2012.04.25
+ * @version     1.0.1e
  */
 
 
@@ -38,7 +38,7 @@ namespace wng {
 
 	
 	/**
-	 *
+	 * start
 	 */
 	void ofxUpdateManager::start(string shPath){
 		
@@ -101,7 +101,9 @@ namespace wng {
 	
 	
 	
-	
+	/**
+	 *
+	 */
 	void ofxUpdateManager::send(string message){
 		int send = udpConnection.Send(message.c_str(), message.length());
 	}
@@ -109,7 +111,9 @@ namespace wng {
 	
 	
 	
-	
+	/**
+	 *
+	 */
 	string ofxUpdateManager::receive(){
 		// Network connection
 		char udpMessage[100000];
