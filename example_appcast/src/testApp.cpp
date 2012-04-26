@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.25
- * @version     1.0.1d2
+ * @version     1.0.1e
  */
 
 
@@ -35,10 +35,18 @@
 
 
 
+
+/**
+ * At this example we need only the ofxAppcast class to include.
+ * This class contains only get methods to work without creating variables at init.
+ * So it's very clean but handle with care your get.. calls.
+ */
 //--------------------------------------------------------------
 void testApp::setup(){
 	
-	vera.loadFont("vera.ttf", 9, true, false);
+	vera9.loadFont("Vera.ttf", 9, true, false);
+	veraBold12.loadFont("VeraBd.ttf", 12, true, true);
+	
 	
 	// Start url notification.
 	ofRegisterURLNotification(this);
@@ -54,9 +62,14 @@ void testApp::setup(){
 	//ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml", "load");
 	
 	// Or the https solution...
-	const string phpHelperUrl = "http://www.wrong-entertainment.com/code/getHttps.php?url=";
-	const string httpsUrl = "https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/appcast.xml";
+	string phpHelperUrl = "http://www.wrong-entertainment.com/code/getHttps.php?url=";
+	string httpsUrl = "https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/develop/release_storage/appcastSample.xml";
 	ofLoadURLAsync(phpHelperUrl+httpsUrl, "load");
+	
+	
+	// Set default item values.
+	currentAppcastItem = 0;
+	totalAppcastItems = 0;
 	
 }
 
@@ -70,30 +83,67 @@ void testApp::draw(){
 	ofBackground(ofColor::white);
 	
 	ofSetColor(ofColor::black);
-	vera.drawString("ofxAppcast", 100, 100);
-	vera.drawString(channelTitle, 100, 120);
-	vera.drawString(channelLink, 100, 140);
-	vera.drawString(channelDate, 100, 160);
+	veraBold12.drawString("<channel> tags", 50, 30);
+	vera9.drawString("channelTitle: ", 50, 50);
+	vera9.drawString("channelLink: ", 50, 70);
+	vera9.drawString("channelDate:", 50, 90);
+	vera9.drawString(channelTitle, 200, 50);
+	vera9.drawString(channelLink, 200, 70);
+	vera9.drawString(channelDate, 200, 90);
 	
-	vera.drawString(itemTitle, 100, 200);
-	vera.drawString(itemDescription, 100, 220);
-	vera.drawString(itemDate, 100, 240);
-	vera.drawString(itemUrl, 100, 260);
-	
-	vera.drawString("appcastVersion: "+appcastVersion, 100, 300);
-	vera.drawString("appcastAuthor: "+appcastAuthor, 100, 320);
-	vera.drawString("appcastLicense: "+appcastLicense, 100, 340);
-	vera.drawString("appcastDownloads: "+appcastDownloads, 100, 360);
+	veraBold12.drawString("<channel:item> tags", 50, 130);
+	vera9.drawString("total items: ", 50, 150);
+	vera9.drawString("itemTitle: ", 50, 170);
+	vera9.drawString("itemDescription: ", 50, 190);
+	vera9.drawString("itemDate: ", 50, 210);
+	vera9.drawString("itemUrl: ", 50, 230);
+	vera9.drawString("appcastVersion: ", 50, 250);
+	vera9.drawString("appcastAuthor: ", 50, 270);
+	vera9.drawString("appcastLicense: ", 50, 290);
+	vera9.drawString("appcastDownloads: ", 50, 310);
+	vera9.drawString(ofToString(totalAppcastItems)+", current item: "+ofToString(currentAppcastItem), 200, 150);
+	vera9.drawString(itemTitle, 200, 170);
+	vera9.drawString(itemDescription, 200, 190);
+	vera9.drawString(itemDate, 200, 210);
+	vera9.drawString(itemUrl, 200, 230);
+	vera9.drawString(appcastVersion, 200, 250);
+	vera9.drawString(appcastAuthor, 200, 270);
+	vera9.drawString(appcastLicense, 200, 290);
+	vera9.drawString(appcastDownloads, 200, 310);
 	
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 	
-	// You can reload your appcast.xml like this
-	// NOTE: We have unregister URLNotification at the end of urlResponse()
-	//       Uncomment it to reload
-	//ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml","load");
+	switch (key) {
+		case 'c':
+			// You can reload your appcast.xml like this
+			// We have unregister URLNotification at the end of urlResponse().
+			// because of this we need to register new notification.
+			ofRegisterURLNotification(this);
+			// get the raw file from github via php helper. See releaseStorage
+			// TODO: create wiki doc.
+			ofLoadURLAsync(ofToString("http://www.wrong-entertainment.com/code/getRawGithub.php?url=WrongEntertainment/ofxAppUpdater/raw/develop/release_storage/appcastSample.xml"), "load");
+			break;
+		case OF_KEY_RIGHT:
+			if(currentAppcastItem < appcast.getNumItems(xml)){
+				currentAppcastItem++;
+				cout << "currentAppcastItem: " << currentAppcastItem;
+				setAppcastVars(currentAppcastItem);
+			}
+			break;
+		case OF_KEY_LEFT:
+			if(currentAppcastItem > 0 ){
+				currentAppcastItem--;
+				cout << "currentAppcastItem: " << currentAppcastItem;
+				setAppcastVars(currentAppcastItem);
+			}
+			break;
+			
+		default:
+			break;
+	}
 	
 }
 
@@ -112,20 +162,7 @@ void testApp::urlResponse(ofHttpResponse & response){
 		
 		xml.loadFromBuffer(response.data);
 		
-		// set string variables with appcast tags.
-		// If you want to change the cantent later, you can
-		// !We have no variables to save at ofxAppcast class!
-		channelTitle = appcast.getChannelTitle(xml);
-		channelLink = appcast.getChannelLink(xml);
-		channelDate = appcast.getChannelPubDate(xml);
-		itemTitle = appcast.getTitle(xml, 0);
-		itemDescription = appcast.getDescription(xml, 0);
-		itemDate = appcast.getPubDate(xml, 0);
-		itemUrl = appcast.getEnclosureUrl(xml, 0);
-		appcastVersion = appcast.getAppcastVersion(xml, 0);
-		appcastAuthor = appcast.getAppcastAuthor(xml, 0);
-		appcastLicense = appcast.getAppcastLicense(xml, 0);
-		appcastDownloads = appcast.getAppcastDownloadCount(xml, 0);
+		setAppcastVars(currentAppcastItem);
 		
 		// This is a list of all appcast get methods.
 		cout << "\nGet a tag from our channel: \n";
@@ -135,37 +172,56 @@ void testApp::urlResponse(ofHttpResponse & response){
 		cout << "getChannelLanguage         = " << appcast.getChannelLanguage(xml) << endl;
 		cout << "getChannelPubDate          = " << channelDate << endl;
 		cout << "\nGet the tags from our first item: \n";
+		cout << "getNumItems                = " << totalAppcastItems << endl;
 		cout << "getTitle                   = " << itemTitle << endl;
 		cout << "getDescription             = " << itemDescription << endl;
 		cout << "getPubDate                 = " << itemDate << endl;
 		cout << "getEnclosureUrl            = " << itemUrl << endl;
-		cout << "getEnclosureType           = " << appcast.getEnclosureType(xml, 0) << endl;
+		cout << "getEnclosureType           = " << appcast.getEnclosureType(xml, currentAppcastItem) << endl;
 		cout << "\nGet the appcast tags from our first item: \n";
 		cout << "getAppcastVersion          = " << appcastVersion << endl;
 		cout << "getAppcastAuthor           = " << appcastAuthor << endl;
-		cout << "getAppcastAuthorUrl        = " << appcast.getAppcastAuthorUrl(xml, 0) << endl;
-		cout << "getAppcastAuthorEmail      = " << appcast.getAppcastAuthorEmail(xml, 0) << endl;
-		cout << "getAppcastShortDescription = " << appcast.getAppcastShortDescription(xml, 0) << endl;
+		cout << "getAppcastAuthorUrl        = " << appcast.getAppcastAuthorUrl(xml, currentAppcastItem) << endl;
+		cout << "getAppcastAuthorEmail      = " << appcast.getAppcastAuthorEmail(xml, currentAppcastItem) << endl;
+		cout << "getAppcastShortDescription = " << appcast.getAppcastShortDescription(xml, currentAppcastItem) << endl;
 		cout << "getAppcastLicense          = " << appcastLicense << endl;
-		cout << "getAppcastLicenseUrl       = " << appcast.getAppcastLicenseUrl(xml, 0) << endl;
-		cout << "getAppcastHash             = " << appcast.getAppcastHash(xml, 0) << endl;
-		cout << "getAppcastHashAlgo         = " << appcast.getAppcastHashAlgo(xml, 0) << endl;
-		cout << "getAppcastRating           = " << appcast.getAppcastRating(xml, 0) << endl;
-		cout << "getAppcastRatingVotes      = " << appcast.getAppcastRatingVotes(xml, 0) << endl;
+		cout << "getAppcastLicenseUrl       = " << appcast.getAppcastLicenseUrl(xml, currentAppcastItem) << endl;
+		cout << "getAppcastHash             = " << appcast.getAppcastHash(xml, currentAppcastItem) << endl;
+		cout << "getAppcastHashAlgo         = " << appcast.getAppcastHashAlgo(xml, currentAppcastItem) << endl;
+		cout << "getAppcastRating           = " << appcast.getAppcastRating(xml, currentAppcastItem) << endl;
+		cout << "getAppcastRatingVotes      = " << appcast.getAppcastRatingVotes(xml, currentAppcastItem) << endl;
 		cout << "getAppcastDownloadCount    = " << appcastDownloads << endl;
-		cout << "getAppcastKeywords         = " << appcast.getAppcastKeywords(xml, 0) << endl;
-		cout << "getAppcastDocsLink          = " << appcast.getAppcastDocsLink(xml, 0) << endl;
-		cout << "getAppcastSourcesLink       = " << appcast.getAppcastSourcesLink(xml, 0) << endl;
-		cout << "getAppcastPreviewLink      = " << appcast.getAppcastPreviewLink(xml, 0) << endl;
+		cout << "getAppcastKeywords         = " << appcast.getAppcastKeywords(xml, currentAppcastItem) << endl;
+		cout << "getAppcastDocsLink         = " << appcast.getAppcastDocsLink(xml, currentAppcastItem) << endl;
+		cout << "getAppcastSourcesLink      = " << appcast.getAppcastSourcesLink(xml, currentAppcastItem) << endl;
+		cout << "getAppcastPreviewLink      = " << appcast.getAppcastPreviewLink(xml, currentAppcastItem) << endl;
 		
 		
-    }else{  
+    } else {  
         cout << response.status << " " << response.error << endl;  
     }
 	
-	ofSleepMillis(200);
+	ofSleepMillis(100);
 	
 	// Unregister URLNotification to close event.
 	ofUnregisterURLNotification(this);
 	
+}
+
+
+void testApp::setAppcastVars(int currentAppcastItem){
+	// set string variables with appcast tags.
+	// We have no variables at ofxAppcast class to save memory!
+	channelTitle = appcast.getChannelTitle(xml);
+	channelLink = appcast.getChannelLink(xml);
+	channelDate = appcast.getChannelPubDate(xml);
+	totalAppcastItems = appcast.getNumItems(xml);
+	itemTitle = appcast.getTitle(xml, currentAppcastItem);
+	itemDescription = appcast.getDescription(xml, currentAppcastItem);
+	itemDate = appcast.getPubDate(xml, currentAppcastItem);
+	itemUrl = appcast.getEnclosureUrl(xml, currentAppcastItem);
+	appcastVersion = appcast.getAppcastVersion(xml, currentAppcastItem);
+	appcastAuthor = appcast.getAppcastAuthor(xml, currentAppcastItem);
+	appcastLicense = appcast.getAppcastLicense(xml, currentAppcastItem);
+	appcastDownloads = appcast.getAppcastDownloadCount(xml, currentAppcastItem);
 }

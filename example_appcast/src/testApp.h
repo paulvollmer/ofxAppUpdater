@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.25
- * @version     1.0.1d2
+ * @version     1.0.1e
  */
 
 
@@ -48,17 +48,21 @@ public:
 	void keyPressed(int key);
 	void keyReleased(int key);
 	void urlResponse(ofHttpResponse & response);  
-		
+	void setAppcastVars(int currentAppcastItem);	
+	
 	
 private:
 	// We need a font to display our appcast content.
-	ofTrueTypeFont vera;
+	ofTrueTypeFont vera9;
+	ofTrueTypeFont veraBold12;
 	
 	// Xml to store appcast file.
 	ofxXmlSettings xml;
 	
 	// Add ofxAppcast class
 	ofxAppcast appcast;
+	int currentAppcastItem;
+	int totalAppcastItems;
 	// This variables will be set by our appcast file.
 	string channelTitle;
 	string channelLink;
