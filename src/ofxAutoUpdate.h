@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.25
- * @version     1.0.1d2
+ * @version     1.0.1e
  */
 
 
@@ -30,6 +30,7 @@
 #pragma once
 
 #include <ofMain.h>
+#include "ofxXmlSettings.h"
 #include "ofxAppUpdater.h"
 
 #define OFXAUTOUPDATE_LOG
@@ -59,6 +60,7 @@ namespace wng {
 		
 		
 	private:
+		ofxXmlSettings xml;
 		ofxAppUpdater updater;
 		
 	};

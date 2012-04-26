@@ -22,7 +22,7 @@
  * 
  * @author      Paul Vollmer
  * @modified    2012.04.25
- * @version     1.0.1d2
+ * @version     1.0.1e
  */
 
 
@@ -50,96 +50,147 @@ namespace wng {
 		
 		ofRegisterURLNotification(this);
 		ofLoadURLAsync(appcastSrc, "load");
-		// ???
-		// An other solution:
-		// for this we use the applescript system events?
-		
 		updater.init(currentVersion, appcastSrc);
-		
+		// S
+		updater.mode = CHECK;
 	}
 	
 	
 	
+	/**
+	 * update
+	 */
 	void ofxAutoUpdate::update(){
+		//cout << updater.mode << endl;
+		//cout << updater.message << endl;
 		
-	}
-	
-	
-	
-	/*
-	void ofxAutoUpdate::downloadRequest(string currentVersion, string appcastSrc){
-		/*init(currentVersion, appcastSrc, true);
 		
-		checkVersion();
+		// DEFAULT
+		/*if(updater.mode == 0) {
+			cout << "Update DEFAULT\n";
+		}
 		
-		if(mode == NEW_RELEASE){
+		
+		// CHECK
+		else if(updater.mode == 1){
+			cout << "Update CHECK\n";
+		}
+		
+		
+		// LATEST_RELEASE
+		else if(updater.mode == 2){
+			cout << "Update LATEST_RELEASE\n";
+		}
+		
+		
+		// NEW_RELEASE
+		else*/ if(updater.mode == NEW_RELEASE){
 			// We create an integer for our notification display dialog.
 			// this variables can be checked later.
-			string tempDesc = "Latest Version: "+latestVersion+"\nCurrent Version: "+currentVersion;
-			int tempDialog = userNotificationDisplay(message, tempDesc, "Download Now", "Cancel", "Check changes");
+			string tempDesc = "Latest Version: "+updater.latestVersion+"\nCurrent Version: "+updater.currentVersion;
+			int tempDialog = updater.userNotificationDisplay(updater.message, tempDesc, "Download Now", "Cancel", "Check changes");
 			
 			switch (tempDialog) {
 				case 0:
 					cout << "Default response\n";
-					
-					// At the moment we create a file at the desktop.
-					// I think we can handle this variable as an intern variable.
-					//download(ofFilePath::getPathForDirectory("~/Downloads/")+temporaryDownloadFilename);
-					
-					download();
-					
-					ofSleepMillis(200);
-					
+					updater.mode = DOWNLOAD;
 					break;
 				case 1:
 					cout << "Alternate response\n";
+					updater.mode = FINISHED;
 					break;
 				case 2:
 					cout << "Other response\n";
+					ofLaunchBrowser(updater.appcastPath);
+					updater.mode = FINISHED;
 					break;
 				case 3:
 					cout << "Cancel response\n";
+					updater.mode = FINISHED;
 					break;
 				default:
 					break;
 			}
+			
 		}
-		relaunch();
 		
-	}*/
+		
+		// DOWNLOAD
+		else if(updater.mode == DOWNLOAD){
+			//cout << "DOWNLOAD\n";
+			
+			// At the moment we create a file at the desktop.
+			// I think we can handle this variable as an intern variable.
+			//updater.download(ofFilePath::getPathForDirectory("~/Downloads/WNGtemp.zip"));
+			/*updater.download(updater.appcast.getEnclosureUrl(xml, 0),
+							 ofFilePath::getPathForDirectory("~/Downloads/WNGtemp.zip"));
+			*/
+			updater.download("http://www.wrong-entertainment.com/code/ofxAppUpdater/test_80mb.zip",
+							 ofFilePath::getPathForDirectory("~/Downloads/WNGtemp.zip"));
+			
+			updater.mode = RELAUNCH;
+			
+		}
+		
+		
+		// DOWNLOADING
+		else if(updater.mode == DOWNLOADING){
+			cout << ofGetFrameNum() << " DOWNLOADING\n";
+		}
+		
+		
+		// RELAUNCH
+		else if(updater.mode == RELAUNCH){
+			cout << "RELAUNCH\n";
+			
+			// TODO----------------------------------------------------------------
+		}
+
+		
+	}
 	
 	
 	
-	
+	/**
+	 * urlResponse
+	 * based on http://forum.openframeworks.cc/index.php/topic,8398.0.html
+	 *
+	 * An other solution: for this we use the
+	 * applescript system events?
+	 */
 	void ofxAutoUpdate::urlResponse(ofHttpResponse & response){
 		
-		// based on http://forum.openframeworks.cc/index.php/topic,8398.0.html
-		if(response.status==200 ){  
-			//cout << response.request.name << endl;  
-			//cout << response.data.getText() << endl;
+		// Switch different urlResponse for different updater modes.
+		switch (updater.mode) {
+				
+			case DEFAULT:
+				cout << "CHECK\n";
+				break;
+				
+			case CHECK:
+				if(response.status==200 ){  
+					//cout << response.request.name << endl;  
+					//cout << response.data.getText() << endl;
+					xml.loadFromBuffer(response.data);
+					updater.checkVersion(xml);
+				} else {  
+					cout << response.status << " " << response.error << endl;  
+				}
+				
+				// Unregister URLNotification to close event.
+				ofUnregisterURLNotification(this);
+				break;
 			
-			updater.xml.loadFromBuffer(response.data);
-			
-			int tempCheck = updater.checkVersion(updater.xml);
-			
-			switch (updater.mode) {
-				case LATEST_RELEASE:
-					cout << "LATEST_RELEASE" << endl;
-					break;
-				case NEW_RELEASE:
-					cout << "NEW_RELEASE" << endl;
-					break;
-				default:
-					cout << "default" << endl;
-					break;
-			}
-			
-		}else{  
-			cout << response.status << " " << response.error << endl;  
+
+			/*	
+			case NEW_RELEASE:
+				cout << "RESPONSE_NEW\n";
+				break;*/
+
+				
+			default:
+				break;
 		}
-		
-		// Unregister URLNotification to close event.
-		//ofUnregisterURLNotification(this);
 		
 	}
 	
