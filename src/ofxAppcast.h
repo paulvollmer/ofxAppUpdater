@@ -21,15 +21,15 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.25
- * @version     1.0.1e
+ * @modified    2012.04.26
+ * @version     1.0.1e2
  */
 
 
 
 #pragma once
 
-#include <ofMain.h>
+//#include <ofMain.h>
 #include "ofxXmlSettings.h"
 
 
@@ -46,12 +46,17 @@ namespace wng {
 		
 		int getNumItems(ofxXmlSettings xml);
 		
+		/**
+		 * The get.. methods can be used to parse appcast files.
+		 * All the get methods need a xml object to parse from.
+		 * More information about appcast can be found at
+		 * https://github.com/WrongEntertainment/ofxAppUpdater/wiki
+		 */
 		string getChannelTitle(ofxXmlSettings xml);
 		string getChannelLink(ofxXmlSettings xml);
 		string getChannelDescription(ofxXmlSettings xml);
 		string getChannelLanguage(ofxXmlSettings xml);
 		string getChannelPubDate(ofxXmlSettings xml);
-		
 		string getTitle(ofxXmlSettings xml, int which);
 		string getDescription(ofxXmlSettings xml, int which);
 		string getPubDate(ofxXmlSettings xml, int which);

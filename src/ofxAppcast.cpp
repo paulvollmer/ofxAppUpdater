@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.25
- * @version     1.0.1e
+ * @modified    2012.04.26
+ * @version     1.0.1e2
  */
 
 
@@ -42,7 +42,7 @@ namespace wng {
 	 * @param xml
 	 *        An ofxXmlSettings object.
 	 * @param return
-	 *        number of items as an integer.
+	 *        Number of items as an integer.
 	 */
 	int ofxAppcast::getNumItems(ofxXmlSettings xml){
 		return xml.getNumTags("rss:channel:item");
@@ -55,6 +55,8 @@ namespace wng {
 	 *
 	 * @param xml
 	 *        An ofxXmlSettings object.
+	 * @param return
+	 *        string.
 	 */
 	string ofxAppcast::getChannelTitle(ofxXmlSettings xml){
 		return ofToString(xml.getValue("rss:channel:title", "not available", 0));
@@ -79,10 +81,12 @@ namespace wng {
 	
 	
 	/**
-	 * Get a tag from a selected item.
+	 * Get a tag from selected item.
 	 *
 	 * @param xml
 	 *        An ofxXmlSettings object.
+	 * @param return
+	 *        string.
 	 */
 	string ofxAppcast::getTitle(ofxXmlSettings xml, int which){
 		return ofToString(xml.getValue("rss:channel:item:title", "not available", which));
@@ -107,10 +111,12 @@ namespace wng {
 	
 	
 	/**
-	 * Get a Appcast tag from a selected item.
+	 * Get a Appcast tag from selected item.
 	 *
 	 * @param xml
 	 *        An ofxXmlSettings object.
+	 * @param return
+	 *        string.
 	 */
 	string ofxAppcast::getAppcastVersion(ofxXmlSettings xml, int which){
 		return ofToString(xml.getValue("rss:channel:item:appcastVersion", "not available", which));
