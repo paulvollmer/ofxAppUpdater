@@ -63,7 +63,7 @@ void testApp::setup(){
 	
 	// Or the https solution...
 	string phpHelperUrl = "http://www.wrong-entertainment.com/code/getHttps.php?url=";
-	string httpsUrl = "https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/develop/release_storage/appcastSample.xml";
+	string httpsUrl = "https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/develop/release_storage/sample_appcast.xml";
 	ofLoadURLAsync(phpHelperUrl+httpsUrl, "load");
 	
 	
@@ -124,7 +124,7 @@ void testApp::keyPressed(int key){
 			ofRegisterURLNotification(this);
 			// get the raw file from github via php helper. See releaseStorage
 			// TODO: create wiki doc.
-			ofLoadURLAsync(ofToString("http://www.wrong-entertainment.com/code/getRawGithub.php?url=WrongEntertainment/ofxAppUpdater/raw/develop/release_storage/appcastSample.xml"), "load");
+			ofLoadURLAsync(ofToString("http://www.wrong-entertainment.com/code/getHttps.php?url=https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/develop/release_storage/sample_appcast.xml"), "load");
 			break;
 		case OF_KEY_RIGHT:
 			if(currentAppcastItem < appcast.getNumItems(xml)){
