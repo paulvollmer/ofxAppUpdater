@@ -41,7 +41,9 @@
 namespace wng {
 	
 	
-	// The values of the different mode-states.
+	// The different mode-states.
+	// This we use to set the mode variable after running a mode correctly. 
+	// Also we will use the enum for if/else, switch case stuff.
 	enum OFXAPPUPDATER_MODE {
 			DEFAULT = 0,
 			CHECK = 1,
@@ -71,13 +73,26 @@ namespace wng {
 		
 		int checkVersion(ofxXmlSettings xml);
 		void download(string downloadUrl, string src);
+		
+		
+		// TODO check if this is deadcode?
+		void loadFile(string serverSrc, string tempFilepath);
+		
+		
+		
+		void unzip(string src);
 		void relaunch();
 		
 		int userNotificationDisplay(string header, string message, const string buttonOk, const string buttonCancle, const string buttonAlternate);
-		void unzip(string src);
 		string getAppName();
 		
 		
+		/**
+		 * Variables
+		 *
+		 * We only create basic variables at this class.
+		 * Basic variables 
+		 */
 		// The update modes.
 		//
 		// This we use to get the current state of the update process.
@@ -101,33 +116,14 @@ namespace wng {
 		// The variables will be set get.. method by ofxAppcast methods.
 		string latestVersion;
 		string appcastPath;
-		//string enclosureUrl;
 		ofxAppcast appcast;
 		
-		
-		// internetConnection
-		//
-		// Trigger your web connection, if bool is true,
-		// your Application can check the version and
-		// download if a new release is available.
-		// 
-		// ???
-		//bool internetConnection;
 		
 		
 	private:
 		
-		
-		/**
-		 * Methods
-		 */
-		void loadFile(string serverSrc, string tempFilepath);
-		
-		
+		// Todo remove this variable.
 		string temporaryDownloadFilename;
-		
-		// If the variable is true, the addon start downloading zip package.
-		//bool downloadActive;
 		
 	};
 

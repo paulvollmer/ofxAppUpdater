@@ -209,6 +209,7 @@ void testApp::urlResponse(ofHttpResponse & response){
 }
 
 
+// a method to get appcast values.
 void testApp::setAppcastVars(int currentAppcastItem){
 	// set string variables with appcast tags.
 	// We have no variables at ofxAppcast class to save memory!

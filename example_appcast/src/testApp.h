@@ -59,11 +59,15 @@ private:
 	// Xml to store appcast file.
 	ofxXmlSettings xml;
 	
-	// Add ofxAppcast class
+	// ofxAppcast class and variables to store the data you need.
 	ofxAppcast appcast;
+	
+	// Wee need the current- and totalAppcastItem value
+	// for jumping between channel:items.
 	int currentAppcastItem;
 	int totalAppcastItems;
-	// This variables will be set by our appcast file.
+	
+	// This variables will be set by ofxAppcast get... methods.
 	string channelTitle;
 	string channelLink;
 	string channelDate;

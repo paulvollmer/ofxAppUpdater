@@ -41,10 +41,9 @@ namespace wng {
 	
 	
 	/**
-	 * sendRequest
+	 * init
 	 *
-	 *
-	 * @see example_autoUpdate
+	 * @param
 	 */
 	void ofxAutoUpdate::init(string currentVersion, string appcastSrc){
 		
@@ -87,8 +86,10 @@ namespace wng {
 		else*/ if(updater.mode == NEW_RELEASE){
 			// We create an integer for our notification display dialog.
 			// this variables can be checked later.
-			string tempDesc = "Latest Version: "+updater.latestVersion+"\nCurrent Version: "+updater.currentVersion;
-			int tempDialog = updater.userNotificationDisplay(updater.message, tempDesc, "Download Now", "Cancel", "Check changes");
+			//string tempDesc = "Latest Version: "+updater.latestVersion+"\nCurrent Version: "+updater.currentVersion;
+			int tempDialog = updater.userNotificationDisplay(updater.message,
+															 "Latest Version: "+updater.latestVersion+"\nCurrent Version: "+updater.currentVersion,
+															 "Download Now", "Cancel", "Check changes");
 			
 			switch (tempDialog) {
 				case 0:
@@ -134,9 +135,9 @@ namespace wng {
 		
 		
 		// DOWNLOADING
-		else if(updater.mode == DOWNLOADING){
+		/*else if(updater.mode == DOWNLOADING){
 			cout << ofGetFrameNum() << " DOWNLOADING\n";
-		}
+		}*/
 		
 		
 		// RELAUNCH
@@ -145,7 +146,7 @@ namespace wng {
 			
 			// TODO----------------------------------------------------------------
 		}
-
+		
 		
 	}
 	
@@ -168,13 +169,14 @@ namespace wng {
 				break;
 				
 			case CHECK:
-				if(response.status==200 ){  
+				if(response.status == 200){  
 					//cout << response.request.name << endl;  
 					//cout << response.data.getText() << endl;
 					xml.loadFromBuffer(response.data);
 					updater.checkVersion(xml);
 				} else {  
-					cout << response.status << " " << response.error << endl;  
+					cout << response.status << " " << response.error << endl;
+					updater.mode = FINISHED;
 				}
 				
 				// Unregister URLNotification to close event.
