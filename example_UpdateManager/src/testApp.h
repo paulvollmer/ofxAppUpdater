@@ -30,6 +30,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxXmlDefaultSettings.h"
+
 // We only need the ofxUpdateManager class.
 // This class contains the connection to the UpdateManager App.
 // Use this example to outsource the update process to an other Ap.
@@ -61,6 +63,8 @@ public:
 		
 	
 private:
+	ofxXmlDefaultSettings defXML;
+	
 	// Add ofxUpdateManager class.
 	ofxUpdateManager updateManager;
 	

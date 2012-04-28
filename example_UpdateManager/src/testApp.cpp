@@ -38,8 +38,12 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
+	// get the initialize method.
+	defXML.init();
+	defXML.setSettings();
+	
 	ofSetVerticalSync(true);
-	ofSetFrameRate(60);
+	
 	
 	// We set the updateManager App connection.
     updateManager.connect();

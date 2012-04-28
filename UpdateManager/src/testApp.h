@@ -30,9 +30,13 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxXmlDefaultSettings.h"
+#include "ofxXmlSettings.h"
+
+#include "ofxGui.h"
+
 #include "ofxAppUpdater.h"
 #include "ofxUpdateManager.h"
-#include "ofxGui.h"
 
 using namespace wng;
 
@@ -63,16 +67,14 @@ public:
 	
 	
 private:
+	ofxXmlDefaultSettings defXML;
+	ofxXmlSettings XML;
+	
 	string workingDir;
 	
 	// Fonts we use
 	ofTrueTypeFont vera9;
 	ofTrueTypeFont veraBold12;
-	
-	
-	// Network connection to get messages from other application.
-	ofxUpdateManager updateManager;
-	
 	
 	// Gui objects
 	int leftControlWidth;
@@ -82,6 +84,8 @@ private:
 	ofxToggle userInformationToggle;
 	//ofxToggle debugInformationToggle;
 	
+	// Network connection to get messages from other application.
+	ofxUpdateManager updateManager;
 	
 	// Added ofxAppUpdater addon to testApp
 	ofxAppUpdater updater;
