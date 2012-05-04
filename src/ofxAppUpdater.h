@@ -30,6 +30,7 @@
 #pragma once
 
 #include <ofMain.h>
+//#include "ofxXmlSettings.h"
 #include "ofxAppcast.h"
 
 #define OFXAPPUPDATER_LOG
@@ -121,6 +122,7 @@ namespace wng {
 		
 		
 	private:
+		//ofxXmlSettings xml;
 		
 		// Todo remove this variable.
 		string temporaryDownloadFilename;
