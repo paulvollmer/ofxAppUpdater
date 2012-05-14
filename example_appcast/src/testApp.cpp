@@ -49,7 +49,7 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
-	vera9.loadFont("Vera.ttf", 9, true, false);
+	vera9.loadFont("Vera.ttf", 9, true, true);
 	veraBold12.loadFont("VeraBd.ttf", 12, true, true);
 	
 	
@@ -62,13 +62,14 @@ void testApp::setup(){
 	// IMPORTANT: https is not working!
 	//            You need a small php script to get content.
 	//            check the releaseStorage/php_helper folder for php script.
+	//            https://github.com/WrongEntertainment/ofxAppUpdater/tree/master/release_storage/php_helper
 	
 	// If you want to load from http, you can use ofLoadURLAsync without php script
-	//ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml", "load");
+	//ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/sample_appcast.xml", "load");
 	
 	// Or the https solution...
-	string phpHelperUrl = "http://www.wrong-entertainment.com/code/getHttps.php?url=";
-	string httpsUrl = "https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/develop/release_storage/sample_appcast.xml";
+	string phpHelperUrl = "http://www.wrong-entertainment.com/code/ofxAppUpdater/php_helper/getHttps.php?url=";
+	string httpsUrl = "https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/sample_appcast.xml";
 	ofLoadURLAsync(phpHelperUrl+httpsUrl, "load");
 	
 	
@@ -127,21 +128,23 @@ void testApp::keyPressed(int key){
 			// We have unregister URLNotification at the end of urlResponse().
 			// because of this we need to register new notification.
 			ofRegisterURLNotification(this);
-			// get the raw file from github via php helper. See releaseStorage
+			// get the raw file from github via php helper. See releaseStorage/php_helper
 			// TODO: create wiki doc.
-			ofLoadURLAsync(ofToString("http://www.wrong-entertainment.com/code/getHttps.php?url=https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/develop/release_storage/sample_appcast.xml"), "load");
+			ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/php_helper/getHttps.php?url=https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/sample_appcast.xml", "load");
 			break;
+			
 		case OF_KEY_RIGHT:
 			if(currentAppcastItem < appcast.getNumItems(xml)){
 				currentAppcastItem++;
-				cout << "currentAppcastItem: " << currentAppcastItem;
+				cout << "currentAppcastItem: " << currentAppcastItem << endl;
 				setAppcastVars(currentAppcastItem);
 			}
 			break;
+			
 		case OF_KEY_LEFT:
 			if(currentAppcastItem > 0 ){
 				currentAppcastItem--;
-				cout << "currentAppcastItem: " << currentAppcastItem;
+				cout << "currentAppcastItem: " << currentAppcastItem << endl;
 				setAppcastVars(currentAppcastItem);
 			}
 			break;
@@ -160,7 +163,6 @@ void testApp::keyReleased(int key){
 //--------------------------------------------------------------
 void testApp::urlResponse(ofHttpResponse & response){
 	
-	// based on http://forum.openframeworks.cc/index.php/topic,8398.0.html
     if(response.status==200 ){  
         cout << response.request.name << endl;  
         cout << response.data.getText() << endl;
@@ -214,7 +216,7 @@ void testApp::urlResponse(ofHttpResponse & response){
 }
 
 
-// a method to get appcast values.
+// a method to set the string variables from our appcast file.
 void testApp::setAppcastVars(int currentAppcastItem){
 	// set string variables with appcast tags.
 	// We have no variables at ofxAppcast class to save memory!
