@@ -37,7 +37,6 @@
 #pragma once
 
 #include <ofMain.h>
-//#include "ofxXmlSettings.h"
 #include "ofxAppcast.h"
 
 #define OFXAPPUPDATER_LOG
@@ -97,10 +96,8 @@ namespace wng {
 		
 		/**
 		 * Variables
-		 *
-		 * We only create basic variables at this class.
-		 * Basic variables 
 		 */
+		
 		// The update modes.
 		//
 		// This we use to get the current state of the update process.
@@ -109,6 +106,7 @@ namespace wng {
 		int mode;
 		// Message container for the different modes.
 		string message;
+		
 		
 		// The current application version.
 		//
@@ -129,8 +127,6 @@ namespace wng {
 		
 		
 	private:
-		//ofxXmlSettings xml;
-		
 		// Todo remove this variable.
 		string temporaryDownloadFilename;
 		
