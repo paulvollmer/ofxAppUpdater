@@ -38,6 +38,7 @@
 
 #include "ofxXmlSettings.h"
 
+#define OFXAPPCAST_DEFAULT_CONTENT "not available"
 
 
 

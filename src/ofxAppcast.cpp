@@ -66,23 +66,23 @@ namespace wng {
 	 *        string.
 	 */
 	string ofxAppcast::getChannelTitle(ofxXmlSettings xml){
-		return ofToString(xml.getValue("rss:channel:title", "not available", 0));
+		return ofToString(xml.getValue("rss:channel:title", OFXAPPCAST_DEFAULT_CONTENT, 0));
 	}
 	
 	string ofxAppcast::getChannelLink(ofxXmlSettings xml){
-		return ofToString(xml.getValue("rss:channel:link", "not available", 0));
+		return ofToString(xml.getValue("rss:channel:link", OFXAPPCAST_DEFAULT_CONTENT, 0));
 	}
 	
 	string ofxAppcast::getChannelDescription(ofxXmlSettings xml){
-		return ofToString(xml.getValue("rss:channel:description", "not available", 0));
+		return ofToString(xml.getValue("rss:channel:description", OFXAPPCAST_DEFAULT_CONTENT, 0));
 	}
 	
 	string ofxAppcast::getChannelLanguage(ofxXmlSettings xml){
-		return ofToString(xml.getValue("rss:channel:language", "not available", 0));
+		return ofToString(xml.getValue("rss:channel:language", OFXAPPCAST_DEFAULT_CONTENT, 0));
 	}
 		
 	string ofxAppcast::getChannelPubDate(ofxXmlSettings xml){
-		return ofToString(xml.getValue("rss:channel:pubDate", "not available", 0));
+		return ofToString(xml.getValue("rss:channel:pubDate", OFXAPPCAST_DEFAULT_CONTENT, 0));
 	}
 	
 	
@@ -96,23 +96,23 @@ namespace wng {
 	 *        string.
 	 */
 	string ofxAppcast::getTitle(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:title", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:title", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getDescription(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:description", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:description", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getPubDate(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:pubDate", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:pubDate", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getEnclosureUrl(ofxXmlSettings xml, int which){
-		return ofToString(xml.getAttribute("rss:channel:item:enclosure", "url", "not available", which));
+		return ofToString(xml.getAttribute("rss:channel:item:enclosure", "url", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getEnclosureType(ofxXmlSettings xml, int which){
-		return ofToString(xml.getAttribute("rss:channel:item:enclosure", "type", "not available", which));
+		return ofToString(xml.getAttribute("rss:channel:item:enclosure", "type", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	
@@ -126,67 +126,67 @@ namespace wng {
 	 *        string.
 	 */
 	string ofxAppcast::getAppcastVersion(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastVersion", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:appcastVersion", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastAuthor(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastAuthor", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:appcastAuthor", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastAuthorUrl(ofxXmlSettings xml, int which){
-		return ofToString(xml.getAttribute("rss:channel:item:appcastAuthor", "url", "not available", which));
+		return ofToString(xml.getAttribute("rss:channel:item:appcastAuthor", "url", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastAuthorEmail(ofxXmlSettings xml, int which){
-		return ofToString(xml.getAttribute("rss:channel:item:appcastAuthor", "email", "not available", which));
+		return ofToString(xml.getAttribute("rss:channel:item:appcastAuthor", "email", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastShortDescription(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastShortDescription", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:appcastShortDescription", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastLicense(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastLicense", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:appcastLicense", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastLicenseUrl(ofxXmlSettings xml, int which){
-		return ofToString(xml.getAttribute("rss:channel:item:appcastLicense", "url", "not available", which));
+		return ofToString(xml.getAttribute("rss:channel:item:appcastLicense", "url", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastHash(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastHash", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:appcastHash", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastHashAlgo(ofxXmlSettings xml, int which){
-		return ofToString(xml.getAttribute("rss:channel:item:appcastHash", "algo", "not available", which));
+		return ofToString(xml.getAttribute("rss:channel:item:appcastHash", "algo", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastRating(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastRating", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:appcastRating", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastRatingVotes(ofxXmlSettings xml, int which){
-		return ofToString(xml.getAttribute("rss:channel:item:appcastRating", "votes", "not available", which));
+		return ofToString(xml.getAttribute("rss:channel:item:appcastRating", "votes", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastDownloadCount(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastDownloadCount", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:appcastDownloadCount", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastKeywords(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastKeywords", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:appcastKeywords", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastDocsLink(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastDocsLink", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:appcastDocsLink", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastSourcesLink(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastSourcesLink", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:appcastSourcesLink", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	string ofxAppcast::getAppcastPreviewLink(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastPreviewLink", "not available", which));
+		return ofToString(xml.getValue("rss:channel:item:appcastPreviewLink", OFXAPPCAST_DEFAULT_CONTENT, which));
 	}
 	
 	
