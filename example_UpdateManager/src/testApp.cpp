@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.24
- * @version     0.0.1b
+ * @modified    2012.04.25
+ * @version     0.0.1e
  */
 
 
@@ -38,8 +38,12 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
+	// get the initialize method.
+	defXML.init();
+	defXML.setSettings();
+	
 	ofSetVerticalSync(true);
-	ofSetFrameRate(60);
+	
 	
 	// We set the updateManager App connection.
     updateManager.connect();
@@ -65,7 +69,7 @@ void testApp::keyPressed(int key){
 	
 	// open our UpdatManager by pressing key '1'
 	if(key == '1'){
-		updateManager.open(ofToDataPath("openChildApp.sh", true));
+		updateManager.start(ofToDataPath("openChildApp.sh", true));
 	}
 	
 }

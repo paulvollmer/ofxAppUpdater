@@ -21,15 +21,13 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.22
- * @version     1.0.1d
+ * @modified    2012.04.25
+ * @version     1.0.1e
  */
 
 
 
 #include "ofxAppUpdater.h"
-
-#include "ofxXmlSettings.h"
 
 // This we need for cocoa dialog
 #ifdef TARGET_OSX
@@ -48,7 +46,7 @@ namespace wng {
 		// Set the internetConnection variable to false. 
 		// If you want to manually, set the internetConnection variable,
 		// change it at openFrameworks setup.
-		internetConnection = false;
+		//internetConnection = false;
 		
 		// We use the mode variable to design different ofxAppUpdater mode states.
 		// See at example draw.
@@ -57,18 +55,13 @@ namespace wng {
 		// Default string for latestVersion variable.
 		latestVersion = "0xDEADC0DE";
 		
+		// TODO: remove this var.
 		// Default string for temporaryDownloadFilename variable.
 		temporaryDownloadFilename = "tempDownload_wng.zip";
-		
-		#ifdef OFXAPPUPDATER_LOG
-			ofLog(OF_LOG_VERBOSE, "Constructor Ready!");
-		#endif
 		
 	}
 
 
-	
-	
 	
 	/**
 	 * initialize
@@ -76,89 +69,120 @@ namespace wng {
 	 * @param currentVersion
 	 *        The current Application Version.
 	 *        Like this: "1.0.0"
-	 * @param appcastSrc
+	 * @param appcastPath
 	 *        The url of the appcast.xml file.
 	 * @param internetConnection
 	 *        Boolean to trigger the internetConnection Variable.
 	 */
-	void ofxAppUpdater::init(string currentVersion, string appcastSrc, bool internetConnection){
+	void ofxAppUpdater::init(string currentVersion, string appcastPath){
 		
 		this->currentVersion = currentVersion;
-		this->appcastSrc = appcastSrc;
-		this->internetConnection = internetConnection;
+		this->appcastPath = appcastPath;
 		
-		#ifdef OFXAPPUPDATER_LOG
+		/*#ifdef OFXAPPUPDATER_LOG
 			// TODO add to message variable = ... for advanced use.
 			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] init() --------------------------------------------------------");
 			ofLog(OF_LOG_VERBOSE, "Current-Version: " + this->currentVersion);
 			ofLog(OF_LOG_VERBOSE, "Appcast.xml: " + this->appcastSrc);
 			ofLog(OF_LOG_VERBOSE, "Internet-Connection: " + ofToString(this->internetConnection));
 			ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
-		#endif
+		#endif*/
 		
 		message = "Initialized";
 		mode = DEFAULT;
 		
 	}
 	
-	void ofxAppUpdater::init(string currentVersion, string appcastSrc){
-		init(currentVersion, appcastSrc, true);
-	}
-	
-	
-	
 	
 	
 	/**
-	 * autoUpdate
+	 * unzip
 	 */
-	void ofxAppUpdater::autoUpdate(){
+	void ofxAppUpdater::unzip(string src){
 		
-		checkVersion();
+		#ifdef OFXAPPUPDATER_LOG
+			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] unzip( " +src+ " )");
+		#endif
 		
-		if(mode == NEW_RELEASE){
-			// We create an integer for our notification display dialog.
-			// this variables can be checked later.
-			string tempDesc = "Latest Version: "+latestVersion+"\nCurrent Version: "+currentVersion;
-			int tempDialog = userNotificationDisplay(message, tempDesc, "Download Now", "Cancel", "Check changes");
-			
-			switch (tempDialog) {
-				case 0:
-					cout << "Default response\n";
-					
-					// At the moment we create a file at the desktop.
-					// I think we can handle this variable as an intern variable.
-					//download(ofFilePath::getPathForDirectory("~/Downloads/")+temporaryDownloadFilename);
-					
-					download();
-					
-					ofSleepMillis(200);
-					
-					break;
-				case 1:
-					cout << "Alternate response\n";
-					break;
-				case 2:
-					cout << "Other response\n";
-					break;
-				case 3:
-					cout << "Cancel response\n";
-					break;
-				default:
-					break;
-			}
-		}
-			relaunch();
-				
+		// unzip file
+		#ifdef TARGET_OSX
+			// ok gotta be a better way then this,
+			// this is what I found...
+			string commandStr = "open "+src;
+			system(commandStr.c_str());
+		#endif
+		
+		ofSleepMillis(200);
+		
 	}
 	
 	
+	/**
+	 * getAppName
+	 */
+	string ofxAppUpdater::getAppName(){
+		string appPath = ofFilePath::getCurrentExePath();
+		vector <string> te;
+		te = ofSplitString(appPath, "/");
+		//cout << ofToString(ofSplitString(appPath, "/")) << endl;
+		//cout << "### " << te[te.size()-1] << endl;
+		
+		return ofToString(te[te.size()-1]);
+	}
 	
 	
 	
 	/**
 	 * checking
+	 *
+	 * @param return
+	 *        LATEST_RELEASE
+	 *        NEW_RELEASE
+	 *        FINISHED
 	 */
+	int ofxAppUpdater::checkVersion(ofxXmlSettings xml){
+		
+		latestVersion = appcast.getAppcastVersion(xml, 0);
+		
+		// Check the Version numbers if it's false, you can download a new version.
+		if(latestVersion == currentVersion){
+			// change mode.
+			mode = LATEST_RELEASE;
+			message = "You're running the latest Application Release!";
+			return LATEST_RELEASE;
+			
+			#ifdef OFXAPPUPDATER_LOG
+				ofLog(OF_LOG_VERBOSE, "Message: "+message);
+				ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
+			#endif
+		} else {
+			if(latestVersion == "0xDEADC0DE"){
+				latestVersion  = "0xDEADC0DE";
+				// change mode.
+				mode = FINISHED;
+				message = "ERROR! Something went wrong with your Appcast content.";
+				return FINISHED;
+				
+				#ifdef OFXAPPUPDATER_LOG
+					ofLog(OF_LOG_VERBOSE, "Message: "+message);
+					ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
+				#endif
+			} else {
+				// change mode.
+				mode = NEW_RELEASE;
+				message = "A new Version is Available!";
+				return NEW_RELEASE;
+			
+				#ifdef OFXAPPUPDATER_LOG
+					ofLog(OF_LOG_VERBOSE, "Message: "+message);
+					ofLog(OF_LOG_VERBOSE, "-------------------------------------------------------------------------------\n");
+				#endif
+			}
+		}
+		
+	}
+	
+	/*
 	void ofxAppUpdater::checkVersion(){
 		
 		if(internetConnection == true && mode == DEFAULT){
@@ -213,6 +237,13 @@ namespace wng {
 		}
 		
 	}
+	*/
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -220,26 +251,22 @@ namespace wng {
 	/**
 	 *
 	 */
-	void ofxAppUpdater::download(string src){
+	void ofxAppUpdater::download(string downloadUrl, string src){
 		
-		//ofLog(OF_LOG_VERBOSE, "downloading");
-		
-		if(internetConnection == true && mode == NEW_RELEASE){
-			
-			loadFile(downloadUrl, src);
-			
-			ofSleepMillis(200);
-			
-			message = "Download Ready!";
-			
-			mode = DOWNLOAD;
-		}
+		message = "Start Download";
+		loadFile(downloadUrl, src);
+		message = "downloading...";
+		ofSleepMillis(200);
+		message = "Download Ready!";
+		mode = FINISHED;
 		
 	}
 	
-	void ofxAppUpdater::download(){
-		download(ofFilePath::getPathForDirectory("~/Downloads/")+temporaryDownloadFilename);
-	}
+	/*void ofxAppUpdater::download(){
+		
+		//download(ofFilePath::getPathForDirectory("~/Downloads/")+temporaryDownloadFilename);
+		download(ofFilePath::getCurrentWorkingDirectory()+temporaryDownloadFilename);
+	}*/
 	
 	
 	
@@ -248,7 +275,7 @@ namespace wng {
 	 */
 	void ofxAppUpdater::relaunch(){
 		
-		if(internetConnection == true && mode == DOWNLOAD){
+		//if(internetConnection == true && mode == DOWNLOAD){
 			
 			string tempFile = ofFilePath::getPathForDirectory("~/Downloads/")+temporaryDownloadFilename;
 			unzip(tempFile);
@@ -287,7 +314,7 @@ namespace wng {
 			
 			message = "Quit Application";
 			ofExit(1);
-		}
+		//}
 	}
 	
 	
@@ -307,6 +334,8 @@ namespace wng {
 	 *        Alternate button title (like "cancel")
 	 * @param buttonOther
 	 *        Other button title
+	 * @param return
+	 *        
 	 */
 	int ofxAppUpdater::userNotificationDisplay(string header, string message, string buttonDefault, string buttonAlternate, string buttonOther){
 		
@@ -370,16 +399,7 @@ namespace wng {
 	
 	
 	
-	
-	string ofxAppUpdater::getAppName(){
-		string appPath = ofFilePath::getCurrentExePath();
-		vector <string> te;
-		te = ofSplitString(appPath, "/");
-		//cout << ofToString(ofSplitString(appPath, "/")) << endl;
-		//cout << "### " << te[te.size()-1] << endl;
 		
-		return ofToString(te[te.size()-1]);
-	}	
 	
 	
 	
@@ -417,62 +437,9 @@ namespace wng {
 			system(tempApplescript.c_str());
 		#endif
 		
+		mode = DOWNLOADING;
 	}
 	
-	
-	/**
-	 * parseAppcast
-	 * At the monent we use hard coded xml tags.
-	 *
-	 * @param filepath
-	 *        The path to our Appcast RSS feed.
-	 */
-	void ofxAppUpdater::parseAppcast(string filepath){
-		
-		// We load our xml file.
-		// This is based on the openFrameworks xmlSettingsExample.
-		if(xml.loadFile(filepath)){
-			
-			// we get the version and download vars by ofxAppcast class.
-			latestVersion = appcast.getAppcastVersion(xml, 0);
-			downloadUrl = appcast.getEnclosureUrl(xml, 0);
-			
-			#ifdef OFXAPPUPDATER_LOG
-				ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] parseAppcast()");
-				ofLog(OF_LOG_VERBOSE, "Filepath <" + filepath + "> loaded!");
-				ofLog(OF_LOG_VERBOSE, "Latest Version: " + latestVersion);
-				ofLog(OF_LOG_VERBOSE, "Download URL: " + downloadUrl);
-			#endif
-		} else {
-			#ifdef OFXAPPUPDATER_LOG
-				ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] parseAppcast()");
-				ofLog(OF_LOG_VERBOSE, "File <" + filepath + "> not found!");
-			#endif
-		}
-		
-	}
-	
-	
-	/**
-	 * unzip
-	 */
-	void ofxAppUpdater::unzip(string src){
-		
-		#ifdef OFXAPPUPDATER_LOG
-			ofLog(OF_LOG_VERBOSE, "[ofxAppUpdater] unzip( " +src+ " )");
-		#endif
-		
-		// unzip file
-		#ifdef TARGET_OSX
-			// ok gotta be a better way then this,
-			// this is what I found...
-			string commandStr = "open "+src;
-			system(commandStr.c_str());
-		#endif
-
-		ofSleepMillis(200);
-		
-	}
 	
 	
 }

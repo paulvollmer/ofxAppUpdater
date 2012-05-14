@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.24
- * @version     1.0.1d
+ * @modified    2012.04.25
+ * @version     1.0.1e
  */
 
 
@@ -36,6 +36,37 @@ namespace wng {
 	ofxUpdateManager::ofxUpdateManager(){}
 
 
+	
+	/**
+	 * start
+	 */
+	void ofxUpdateManager::start(string shPath){
+		
+		char *shPathChar;
+		shPathChar = new char[ shPath.length() + 1 ];
+		
+		strcpy( shPathChar, shPath.c_str() );
+		
+		
+		int pid = fork();
+		cout << "pid :: " << pid << endl;
+		
+		switch(pid){
+			case -1 :
+				cout << "Uh-Oh! fork() failed.\n" << endl;
+			case  0 :
+				execl( shPathChar, shPathChar, NULL );
+			default :
+				return;
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * Create and connect the socket.
 	 * Based on oF networkUdpSender-, ReceiverExample
@@ -70,7 +101,9 @@ namespace wng {
 	
 	
 	
-	
+	/**
+	 *
+	 */
 	void ofxUpdateManager::send(string message){
 		int send = udpConnection.Send(message.c_str(), message.length());
 	}
@@ -78,7 +111,9 @@ namespace wng {
 	
 	
 	
-	
+	/**
+	 *
+	 */
 	string ofxUpdateManager::receive(){
 		// Network connection
 		char udpMessage[100000];
@@ -89,33 +124,6 @@ namespace wng {
 		}*/
 		return udpMessage;
 	}
-	
-	
-	
-	
-	
-	void ofxUpdateManager::open(string shPath){
-		
-		char *shPathChar;
-		shPathChar = new char[ shPath.length() + 1 ];
-		
-		strcpy( shPathChar, shPath.c_str() );
-		
-		
-		int pid = fork();
-		cout << "pid :: " << pid << endl;
-		
-		switch(pid){
-			case -1 :
-				cout << "Uh-Oh! fork() failed.\n" << endl;
-			case  0 :
-				execl( shPathChar, shPathChar, NULL );
-			default :
-				return;
-		}
-		
-	}
-	
 	
 	
 }

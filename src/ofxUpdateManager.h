@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.24
- * @version     1.0.1d
+ * @modified    2012.04.25
+ * @version     1.0.1e
  */
 
 
@@ -41,14 +41,14 @@ namespace wng {
 		
 	public:
 		ofxUpdateManager();
-
+		
+		void start(string shPath);
 		void connect(string ip, int port, bool blocking);
 		void connect();
 		void bind(int port, bool blocking);
 		void bind();
 		void send(string message);
 		string receive();
-		void open(string shPath);
 
 		
 	private:

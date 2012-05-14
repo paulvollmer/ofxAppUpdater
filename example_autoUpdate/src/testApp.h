@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.22
- * @version     1.0.1c2
+ * @modified    2012.04.25
+ * @version     1.0.1e
  */
 
 
@@ -30,7 +30,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxAppUpdater.h"
+#include "ofxAutoUpdate.h"
 
 using namespace wng;
 
@@ -47,18 +47,11 @@ public:
 	
 	void keyPressed(int key);
 	void keyReleased(int key);
-	void mouseMoved(int x, int y);
-	void mouseDragged(int x, int y, int button);
-	void mousePressed(int x, int y, int button);
-	void mouseReleased(int x, int y, int button);
-	void windowResized(int w, int h);
-	void dragEvent(ofDragInfo dragInfo);
-	void gotMessage(ofMessage msg);
-	void exit();
+	void urlResponse(ofHttpResponse & response);
 	
 	
 private:
 	// Added ofxAppUpdater addon to testApp
-	ofxAppUpdater updater;
+	ofxAutoUpdate autoUpdate;
 
 };

@@ -21,8 +21,8 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.23
- * @version     1.0.1d
+ * @modified    2012.04.26
+ * @version     1.0.1e2
  */
 
 
@@ -35,23 +35,29 @@ namespace wng {
 	ofxAppcast::ofxAppcast(){}
 	
 	
+	
 	/**
+	 * Get the total number of 'rss:channel:item' tags
 	 *
-	 * TODO: did we need to check if a tag exist?
-	 *
-	 * if(xml.tagExists("rss:channel:title", 0)){
-	 * return ofToString(xml.getValue("rss:channel:title", "ox11120119", 0));
-	 * } else {
-	 * return "not available";
-	 * }
-	 *
+	 * @param xml
+	 *        An ofxXmlSettings object.
+	 * @param return
+	 *        Number of items as an integer.
 	 */
+	int ofxAppcast::getNumItems(ofxXmlSettings xml){
+		return xml.getNumTags("rss:channel:item");
+	}
+	
 	
 	
 	/**
 	 * Get a tag from our first channel.
+	 *
+	 * @param xml
+	 *        An ofxXmlSettings object.
+	 * @param return
+	 *        string.
 	 */
-	
 	string ofxAppcast::getChannelTitle(ofxXmlSettings xml){
 		return ofToString(xml.getValue("rss:channel:title", "not available", 0));
 	}
@@ -75,9 +81,13 @@ namespace wng {
 	
 	
 	/**
-	 * Get a tag from a selected item.
+	 * Get a tag from selected item.
+	 *
+	 * @param xml
+	 *        An ofxXmlSettings object.
+	 * @param return
+	 *        string.
 	 */
-	
 	string ofxAppcast::getTitle(ofxXmlSettings xml, int which){
 		return ofToString(xml.getValue("rss:channel:item:title", "not available", which));
 	}
@@ -101,9 +111,13 @@ namespace wng {
 	
 	
 	/**
-	 * Get a Appcast tag from a selected item.
+	 * Get a Appcast tag from selected item.
+	 *
+	 * @param xml
+	 *        An ofxXmlSettings object.
+	 * @param return
+	 *        string.
 	 */
-	
 	string ofxAppcast::getAppcastVersion(ofxXmlSettings xml, int which){
 		return ofToString(xml.getValue("rss:channel:item:appcastVersion", "not available", which));
 	}
@@ -156,12 +170,12 @@ namespace wng {
 		return ofToString(xml.getValue("rss:channel:item:appcastKeywords", "not available", which));
 	}
 	
-	string ofxAppcast::getAppcastDocLink(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastDocLink", "not available", which));
+	string ofxAppcast::getAppcastDocsLink(ofxXmlSettings xml, int which){
+		return ofToString(xml.getValue("rss:channel:item:appcastDocsLink", "not available", which));
 	}
 	
-	string ofxAppcast::getAppcastSourceLink(ofxXmlSettings xml, int which){
-		return ofToString(xml.getValue("rss:channel:item:appcastSourceLink", "not available", which));
+	string ofxAppcast::getAppcastSourcesLink(ofxXmlSettings xml, int which){
+		return ofToString(xml.getValue("rss:channel:item:appcastSourcesLink", "not available", which));
 	}
 	
 	string ofxAppcast::getAppcastPreviewLink(ofxXmlSettings xml, int which){
