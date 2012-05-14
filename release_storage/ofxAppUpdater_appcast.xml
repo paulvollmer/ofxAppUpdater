@@ -26,6 +26,9 @@
     </description>
     <pubDate>Fri, 24 Apr 2012 01:07:00 GMT</pubDate>
     <appcastVersion>1.0.1</appcastVersion>
+	<appcastAuthor url="http://www.wng.cc/" email="paul.vollmer@fh-potsdam.de">Paul Vollmer</appcastAuthor>
+    <appcastShortDescription type="plain">This is a sample appcast file to test and debug the ofxAppUpdater addon.</appcastShortDescription>
+    <appcastLicense url="http://www.opensource.org/licenses/MIT">MIT Public License</appcastLicense>
   </item>
     
   <item>
