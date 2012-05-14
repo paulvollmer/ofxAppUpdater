@@ -39,8 +39,6 @@
 #include "ofMain.h"
 #include "ofxAutoUpdate.h"
 
-using namespace wng;
-
 
 
 
@@ -59,6 +57,6 @@ public:
 	
 private:
 	// Added ofxAppUpdater addon to testApp
-	ofxAutoUpdate autoUpdate;
+	wng::ofxAutoUpdate autoUpdate;
 
 };

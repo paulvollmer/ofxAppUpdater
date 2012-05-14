@@ -46,7 +46,7 @@ void testApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	
 	// Description at example_appcast setup()
-	const string phpHelperUrl = "http://www.wrong-entertainment.com/code/getHttps.php?url=";
+	const string phpHelperUrl = "http://www.wrong-entertainment.com/code/ofxAppUpdater/php_helper/getHttps.php?url=";
 	const string httpsUrl = "https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/develop/release_storage/sample_appcast.xml";
 	autoUpdate.init("0.0.1", phpHelperUrl+httpsUrl);
 	
