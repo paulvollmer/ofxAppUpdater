@@ -96,7 +96,7 @@ namespace wng {
 			//string tempDesc = "Latest Version: "+updater.latestVersion+"\nCurrent Version: "+updater.currentVersion;
 			int tempDialog = updater.userNotificationDisplay(updater.message,
 															 "Latest Version: "+updater.latestVersion+"\nCurrent Version: "+updater.currentVersion,
-															 "Download Now", "Cancel", "Check changes");
+															 "Download Now", "Later", "Check changes");
 			
 			switch (tempDialog) {
 				case 0:
