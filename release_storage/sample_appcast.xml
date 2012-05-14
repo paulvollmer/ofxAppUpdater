@@ -19,8 +19,8 @@
     <enclosure url="http://github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/release_1_0_0.zip" type="application/octet-stream"/>
     <appcastVersion>0.0.2</appcastVersion>
     <appcastAuthor url="http://www.wng.cc/" email="paul.vollmer@fh-potsdam.de">Paul Vollmer</appcastAuthor>
-    <appcastShortDescription type="plain">This is a datagrid component with drag/drop animation.</appcastShortDescription>
-    <appcastLicense url="http://www.opensource.org/licenses/LGPL-3.0">LGPL-3.0</appcastLicense>
+    <appcastShortDescription type="plain">This is a sample appcast file to test and debug the ofxAppUpdater addon.</appcastShortDescription>
+    <appcastLicense url="http://www.opensource.org/licenses/MIT">MIT Public License</appcastLicense>
     <appcastHash algo="md5">a297aebb68e137682fa72e3f3325cd1d</appcastHash>
     <appcastRating votes="10">4</appcastRating>
     <appcastDownloadCount>2</appcastDownloadCount>

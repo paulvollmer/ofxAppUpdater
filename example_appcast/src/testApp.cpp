@@ -1,33 +1,38 @@
 /**
- * ofxAppUpdater is developed by Paul Vollmer
- * http://www.wng.cc
- * 
- * 
- * Copyright (c) 2012 Paul Vollmer
+ *  ofxAppUpdater
  *
- * ofxAppUpdater is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * ofxAppUpdater is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General
- * Public License along with ofxAppUpdater; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA  02111-1307  USA
- * 
- * @author      Paul Vollmer
- * @modified    2012.04.25
- * @version     1.0.1e
+ *  
+ *  The MIT License
+ *
+ *  Copyright (c) 2012 Paul Vollmer, http://www.wng.cc
+ *  
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *  
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *  
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ *
+ *  
+ *  @testet_oF          0.07
+ *  @testet_plattform   MacOs 10.6
+ *                      ??? Win
+ *                      ??? Linux
+ *  @dependencies       ofxXmlSettings
+ *  @modified           2012.05.14
+ *  @version            0.1.1e
  */
-
-
-
-
 
 #include "testApp.h"
 
@@ -44,7 +49,7 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	
-	vera9.loadFont("Vera.ttf", 9, true, false);
+	vera9.loadFont("Vera.ttf", 9, true, true);
 	veraBold12.loadFont("VeraBd.ttf", 12, true, true);
 	
 	
@@ -57,13 +62,14 @@ void testApp::setup(){
 	// IMPORTANT: https is not working!
 	//            You need a small php script to get content.
 	//            check the releaseStorage/php_helper folder for php script.
+	//            https://github.com/WrongEntertainment/ofxAppUpdater/tree/master/release_storage/php_helper
 	
 	// If you want to load from http, you can use ofLoadURLAsync without php script
-	//ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/appcastSample.xml", "load");
+	//ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/sample_appcast.xml", "load");
 	
 	// Or the https solution...
-	string phpHelperUrl = "http://www.wrong-entertainment.com/code/getHttps.php?url=";
-	string httpsUrl = "https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/develop/release_storage/sample_appcast.xml";
+	string phpHelperUrl = "http://www.wrong-entertainment.com/code/ofxAppUpdater/php_helper/getHttps.php?url=";
+	string httpsUrl = "https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/sample_appcast.xml";
 	ofLoadURLAsync(phpHelperUrl+httpsUrl, "load");
 	
 	
@@ -122,21 +128,23 @@ void testApp::keyPressed(int key){
 			// We have unregister URLNotification at the end of urlResponse().
 			// because of this we need to register new notification.
 			ofRegisterURLNotification(this);
-			// get the raw file from github via php helper. See releaseStorage
+			// get the raw file from github via php helper. See releaseStorage/php_helper
 			// TODO: create wiki doc.
-			ofLoadURLAsync(ofToString("http://www.wrong-entertainment.com/code/getHttps.php?url=https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/develop/release_storage/sample_appcast.xml"), "load");
+			ofLoadURLAsync("http://www.wrong-entertainment.com/code/ofxAppUpdater/php_helper/getHttps.php?url=https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/master/release_storage/sample_appcast.xml", "load");
 			break;
+			
 		case OF_KEY_RIGHT:
 			if(currentAppcastItem < appcast.getNumItems(xml)){
 				currentAppcastItem++;
-				cout << "currentAppcastItem: " << currentAppcastItem;
+				cout << "currentAppcastItem: " << currentAppcastItem << endl;
 				setAppcastVars(currentAppcastItem);
 			}
 			break;
+			
 		case OF_KEY_LEFT:
 			if(currentAppcastItem > 0 ){
 				currentAppcastItem--;
-				cout << "currentAppcastItem: " << currentAppcastItem;
+				cout << "currentAppcastItem: " << currentAppcastItem << endl;
 				setAppcastVars(currentAppcastItem);
 			}
 			break;
@@ -155,7 +163,6 @@ void testApp::keyReleased(int key){
 //--------------------------------------------------------------
 void testApp::urlResponse(ofHttpResponse & response){
 	
-	// based on http://forum.openframeworks.cc/index.php/topic,8398.0.html
     if(response.status==200 ){  
         cout << response.request.name << endl;  
         cout << response.data.getText() << endl;
@@ -209,7 +216,7 @@ void testApp::urlResponse(ofHttpResponse & response){
 }
 
 
-// a method to get appcast values.
+// a method to set the string variables from our appcast file.
 void testApp::setAppcastVars(int currentAppcastItem){
 	// set string variables with appcast tags.
 	// We have no variables at ofxAppcast class to save memory!
