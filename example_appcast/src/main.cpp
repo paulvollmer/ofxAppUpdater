@@ -21,43 +21,25 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.24
- * @version     0.0.1b
+ * @modified    2012.04.25
+ * @version     1.0.1e
  */
 
 
 
-#pragma once
-
 #include "ofMain.h"
-#include "ofxUpdateManager.h"
+#include "testApp.h"
+#include "ofAppGlutWindow.h"
 
-using namespace wng;
+//========================================================================
+int main( ){
 
+    ofAppGlutWindow window;
+	ofSetupOpenGL(&window, 900, 600, OF_WINDOW);			// <-------- setup the GL context
 
+	// this kicks off the running of my app
+	// can be OF_WINDOW or OF_FULLSCREEN
+	// pass in width and height too:
+	ofRunApp( new testApp());
 
-
-
-class testApp : public ofBaseApp{
-
-public:
-	void setup();
-	void update();
-	void draw();
-	
-	void keyPressed(int key);
-	void keyReleased(int key);
-	void mouseMoved(int x, int y);
-	void mouseDragged(int x, int y, int button);
-	void mousePressed(int x, int y, int button);
-	void mouseReleased(int x, int y, int button);
-	void windowResized(int w, int h);
-	void dragEvent(ofDragInfo dragInfo);
-	void gotMessage(ofMessage msg);
-	void exit();
-		
-	
-private:
-	ofxUpdateManager updateManager;
-	
-};
+}

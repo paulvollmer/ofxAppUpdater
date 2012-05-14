@@ -30,7 +30,8 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxAppUpdater.h"
+#include "ofxXmlSettings.h"
+#include "ofxAppcast.h"
 
 using namespace wng;
 
@@ -46,11 +47,38 @@ public:
 	void draw();
 	void keyPressed(int key);
 	void keyReleased(int key);
-	void urlResponse(ofHttpResponse & response);
+	void urlResponse(ofHttpResponse & response);  
+	void setAppcastVars(int currentAppcastItem);	
 	
 	
 private:
-	// Added ofxAppUpdater addon to testApp
-	ofxAppUpdater updater;
+	// We need a font to display our appcast content.
+	ofTrueTypeFont vera9;
+	ofTrueTypeFont veraBold12;
+	
+	// Xml to store appcast file.
+	ofxXmlSettings xml;
+	
+	// ofxAppcast class and variables to store the data you need.
+	ofxAppcast appcast;
+	
+	// Wee need the current- and totalAppcastItem value
+	// for jumping between channel:items.
+	int currentAppcastItem;
+	int totalAppcastItems;
+	
+	// This variables will be set by ofxAppcast get... methods.
+	string channelTitle;
+	string channelLink;
+	string channelDate;
+	string itemTitle;
+	string itemDescription;
+	string itemDate;
+	string itemUrl;
+	string appcastVersion;
+	string appcastAuthor;
+	string appcastLicense;
+	string appcastDownloads;
+	
 
 };

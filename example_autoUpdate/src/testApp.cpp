@@ -21,11 +21,9 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.22
- * @version     1.0.1c2
+ * @modified    2012.04.25
+ * @version     1.0.1e
  */
-
-
 
 
 
@@ -33,39 +31,24 @@
 
 
 
-
-
 //--------------------------------------------------------------
 void testApp::setup(){
 	
 	ofSetVerticalSync(true);
-	
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	
-	// We store our updater Variables here (FOR THE CURRENT APPLICATION RELEASE).
-	// For our ofxAppUpdater::init method we need the following variables:
-	// - An Application Release version (string)
-	// - A Server-URL who will be stored the Appcast.xml file.
-	//
-	// KEEP CLEAN THE FOLLWING VARIABLES TO UPDATE AND RELEASE OUR SOFTWARE SAVETY.
-	// FOR THIS YOU CAN USE THE [semantic versioning]( http://semver.org ) STYLE.
-	// 
-	// The appcast.xml and release.zip are stored at github repository.
-	updater.init("0.0.0", "https://github.com/WrongEntertainment/ofxAppUpdater/raw/develope/release_storage/appcast.xml");
+	// Description at example_appcast setup()
+	const string phpHelperUrl = "http://www.wrong-entertainment.com/code/getHttps.php?url=";
+	const string httpsUrl = "https://www.github.com/WrongEntertainment/ofxAppUpdater/raw/develop/release_storage/sample_appcast.xml";
+	autoUpdate.init("0.0.1", phpHelperUrl+httpsUrl);
 	
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 	
-	switch (ofGetFrameNum()) {
-		case 10:
-			updater.autoUpdate();
-			break;
-		default:
-			break;
-	}
+	autoUpdate.update();
 	
 }
 
@@ -74,10 +57,6 @@ void testApp::draw(){
 	
 	ofBackground(ofColor::white);
 	
-	ofSetColor(ofColor::black);
-	ofDrawBitmapString("Message:", 70, 90);
-	ofDrawBitmapString(updater.message, 150, 90);
-
 }
 
 //--------------------------------------------------------------
@@ -91,40 +70,8 @@ void testApp::keyReleased(int key){
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){ 
-
-}
-
-void testApp::exit(){
+void testApp::urlResponse(ofHttpResponse & response){
 	
+	autoUpdate.urlResponse(response);
+
 }

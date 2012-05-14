@@ -39,10 +39,12 @@
 void testApp::setup(){
 	
 	// of settings
+	defXML.init();
+	defXML.setSettings();
 	ofSetVerticalSync(true);
-	ofSetFrameRate(60);
-	ofSetWindowTitle("UpdaterApp version 0.0.1");
+	
 	ofRegisterURLNotification(this);
+	
 	// ofLog settings
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_VERBOSE);
@@ -141,16 +143,16 @@ void testApp::draw(){
 		case DEFAULT:
 			/*ofSetColor(ofColor::black);
 			ofDrawBitmapString("Press 'u' for update check!", 10, 20);*/
-			updater.checkVersion();
+			updater.checkVersion(XML);
 			
-			chTitle = appcast.getChannelTitle(updater.xml);
-			chDescription = appcast.getChannelDescription(updater.xml);
-			chDate = appcast.getChannelPubDate(updater.xml);
+			chTitle = appcast.getChannelTitle(XML);
+			chDescription = appcast.getChannelDescription(XML);
+			chDate = appcast.getChannelPubDate(XML);
 			
-			acVersion =appcast.getAppcastVersion(updater.xml, 0);
-			acAuthor = appcast.getAppcastAuthor(updater.xml, 0);
-			acDoclink = appcast.getAppcastDocLink(updater.xml, 0);
-			acSourcelink = appcast.getAppcastSourceLink(updater.xml, 0);
+			acVersion =appcast.getAppcastVersion(XML, 0);
+			acAuthor = appcast.getAppcastAuthor(XML, 0);
+			acDoclink = appcast.getAppcastDocsLink(XML, 0);
+			acSourcelink = appcast.getAppcastSourcesLink(XML, 0);
 			break;
 			
 			
@@ -181,7 +183,8 @@ void testApp::draw(){
 				ofSetColor(0, 200, 255);
 				if(ofGetMousePressed(0)){
 					cout << "pressed\n";
-					updater.download("tempDownload.zip");
+					updater.download(updater.appcast.getEnclosureUrl(XML, 0),
+									 "tempDownload.zip");
 				}
 			}
 			ofRect(updateButton.x, updateButton.y, updateButton.width, updateButton.height);
@@ -313,7 +316,7 @@ void testApp::exit(){
 
 //--------------------------------------------------------------
 void testApp::urlResponse(ofHttpResponse & response){
-	/*if(response.status == 200 && response.request.name == "async_req") {
+	if(response.status == 200 && response.request.name == "async_req") {
 		cout << "loading" << endl;
 	} else {
 		cout << response.status << " " << response.error << endl;
@@ -321,7 +324,7 @@ void testApp::urlResponse(ofHttpResponse & response){
 			cout << "loading = false \n" ;
 		}
 	}
-*/
+
 	
 }
 

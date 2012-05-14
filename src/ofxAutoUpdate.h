@@ -1,22 +1,22 @@
 /**
- * ofxAppUpdater is developed by Paul Vollmer
+ * ofxAutoUpdate.h is developed by Paul Vollmer
  * http://www.wng.cc
  * 
  * 
  * Copyright (c) 2012 Paul Vollmer
  *
- * ofxAppUpdater is free software; you can redistribute it and/or
+ * ofxAutoUpdate.h is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  * 
- * ofxAppUpdater is distributed in the hope that it will be useful,
+ * ofxAutoUpdate.h is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General
- * Public License along with ofxAppUpdater; if not, write to the
+ * Public License along with ofxAutoUpdate.h; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA  02111-1307  USA
  * 
@@ -27,19 +27,42 @@
 
 
 
-#include "ofMain.h"
-#include "testApp.h"
-#include "ofAppGlutWindow.h"
+#pragma once
 
-//========================================================================
-int main( ){
+#include <ofMain.h>
+#include "ofxXmlSettings.h"
+#include "ofxAppUpdater.h"
 
-    ofAppGlutWindow window;
-	ofSetupOpenGL(&window, 900, 600, OF_WINDOW);			// <-------- setup the GL context
+#define OFXAUTOUPDATE_LOG
 
-	// this kicks off the running of my app
-	// can be OF_WINDOW or OF_FULLSCREEN
-	// pass in width and height too:
-	ofRunApp( new testApp());
 
-}
+
+
+
+namespace wng {
+	
+	class ofxAutoUpdate {
+		
+	public:
+		/**
+		 * Constructor
+		 */
+		ofxAutoUpdate();
+		
+		
+		/**
+		 * Methods
+		 */
+		void init(string currentVersion, string appcastSrc);
+		void update();
+		void urlResponse(ofHttpResponse & response);
+		
+		
+		
+	private:
+		ofxXmlSettings xml;
+		ofxAppUpdater updater;
+		
+	};
+	
+};

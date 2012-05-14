@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+  <title>ofxAppUpdater Appcast</title>
+  <link>http://www.github.com/wrongentertainment/ofxAppUpdater</link>
+  <description>You can find the most recent changes from ofxAppUpdater Addon at this file (including changes from UpdateManager App).</description>
+  <language>en</language>
+  <pubDate>Wed, 25 Apr 2010 20:52:00 GMT</pubDate>
+
+  <!--<item>
+    <title>ofxAppUpdater release v.1.0.2</title>
+    <description>[new] GitHub wiki e_storage directory, added appcast rss feed to check if a new version is available. //
+    </description>
+    <pubDate>Fri, 26 Apr 2012 04:39:00 GMT</pubDate>
+    <appcastVersion>1.0.1</appcastVersion>
+  </item>-->
+  
+  <item>
+    <title>ofxAppUpdater release v.1.0.1</title>
+    <description>
+      [new] GitHub wiki //
+      [new] UpdateManager and example_UpdateManager, an app to outsource the update process. //
+      [new] ofxAppcast class to parse appcast files. //
+      [new] ofxAutoUpdate class and example_autoUpdate  //
+      [internal] Added release_storage directory, added appcast rss feed to check if a new version is available. //
+    </description>
+    <pubDate>Fri, 24 Apr 2012 01:07:00 GMT</pubDate>
+    <appcastVersion>1.0.1</appcastVersion>
+  </item>
+    
+  <item>
+    <title>ofxAppUpdater release v.1.0.0</title>
+    <description>
+      [change] versioninfo.xml to Appcast RSS //
+      [improved] Download, and unzip. //
+      [internal] Changes at init method (because of apcast.xml contains variables that we set in previous version at versioninfo.xml) //
+      [internal] Test examples and methods //
+      [internal] Added release_storage directory, added appcast rss feed to check if a new version is available. //
+    </description>
+    <pubDate>Fri, 20 Apr 2012 15:45:00 GMT</pubDate>
+    <appcastVersion>1.0.0</appcastVersion>
+  </item>
+  
+  <item>
+    <title>ofxAppUpdater release v.0.1.1</title>
+    <description>
+      [new] Create GitHub Repository.
+      [new] Added addon src directory, ofxAppUpdater class. First example sourcecode + Xcode project.
+    </description>
+    <pubDate>Thu, 12 Apr 2012 17:56:00 GMT</pubDate>
+    <appcastVersion>0.1.1</appcastVersion>
+  </item>
+
+</channel>
+</rss>

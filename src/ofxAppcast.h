@@ -21,15 +21,15 @@
  * Boston, MA  02111-1307  USA
  * 
  * @author      Paul Vollmer
- * @modified    2012.04.23
- * @version     1.0.1d
+ * @modified    2012.04.26
+ * @version     1.0.1e2
  */
 
 
 
 #pragma once
 
-#include <ofMain.h>
+//#include <ofMain.h>
 #include "ofxXmlSettings.h"
 
 
@@ -44,22 +44,24 @@ namespace wng {
 	public:
 		ofxAppcast();
 		
+		int getNumItems(ofxXmlSettings xml);
 		
-		//void load(string url);
-		// TODO: void remove();
-		
+		/**
+		 * The get.. methods can be used to parse appcast files.
+		 * All the get methods need a xml object to parse from.
+		 * More information about appcast can be found at
+		 * https://github.com/WrongEntertainment/ofxAppUpdater/wiki
+		 */
 		string getChannelTitle(ofxXmlSettings xml);
 		string getChannelLink(ofxXmlSettings xml);
 		string getChannelDescription(ofxXmlSettings xml);
 		string getChannelLanguage(ofxXmlSettings xml);
 		string getChannelPubDate(ofxXmlSettings xml);
-		
 		string getTitle(ofxXmlSettings xml, int which);
 		string getDescription(ofxXmlSettings xml, int which);
 		string getPubDate(ofxXmlSettings xml, int which);
 		string getEnclosureUrl(ofxXmlSettings xml, int which);
 		string getEnclosureType(ofxXmlSettings xml, int which);
-		
 		string getAppcastVersion(ofxXmlSettings xml, int which);
 		string getAppcastAuthor(ofxXmlSettings xml, int which);
 		string getAppcastAuthorUrl(ofxXmlSettings xml, int which);
@@ -73,12 +75,9 @@ namespace wng {
 		string getAppcastRatingVotes(ofxXmlSettings xml, int which);
 		string getAppcastDownloadCount(ofxXmlSettings xml, int which);
 		string getAppcastKeywords(ofxXmlSettings xml, int which);
-		string getAppcastDocLink(ofxXmlSettings xml, int which);
-		string getAppcastSourceLink(ofxXmlSettings xml, int which);
+		string getAppcastDocsLink(ofxXmlSettings xml, int which);
+		string getAppcastSourcesLink(ofxXmlSettings xml, int which);
 		string getAppcastPreviewLink(ofxXmlSettings xml, int which);
-		
-		
-		//ofxXmlSettings xml;
 		
 	};
 	
