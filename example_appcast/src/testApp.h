@@ -40,8 +40,6 @@
 #include "ofxXmlSettings.h"
 #include "ofxAppcast.h"
 
-using namespace wng;
-
 
 
 
@@ -67,7 +65,7 @@ private:
 	ofxXmlSettings xml;
 	
 	// ofxAppcast class and variables to store the data you need.
-	ofxAppcast appcast;
+	wng::ofxAppcast appcast;
 	
 	// Wee need the current- and totalAppcastItem value
 	// for jumping between channel:items.
