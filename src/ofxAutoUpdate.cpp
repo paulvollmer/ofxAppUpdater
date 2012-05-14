@@ -57,8 +57,13 @@ namespace wng {
 		ofRegisterURLNotification(this);
 		ofLoadURLAsync(appcastSrc, "load");
 		updater.init(currentVersion, appcastSrc);
-		// S
+		// Set the mode to enum CHECK
 		updater.mode = CHECK;
+		
+		#ifdef OFXAUTOUPDATE_LOG
+			ofLog() << "[ofxAutoUpdate] Current Version: " << currentVersion;
+			ofLog() << "[ofxAutoUpdate] Appcast src: " << appcastSrc;
+		#endif
 	}
 	
 	
@@ -96,24 +101,32 @@ namespace wng {
 			//string tempDesc = "Latest Version: "+updater.latestVersion+"\nCurrent Version: "+updater.currentVersion;
 			int tempDialog = updater.userNotificationDisplay(updater.message,
 															 "Latest Version: "+updater.latestVersion+"\nCurrent Version: "+updater.currentVersion,
-															 "Download Now", "Later", "Check changes");
+															 "Download Now", "Later", "Check Changes");
 			
 			switch (tempDialog) {
 				case 0:
-					cout << "Default response\n";
+					#ifdef OFXAUTOUPDATE_LOG
+						ofLog() << "[ofxAutoUpdate] Default Response (Download Now)";
+					#endif
 					updater.mode = DOWNLOAD;
 					break;
 				case 1:
-					cout << "Alternate response\n";
+					#ifdef OFXAUTOUPDATE_LOG
+						ofLog() << "[ofxAutoUpdate] Alternate Response (Later)";
+					#endif
 					updater.mode = FINISHED;
 					break;
 				case 2:
-					cout << "Other response\n";
+					#ifdef OFXAUTOUPDATE_LOG
+						ofLog() << "[ofxAutoUpdate] Other Response (Check Changes)";
+					#endif
 					ofLaunchBrowser(updater.appcastPath);
 					updater.mode = FINISHED;
 					break;
 				case 3:
-					cout << "Cancel response\n";
+					#ifdef OFXAUTOUPDATE_LOG
+						ofLog() << "[ofxAutoUpdate] Cancel Response";
+					#endif
 					updater.mode = FINISHED;
 					break;
 				default:
@@ -127,14 +140,14 @@ namespace wng {
 		else if(updater.mode == DOWNLOAD){
 			//cout << "DOWNLOAD\n";
 			
-			// At the moment we create a file at the desktop.
+			// At the moment we create a file at the downloads directory.
 			// I think we can handle this variable as an intern variable.
-			//updater.download(ofFilePath::getPathForDirectory("~/Downloads/WNGtemp.zip"));
-			/*updater.download(updater.appcast.getEnclosureUrl(xml, 0),
+			updater.download(updater.appcast.getEnclosureUrl(xml, 0),
+							 ofFilePath::getPathForDirectory("~/Downloads/WNGtemp.zip"));
+			
+			/*updater.download("http://www.wrong-entertainment.com/code/ofxAppUpdater/test_80mb.zip",
 							 ofFilePath::getPathForDirectory("~/Downloads/WNGtemp.zip"));
 			*/
-			updater.download("http://www.wrong-entertainment.com/code/ofxAppUpdater/test_80mb.zip",
-							 ofFilePath::getPathForDirectory("~/Downloads/WNGtemp.zip"));
 			
 			updater.mode = RELAUNCH;
 			
@@ -163,7 +176,7 @@ namespace wng {
 	 * urlResponse
 	 * based on http://forum.openframeworks.cc/index.php/topic,8398.0.html
 	 *
-	 * An other solution: for this we use the
+	 * An other solution: for this we can use the
 	 * applescript system events?
 	 */
 	void ofxAutoUpdate::urlResponse(ofHttpResponse & response){
@@ -171,9 +184,9 @@ namespace wng {
 		// Switch different urlResponse for different updater modes.
 		switch (updater.mode) {
 				
-			case DEFAULT:
+			/*case DEFAULT:
 				cout << "CHECK\n";
-				break;
+				break;*/
 				
 			case CHECK:
 				if(response.status == 200){  
@@ -195,10 +208,6 @@ namespace wng {
 			case NEW_RELEASE:
 				cout << "RESPONSE_NEW\n";
 				break;*/
-
-				
-			default:
-				break;
 		}
 		
 	}

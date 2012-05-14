@@ -40,6 +40,7 @@
 #include "ofxXmlSettings.h"
 #include "ofxAppUpdater.h"
 
+// If "OFXAUTOUPDATE_LOG" is defined, the addon prints out ofLog messages.
 #define OFXAUTOUPDATE_LOG
 
 
