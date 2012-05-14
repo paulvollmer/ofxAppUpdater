@@ -20,7 +20,7 @@ ofxXmlSettings
 You can find a list of all known bugs at [GitHub](https://github.com/wrongentertainment/ofxAppUpdater/issues). Please report if you find an unknown bug.  
 
 ## Changelog
-A detailed changelog can be found at the [Appcast RSS](https://raw.github.com/WrongEntertainment/ofxAppUpdater/master/release_storage/appcast.xml).  
+A detailed changelog can be found at the [Wiki/Changelog RSS](https://github.com/WrongEntertainment/ofxAppUpdater/wiki/Changelog).  
  
 
 ## Author  
