@@ -39,6 +39,10 @@
 #include "ofMain.h"
 #include "ofxAutoUpdate.h"
 
+// Set the current version MAJOR.MINOR.PATCH
+// More information can be found at http://semver.org/
+#define CURRENT_VERSION "0.0.1"
+
 
 
 
