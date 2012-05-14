@@ -5,3 +5,5 @@
 # ignore Xcode User .pbxuser and .mode1v3 files.
 *.pbxuser
 *.mode1v3
+
+*.DS_STORE
